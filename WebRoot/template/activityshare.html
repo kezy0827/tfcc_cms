@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="title" content="下载">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"><!--解决android平台无法自适应-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no"><!--解决ios对5位数字自动识别和添加样式-->
+    <meta content="email=no" name="format-detection" /><!--禁止android识别邮箱-->
+    <meta name="viewport" content="width=device-width"><!--设备宽度-->
+    <title>#title#</title>
+    <script type="text/javascript" src="http://115.28.39.196:8383/resources/js/jquery-1.5.min.js"></script>
+    <style>
+       body,p{margin:0;padding:0;}
+       ul{margin: 0px;padding:0px;list-style:none}
+       .fl{float:left;}
+       .fr{float:right;}
+       .clear{clear:both;}
+       #cover{
+		    position:fixed;left:0px;top:0px; z-index:10;
+		    width:100%;height:100%;background-color:#000;opacity:0.85;
+	   }
+	   #cover p{
+			-webkit-background-clip: text;
+			-moz-background-clip: text;
+			background-clip: text;
+			color: transparent;
+			float:right;
+			margin-right:40px;
+			margin-top:40px;
+			color:#fff;
+			font-size:16px;
+			font-family: "Gabriola;
+							
+		}
+    </style>
+    <script type="text/javascript">
+	    function initpage(){
+	    	var ua = navigator.userAgent.toLowerCase();
+	    	if(ua.match(/MicroMessenger/i)=="micromessenger") {
+	    		 $('#cover').show();
+	    		 $('#url').val(0);
+	     	} else {
+	     		$('#cover').hide();
+	     		initdownloadbtn();
+	    	}
+	    }
+	    function initdownloadbtn(){
+	    	if(navigator.userAgent.match(/(Android)\s+([\d.]+)/)){
+	            platform = 'android';
+	        }
+	        if(navigator.userAgent.match(/(.*iPhone.*)|(.*iPad.*)/)){
+	            platform = 'ios';
+	        }
+	        var appLinks = $('#url');
+	        var open_appstore_timer;
+	        if(platform == 'ios'){//连接到iOS store
+	            aurl = "https://itunes.apple.com/cn/app/donga-dong/id966111488?mt=8";
+	            appLinks.attr('value',aurl);
+	        }else if(platform == 'android'){//
+	            appLinks.attr('value','http://115.28.39.196:8383/APP/DAD/dongadong.apk');
+	        }else{
+	        	appLinks.attr('value',1);
+	        }
+	    }
+    	function pageonload(){
+    		setTimeout(scrollTo,0,0,0);//阻止URL条显示
+            navigator.standalone = false;//是否从浏览器直接访问webapp，false为否
+            var p = getPageSize();
+            var h1 = $('#h1').height()+40;
+            var h2 = $('#h2').height()+20;
+            var h3 = $('#h3').height()+20;
+            var hh = p[1];
+            var ww = p[0];
+            if(h1+h2+h3<hh){
+            	$('#hother').height((hh-h1-h2-h3-82)+"px");
+            }
+            var h1width = $('#h1').width();
+            $('#w1').width((h1width-60)+"px");
+          
+    	}
+    	function clickhide(){
+    		$('#cover').hide();
+    	}
+    	function getPageSize(){
+    		var windowWidth, windowHeight;
+    		if (self.innerHeight) { //   all   except   Explorer   
+    			windowWidth = self.innerWidth;
+    			windowHeight = self.innerHeight;
+    		} else {
+    			if (document.documentElement && document.documentElement.clientHeight) { //   Explorer   6   Strict   Mode   
+    				windowWidth = document.documentElement.clientWidth;
+    				windowHeight = document.documentElement.clientHeight;
+    			} else {
+    				if (document.body) { //   other   Explorers   
+    					windowWidth = document.body.clientWidth;
+    					windowHeight = document.body.clientHeight;
+    				}
+    			}
+    		}
+    		return new Array(windowWidth,windowHeight);
+    	}
+    	function download(){
+    		var url = $('#url').val();
+    		if(url==0){
+    			$('#cover').show();
+    		}else if(url ==1){
+    			alert("暂不支持该系统");
+    		}else{
+    			window.location.href = $('#url').val();
+    		}
+    	}
+    </script>
+</head>
+<body onload="initpage();pageonload()">
+<section data-role="content">
+    <article>
+        <aside>
+        	<div style="background-color:#399;">
+        		<div class="fl">
+        			<div style="height:60px;line-height:60px;vertical-align:middle;color:#fff;font-size:30px;letter-spacing:5px;margin-left:10px;font-weight:bold;font-family:'微软雅黑,宋体'">动a动</div>
+        			<div style="height:20px;margin-left:50px;font-size:12px;color:#fff;letter-spacing:2px;">您身边的运动管家</div>
+        		</div>
+        		<div class="fr" style="width:40px;height:40px;background:url('share/btn_dw.png');margin:20px;line-height:40px;vertical-align:middle;color:#eee;font-size:12px;font-weight:bold;text-align:center;" onclick="download()">
+        			下载
+        		</div>
+        		<div class="clear"></div>
+        	</div>
+        	<h3 style="text-align:center;height:24px;line-height:24px;vertical-align:middle;margin:10px 20px 0px 20px;">#title#</h3>
+			<hr style="border-bottom:0px solid #ccc;width:97%;">
+        	<div style="padding:10px 20px;">
+				<p style="letter-spacing:1px;">
+        			#content# 
+        		</p>
+			</div>
+        	<hr style="border-bottom:0px solid #ccc;width:97%;">
+        	<!-- <div style="height:30px;line-height:30px;vertical-align:middle;text-align:center;font-size:12px;color:#999;">#createdate#&nbsp;&nbsp;&nbsp;&nbsp;来源：#origin#</div> -->
+        	<div align="center" style="padding:10px 0px;">
+        		<div style="background-color:#399;height:50px;line-height:50px;vertical-align:middle;color:#fff;font-weight:bold;letter-spacing:2px;width:200px;" onclick="download()">免费下载动a动</div>
+        	</div>
+        	<div id='cover' onclick="clickhide()" style="display:none;">
+				<p>请先点击&nbsp;右上角<font style="font-size:35px;">↗</font><br>猛戳"在浏览器中打开"</p>
+				<div style="clear:both;"></div>
+				<div align="center">
+					<img alt="" src="image/help.png" style="width:50%;margin-top:50px;">
+				</div>
+			</div>
+			<input type="hidden" id="url">
+        </aside>
+    </article>
+</section>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserActivityApplyMapper">
+	<select id="userActivityApplyList"  parameterType="page" resultType="pd">
+		select 
+			a.uav_create_datetime,
+			a.user_id,
+			b.activity_id,
+			c.nick_name,
+			c.user_mobile,
+			c.venue_public_account_nickname,
+			c.uaa_ispay,
+			c.uaa_pay_status,
+			c.user_order_number,
+			d.uo_trade_no,
+			d.uo_status,
+			d.uo_total_price,
+			d.user_order_id
+		from dongadongdb.user_apply_venue a 
+		LEFT JOIN dongadongdb.venue_activity_venue_list b
+		on a.venue_activity_venue_list_id = b.venue_activity_venue_list_id
+		LEFT JOIN dongadongdb.user_activity_apply c
+		ON b.activity_id = c.activity_id and a.user_id = c.user_id
+		left join dongadongdb.user_order d 	
+		on b.activity_id = d.uo_third_id and d.uo_third_obj=1 and a.user_id = d.user_id	
+		where a.uav_isvalid = 1 and b.activity_id= and b.venue_public_account_id
+	</select>
+</mapper>

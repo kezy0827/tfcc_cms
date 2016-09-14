@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserActivityApplyMapper">
+	<select id="userActivityApplyList"  parameterType="page" resultType="pd">
+		select 
+			a.activity_id,
+			a.user_id,
+			a.user_order_number,
+			a.uaa_create_datetime,
+			a.uaa_pay_status,
+			a.uaa_ispay,
+			a.nick_name,
+			a.user_mobile,
+			a.venue_public_account_nickname,
+			b.uo_trade_no,
+			b.uo_status,
+			b.uo_total_price,
+			b.user_order_id
+		from 
+			dongadongdb.user_activity_apply a 
+		left join 
+			dongadongdb.user_order b 	
+		on
+			a.activity_id=b.uo_third_id and b.uo_third_obj = 1 and a.user_id = b.user_id	 
+		where 
+		 		a.activity_id = #{pd.activity_id}
+		 		and a.uaa_isvalid = 1
+		 		<if test="pd.venue_public_account_id != null and pd.venue_public_account_id !=''">
+		 			and a.venue_public_account_id = #{pd.venue_public_account_id}
+		 		</if>
+	<!-- select 
+
+			a.activity_id,
+			a.user_id,
+			a.user_mobile,
+			a.nick_name,
+			a.venue_public_account_nickname,
+			a.user_order_number,
+			a.uaa_create_datetime,
+			a.uaa_pay_status,
+			a.uaa_ispay,
+			b.uo_trade_no,
+			b.uo_status,
+			b.uo_total_price,
+			b.user_order_id
+	from 
+			dongadongdb.user_activity_apply a 
+	left join
+			dongadongdb.user_order b 
+	on 
+			a.user_activity_apply_id = b.user_activity_apply_id and 
+			b.uo_third_obj = 1 
+	where 
+	 		a.activity_id = #{pd.activity_id} 
+	 		<if test="pd.venue_public_account_id != null">
+	 			and venue_public_account_id = #{pd.venue_public_account_id}
+	 		</if>
+	GROUP BY b.user_order_id -->
+	<!-- select 
+			a.activity_id,
+			a.user_id,
+			a.user_mobile,
+			a.uaa_ispay,
+			a.venue_public_account_nickname,
+			a.user_order_number,
+			a.uaa_create_datetime,
+			a.uaa_pay_status,
+			b.uo_trade_no,
+			b.uo_status,
+			b.uo_total_price,
+			b.user_order_id,
+			c.nick_name
+		from 
+				dongadongdb.user_activity_apply a 
+			
+			inner join 
+				ddwdb.one_ddh c  
+			on 
+				a.user_id = c.ID 
+		left join
+				dongadongdb.user_order b 
+			on 
+				c.ID = b.user_id and 
+				b.uo_third_obj = 1 
+			where 
+			 	a.activity_id = #{pd.activity_id}
+		GROUP BY b.user_order_id -->
+		<!-- select 
+			a.activity_id,
+			a.user_id,
+			a.user_mobile,
+			a.user_order_number,
+			a.uaa_create_datetime,
+			a.uaa_pay_status,
+			b.uo_trade_no,
+			b.uo_status,
+			b.uo_total_price,
+			c.nick_name
+		from 
+				dongadongdb.user_activity_apply a 
+			left join
+				dongadongdb.user_order b 
+			on 
+				a.activity_id = b.uo_third_id and 
+				b.uo_third_obj = 1 
+			inner join 
+				ddwdb.one_ddh c  
+			on 
+				a.user_id = c.ID 
+			where 
+			 	a.activity_id = #{pd.activity_id} -->
+	</select>
+	<!-- 查询报名用户 -->
+	<!-- <select id="userList" parameterType="page" resultType="pd">
+		select 
+			d.nick_name,a.uaa_create_datetime,c.venue_name,c.venue_address
+		from 
+			user_activity_apply a,user_apply_venue b,venue_activity_venue_list c,one_ddh d
+		where
+			a.user_id = b.user_id and 
+			b.venue_activity_venue_list_id = c.venue_activity_venue_list_id and
+			a.user_id = d.ID and
+		 	a.activity_id =#{activity_id}
+	</select> -->
+	<update id="updateStatus" parameterType="pd">
+		update
+			user_order
+		set
+			uo_status = #{uo_status}
+		where 
+			user_order_id = #{user_order_id}
+	</update>
+</mapper>

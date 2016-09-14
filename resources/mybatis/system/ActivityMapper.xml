@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ActivityMapper">
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select 	
+			a.*,
+			<!-- (select count(*) from venue_activity_venue_list b where b.activity_id = a.activity_id) as isvenues, -->
+			(select count(*) from activity_contestant b where b.activity_id = a.activity_id and ac_isdelete = 1) as iscontestant
+		from 
+			activity a
+		where 
+			a_type = #{pd.a_type} and 
+			a_isdelete = 1 and 
+			a_examine_status = 1   
+		<if test="pd.a_title != null and pd.a_title!=''">
+			and a_title like concat(concat('%', #{pd.a_title}),'%')
+		</if>
+		<if test="pd.a_activity_venue_name != null and pd.a_activity_venue_name !=''">
+			and a_title like concat(concat('%', #{pd.a_activity_venue_name}),'%')
+		</if>
+		<if test="pd.a_sponsor_venue_name != null and pd.a_sponsor_venue_name !=''">
+			and a_title like concat(concat('%', #{pd.a_sponsor_venue_name}),'%')
+		</if>
+		
+		<if test="pd.a_status ==1"><!-- 状态检索 -->
+			and a_apply_start_datetime &gt; #{pd.systemTime} 
+		</if>
+		<if test="pd.a_status ==2"><!-- 状态检索 -->
+			and a_apply_start_datetime &lt;= #{pd.systemTime} and a_apply_end_datetime &gt;#{pd.systemTime}
+		</if>
+		<if test="pd.a_status ==3"><!-- 状态检索 -->
+			and a_apply_end_datetime &lt;= #{pd.systemTime} and a_activity_end_datetime &gt;#{pd.systemTime}
+		</if>
+		<if test="pd.a_status ==4"><!-- 状态检索 -->
+			and a_activity_end_datetime &lt;= #{pd.systemTime} 
+		</if>
+		
+		<if test="pd.a_activity_start_datetime!=null and pd.a_activity_start_datetime!=''"><!-- 活动开始时间检索 -->
+			and a_activity_start_datetime &gt;= #{pd.a_activity_start_datetime} 
+		</if>
+		<if test="pd.a_activity_end_datetime!=null and pd.a_activity_end_datetime!=''"><!-- 活动结束时间检索 -->
+			and a_activity_end_datetime &lt;= #{pd.a_activity_end_datetime} 
+		</if>
+		
+		<if test="pd.a_apply_start_datetime!=null and pd.a_apply_start_datetime!=''"><!-- 报名或投票开始时间检索 -->
+			and a_apply_start_datetime &gt;= #{pd.a_apply_start_datetime} 
+		</if>
+		<if test="pd.a_apply_end_datetime!=null and pd.a_apply_end_datetime!=''"><!-- 报名或投票结束时间检索 -->
+			and a_apply_end_datetime &lt;= #{pd.a_apply_end_datetime} 
+		</if>
+		order by a.a_update_datetime desc
+	</select>
+	
+	<!-- 新增线上活动 -->
+	<insert id="save" parameterType="pd">
+		insert into activity (
+			a_type,
+			a_title,
+			a_introduce,
+			a_apply_start_datetime,
+			a_apply_end_datetime,
+			a_rule,
+			a_notice,
+			a_carousel,
+			a_ishtml_isapp,
+			a_ispay,
+			a_original_img_name,
+			a_original_img_width,
+			a_original_img_height,
+			a_original_img_size,
+			a_operating_obj,
+			a_operating_user,
+			a_create_datetime,
+			a_html,
+			a_activity_venue_name,
+			a_cut_img_x1,
+			a_cut_img_y1,
+			a_cut_img_x2,
+			a_cut_img_y2,
+			a_cut_img_width,
+			a_cut_img_height,
+			a_currentTimeMillis,
+			a_status,
+			a_examine_status
+		) values (
+			#{a_type},
+			#{a_title},
+			#{a_introduce},
+			#{a_apply_start_datetime},
+			#{a_apply_end_datetime},
+			#{a_rule},
+			#{a_notice},
+			#{a_carousel},
+			#{a_ishtml_isapp},
+			#{a_ispay},
+			#{a_original_img_name},
+			#{a_original_img_width},
+			#{a_original_img_height},
+			#{a_original_img_size},
+			#{a_operating_obj},
+			#{a_operating_user},
+			#{a_create_datetime},
+			#{a_html},
+			#{a_activity_venue_name},
+			#{a_cut_img_x1},
+			#{a_cut_img_y1},
+			#{a_cut_img_x2},
+			#{a_cut_img_y2},
+			#{a_cut_img_width},
+			#{a_cut_img_height},
+			#{a_currentTimeMillis},
+			'0',
+			'1'
+		)
+	</insert>
+	<!-- 新增线下活动 -->
+	<insert id="offline_save" parameterType="pd">
+		insert into activity (
+			a_type,
+			a_title,
+			a_activity_venue_id,
+			a_activity_venue_name,
+			a_apply_start_datetime,
+			a_apply_end_datetime,
+			a_activity_start_datetime,
+			a_activity_end_datetime,
+			a_ispay,
+			a_entry_fee,
+			a_sponsor_venue_name,
+			a_phone,
+			a_province_id,
+			a_city_id,
+			a_country_id,
+			a_address,
+			a_original_img_name,
+			a_original_img_width,
+			a_original_img_height,
+  			a_original_img_size,
+  			a_cut_img_x1,
+  			a_cut_img_y1,
+  			a_cut_img_x2, 
+  			a_cut_img_y2, 
+  			a_cut_img_width, 
+  			a_cut_img_height, 
+  			a_address_latitude,
+  			a_address_longitude,
+  			a_carousel,
+  			a_introduce,
+			a_operating_obj,
+			a_operating_user,
+			a_create_datetime,
+			a_currentTimeMillis,
+			a_status,
+			a_examine_status,
+			a_is_submit_alert_html
+		) values (
+			'-1',
+			#{a_title},
+			#{a_activity_venue_id},
+			#{a_activity_venue_name},
+			#{a_apply_start_datetime},
+			#{a_apply_end_datetime},
+			#{a_activity_start_datetime},
+			#{a_activity_end_datetime},
+			#{a_ispay},
+			#{a_entry_fee},
+			#{a_sponsor_venue_name},
+			#{a_phone},
+			#{a_province_id},
+			#{a_city_id},
+			#{a_country_id},
+			#{a_address},
+			#{a_original_img_name},
+			#{a_original_img_width},
+			#{a_original_img_height},
+			#{a_original_img_size},
+			#{a_cut_img_x1},
+			#{a_cut_img_y1},
+			#{a_cut_img_x2},
+			#{a_cut_img_y2},
+			#{a_cut_img_width},
+			#{a_cut_img_height},
+			#{a_address_latitude},
+			#{a_address_longitude},
+			#{a_carousel},
+			#{a_introduce},
+			#{a_operating_obj},
+			#{a_operating_user},
+			now(),
+			#{a_currentTimeMillis},
+			'0',
+			'1',
+			'2'
+		)
+	</insert>
+	<!-- 线上活动修改 -->
+    <update id="edit" parameterType="pd">
+		update  activity
+			set 
+				a_title = #{a_title},
+				a_introduce = #{a_introduce},
+				a_apply_start_datetime = #{a_apply_start_datetime},
+				a_apply_end_datetime = #{a_apply_end_datetime},
+				a_rule = #{a_rule},
+				a_notice = #{a_notice},
+				a_carousel = #{a_carousel},
+				a_original_img_name = #{a_original_img_name},
+				a_original_img_width = #{a_original_img_width},
+				a_original_img_height = #{a_original_img_height},
+				a_original_img_size = #{a_original_img_size},
+				a_operating_user = #{a_operating_user},
+				a_html = #{a_html},
+				a_cut_img_x1 = #{a_cut_img_x1},
+				a_cut_img_y1 = #{a_cut_img_y1},
+				a_cut_img_x2 = #{a_cut_img_x2},
+				a_cut_img_y2 = #{a_cut_img_y2},
+				a_cut_img_width = #{a_cut_img_width},
+				a_cut_img_height = #{a_cut_img_height}
+			where 
+				activity_id = #{activity_id}
+	</update>
+	<!-- 线下活动修改 -->
+    <update id="offline_edit" parameterType="pd">
+		update  activity
+			set 
+			a_title = #{a_title},
+			a_activity_venue_id = #{a_activity_venue_id},
+			a_activity_venue_name = #{a_activity_venue_name},
+			a_apply_start_datetime = #{a_apply_start_datetime},
+			a_apply_end_datetime = #{a_apply_end_datetime},
+			a_activity_start_datetime = #{a_activity_start_datetime},
+			a_activity_end_datetime = #{a_activity_end_datetime},
+			a_ispay = #{a_ispay},
+			a_entry_fee = #{a_entry_fee},
+			a_sponsor_venue_name = #{a_sponsor_venue_name},
+			a_phone = #{a_phone},
+			a_province_id = #{a_province_id},
+			a_city_id = #{a_city_id},
+			a_country_id = #{a_country_id},
+			a_address = #{a_address},
+			a_original_img_name = #{a_original_img_name},
+			a_original_img_width = #{a_original_img_width},
+			a_original_img_height = #{a_original_img_height},
+			a_original_img_size = #{a_original_img_size},
+			a_cut_img_x1 = #{a_cut_img_x1},
+			a_cut_img_y1 = #{a_cut_img_y1},
+			a_cut_img_x2 = #{a_cut_img_x2},
+			a_cut_img_y2 = #{a_cut_img_y2},
+			a_cut_img_width = #{a_cut_img_width},
+			a_cut_img_height = #{a_cut_img_height},
+			a_address_latitude = #{a_address_latitude},
+			a_address_longitude = #{a_address_longitude},
+			a_carousel = #{a_carousel},
+			a_introduce = #{a_introduce},
+			a_operating_obj = #{a_operating_obj},
+			a_operating_user = #{a_operating_user}
+		where 
+			activity_id = #{activity_id}
+	</update>
+	<select id="getActivityId" parameterType="pd" resultType="pd">
+		select
+				a.activity_id
+		FROM
+				activity a 
+		where   
+				a.a_isdelete = 1 and a_original_img_name=#{a_original_img_name} and a_currentTimeMillis=#{a_currentTimeMillis}
+		<!-- select
+				a.activity_id
+		from
+				activity a 
+		where   
+				a.a_isdelete = 1 
+		order by 
+				a.activity_id desc limit 1 -->
+	</select>
+	
+	<update id="deleteActivityById" parameterType="pd">
+		update  activity
+			set 
+				a_isdelete = -1
+		where 
+				activity_id = #{activity_id}
+	</update>
+	<update id="update_alert_html" parameterType="pd">
+		update  activity
+			set 
+				a_is_submit_alert_html = 1
+		where 
+				activity_id = #{activity_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+				a.*
+		from
+				activity a
+		where
+				a.activity_id = #{activity_id}
+	</select>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogSmsMapper">
+	<!-- 列表 -->                
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select * from log_sms where 1=1 
+		<if test="pd.ls_phone != null  and pd.ls_phone!=''">
+			and ls_phone like concat(concat('%', #{pd.ls_phone}),'%')
+		</if>
+		<if test="pd.ls_content != null  and pd.ls_content!=''">
+			and ls_content like concat(concat('%', #{pd.ls_content}),'%')
+		</if>
+		<if test="pd.ls_type != null and pd.ls_type != ''">
+			and ls_type=#{pd.ls_type}
+		</if>
+		<if test="pd.ls_sender_type != null">
+			and ls_sender_type=#{pd.ls_sender_type}
+		</if>
+		<if test="pd.ls_sender_public_account_id != null">
+			and ls_sender_public_account_id=#{pd.ls_sender_public_account_id}
+		</if>
+		<if test="pd.ls_response_code != null">
+			and ls_response_code like concat(concat('%', #{pd.ls_response_code}),'%')
+		</if>
+		<if test="pd.ls_create_start_datetime != null and pd.ls_create_start_datetime != '' and pd.ls_create_start_datetime != 'null'"><!-- 创建开始时间检索 -->
+			and ls_create_datetime &gt;= #{pd.ls_create_start_datetime} 
+		</if>
+		<if test="pd.ls_create_end_datetime !=null and pd.ls_create_end_datetime != '' and pd.ls_create_end_datetime != 'null'"><!-- 创建结束时间检索 -->
+			and ls_create_datetime &lt;= #{pd.ls_create_end_datetime} 
+		</if>
+		<if test="pd.ls_is_resend != null">
+			and ls_is_resend=#{pd.ls_is_resend}
+		</if>
+		    order by ls_create_datetime desc
+	</select>
+	
+		<!-- 通过id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			dictionary_sms
+		where 
+			dictionary_sms_id = #{dictionary_sms_id}
+	</select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DictionarySmsMapper">
+	<!-- 列表 -->
+	<select id="dictionarylist" parameterType="pd" resultType="pd">
+		select * from dictionary_sms where ds_obj = 1 and activity_id = #{pd.activity_id}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into dictionary_sms (
+			ds_type,
+			ds_content,
+			ds_obj,
+			activity_title,
+			activity_id,
+			venue_public_account_nickname,
+			venue_public_account_id,
+			system_user_name,
+			ds_create_datetime
+		) values (
+			#{ds_type},
+			#{ds_content},
+			#{ds_obj},
+			#{activity_title},
+			#{activity_id},
+			#{venue_public_account_nickname},
+			#{venue_public_account_id},
+			#{system_user_name},
+			#{ds_create_datetime}
+		)
+	</insert>
+		<!-- 通过id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			dictionary_sms
+		where 
+			dictionary_sms_id = #{dictionary_sms_id}
+	</select>
+</mapper>

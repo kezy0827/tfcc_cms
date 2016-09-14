@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogPushMapper">
+	<!-- 列表 -->                
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select * from log_push where 1=1 
+		<if test="pd.lp_content != null  and pd.lp_content!=''">
+			and lp_content like concat(concat('%', #{pd.lp_content}),'%')
+		</if>
+		<if test="pd.lp_create_start_datetime != null and pd.lp_create_start_datetime != '' and pd.lp_create_start_datetime != 'null'"><!-- 创建开始时间检索 -->
+			and lp_create_datetime &gt;= #{pd.lp_create_start_datetime} 
+		</if>
+		<if test="pd.lp_create_end_datetime !=null and pd.lp_create_end_datetime != '' and pd.lp_create_end_datetime != 'null'"><!-- 创建结束时间检索 -->
+			and lp_create_datetime &lt;= #{pd.lp_create_end_datetime} 
+		</if>
+		<if test="pd.lp_device_type != null and pd.lp_device_type != ''">
+			and lp_device_type=#{pd.lp_device_type}
+		</if>
+		<if test="pd.lp_type != null and pd.lp_type != ''">
+			and lp_type=#{pd.lp_type}
+		</if>
+		<if test="pd.lp_push_type != null and pd.lp_push_type != ''">
+			and lp_push_type=#{pd.lp_push_type}
+		</if>
+		<if test="pd.lp_push_type_obj != null  and pd.lp_push_type_obj!=''">
+			and lp_push_type_obj like concat(concat('%', #{pd.lp_push_type_obj}),'%')
+		</if>
+		<if test="pd.lp_push_code != null  and pd.lp_push_code!=''">
+			and lp_push_code like concat(concat('%', #{pd.lp_push_code}),'%')
+		</if>
+		<if test="pd.lp_status != null and pd.lp_status != ''">
+			and lp_status=#{pd.lp_status}
+		</if>
+		<if test="pd.lp_is_resend != null and pd.lp_is_resend != ''">
+			and lp_is_resend=#{pd.lp_is_resend}
+		</if>
+		    order by lp_create_datetime desc
+	</select>
+	
+	<!-- 新增日志 -->
+	<insert id="save" parameterType="pd">
+		insert into log_push (
+			lp_type,
+			lp_push_type,
+			lp_push_type_obj,
+			lp_content,
+			lp_push_code,
+			lp_push_msg,
+			lp_status,
+			lp_is_resend,
+			lp_create_datetime,
+			lp_device_type
+		) values (
+			'0',
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			now(),
+			null
+		)
+	</insert>
+	
+	
+	<!-- 日志修改 -->
+    <update id="edit" parameterType="pd">
+		update  log_push
+			set 
+				lp_status = 3
+			where 
+				log_push_id = 130
+	</update>
+	
+	
+	
+	
+		<!-- 通过id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			dictionary_sms
+		where 
+			dictionary_sms_id = #{dictionary_sms_id}
+	</select>
+</mapper>

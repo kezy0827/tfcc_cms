@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VenuePublicAccoutMapper">
+	<!-- 列表 -->
+	<select id="accountList" parameterType="pd" resultType="pd">
+		select
+				vpc.id,
+				vpc.nickname
+		from 
+				ddwdb.venue_public_account vpc
+	</select>
+	<select id="oneAccount" parameterType="pd" resultType="pd">
+		select
+			vpc.*
+		from
+			ddwdb.venue_public_account vpc
+		where
+			vpc.id = #{id}
+	</select>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<settings> 
+        <setting name="cacheEnabled" value="false" /> 
+        <setting name="useGeneratedKeys" value="true" /> 
+        <setting name="defaultExecutorType" value="REUSE" /> 
+    </settings>
+
+	<typeAliases>
+		<typeAlias type="com.fh.entity.system.User" alias="User"/>
+		<typeAlias type="com.fh.entity.system.Role" alias="Role"/>
+		<typeAlias type="com.fh.entity.system.Menu" alias="Menu"/>
+		<typeAlias type="com.fh.util.PageData" alias="pd"/>
+		<!-- 分页 -->
+		<typeAlias type="com.fh.entity.Page" alias="Page"/>
+	</typeAliases>
+	
+	<plugins>
+		<plugin interceptor="com.fh.plugin.PagePlugin">
+			<property name="dialect" value="mysql"/>
+			<property name="pageSqlId" value=".*listPage.*"/>
+		</plugin>
+	</plugins>
+	
+	<mappers>
+	
+		<!-- 系统模块    开始 -->
+			<!-- 系统用户 -->
+			<mapper resource="mybatis/system/UserMapper.xml"/>
+			<!-- 系统角色 -->
+			<mapper resource="mybatis/system/RoleMapper.xml"/>
+			<!-- 系统菜单 -->
+			<mapper resource="mybatis/system/MenuMapper.xml"/>
+			<!-- 新用户处理 -->
+			<mapper resource="mybatis/system/UserXMapper.xml"/>
+			<!-- app用户 -->
+			<mapper resource="mybatis/system/AppuserMapper.xml"/>
+			<!-- 数据字典 -->
+			<mapper resource="mybatis/system/ZidianMapper.xml"/>
+		<!-- 系统模块    结束 -->
+		
+		<!-- 业务模块  开始-->
+			<!-- 系统工具管理 -->
+			<mapper resource="mybatis/system/SystemMapper.xml"/>
+			<!-- 频道管理 -->
+			<mapper resource="mybatis/system/ChannelMapper.xml"/>
+			<!-- 新闻管理 -->
+			<mapper resource="mybatis/system/NewsMapper.xml"/>
+			<mapper resource="mybatis/system/NewsDataMapper.xml"/>
+			<!-- 活动管理 -->
+			<mapper resource="mybatis/system/ActivityMapper.xml"/>
+			<!-- 参赛选手管理 -->
+			<mapper resource="mybatis/system/ContestantMapper.xml"/>
+			<!-- 短信管理 -->
+			<mapper resource="mybatis/system/DictionarySmsMapper.xml"/>
+			<!-- 用户报名管理 -->
+			<mapper resource="mybatis/system/UserActivityApplyMapper.xml"/>
+			<!-- 报名场馆管理 -->
+			<mapper resource="mybatis/system/VenueActivityVenueListMapper.xml"/>
+			<!-- 公众号管理 -->
+			<mapper resource="mybatis/system/VenuePublicAccountMapper.xml"/>
+			<!-- 日志管理  -->
+			<mapper resource="mybatis/system/LogSmsMapper.xml"/>
+			<mapper resource="mybatis/system/LogPushMapper.xml"/>
+		<!-- 业务模块 结束-->
+	</mappers>
+</configuration>
