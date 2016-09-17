@@ -1,4 +1,7 @@
-package com.fh.util.mail;
+package com.fh.util.mail;   
+
+
+
 /**   
  * 简单邮件（不带附件的邮件）发送器   
  */ 
