@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AccDetailMapper">
+
+	<!-- -->
+	 <!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into tb_acc_detail 
+		(
+		user_code,
+		sub_accno,
+		bouns_source1,
+		bouns_source2,
+		rela_usercode,
+		rela_userlevel,
+		amnt,
+		caldate,
+		cntflag,
+		status,
+		syscode,
+		create_time,
+		modify_time,
+		operator
+		)		
+		select 
+		a.user_code,
+		#{subAccno},
+		#{bounsSource1},
+		#{bounsSource2},
+		recomuser_code,
+		rela_level,
+		 case when rela_level ='A' then  b.txnum*#{rsbns1}
+		 when rela_level='B' then b.txnum*#{rsbns2} 
+		 when rela_level='C' then b.txnum*#{rsbns3}
+		 end,
+		now(),
+		'',
+		'1',
+		a.syscode,
+		now(),
+		now(),
+		#{operator}
+		from tb_user_friendship a,tb_trade_detail b
+		where a.user_code = b.user_code
+		and b.order_no =#{orderNo}
+	</insert>
+
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SysGencodeMapper">
+
+	<!-- 通过id获取数据 -->
+	<select id="find" parameterType="pd" resultType="pd">
+		SELECT   
+	    a.group_code groupCode,
+   	    a.group_name groupName,
+		b.code_value codeValue,
+		b.code_name codeName,
+		b.description description,
+		b.readonly readonly
+		from t_code_group a ,t_general_code b 
+        where a.id = b.group_id 
+        and a.group_code =#{groupcode}
+	</select>
+
+
+</mapper>
