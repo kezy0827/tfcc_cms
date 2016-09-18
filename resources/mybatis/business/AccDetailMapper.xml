@@ -2,48 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AccDetailMapper">
 
-	<!-- -->
-	 <!-- 新增 -->
-	<insert id="save" parameterType="pd">
-		insert into tb_acc_detail 
-		(
-		user_code,
-		sub_accno,
-		bouns_source1,
-		bouns_source2,
-		rela_usercode,
-		rela_userlevel,
-		amnt,
-		caldate,
-		cntflag,
-		status,
-		syscode,
-		create_time,
-		modify_time,
-		operator
-		)		
-		select 
-		a.user_code,
-		#{subAccno},
-		#{bounsSource1},
-		#{bounsSource2},
-		recomuser_code,
-		rela_level,
-		 case when rela_level ='A' then  b.txnum*#{rsbns1}
-		 when rela_level='B' then b.txnum*#{rsbns2} 
-		 when rela_level='C' then b.txnum*#{rsbns3}
-		 end,
-		now(),
-		'',
-		'1',
-		a.syscode,
-		now(),
-		now(),
-		#{operator}
-		from tb_user_friendship a,tb_trade_detail b
-		where a.user_code = b.user_code
-		and b.order_no =#{orderNo}
-	</insert>
+     <!-- 新增 -->
+    <insert id="save" parameterType="pd">
+        insert into tb_acc_detail 
+        (
+        user_code,
+        sub_accno,
+        bouns_source1,
+        bouns_source2,
+        rela_usercode,
+        rela_userlevel,
+        amnt,
+        caldate,
+        cntflag,
+        status,
+        syscode,
+        create_time,
+        modify_time,
+        operator
+        )       
+        select 
+        a.user_code,
+        #{subAccno},
+        #{bounsSource1},
+        #{bounsSource2},
+        recomuser_code,
+        a.rela_level,
+         case        
+         when a.rela_level ='A' and c.levcnt =#{nedleva}   then  b.txnum*#{rsbns1}*#{nedleva}
+         when a.rela_level ='A' and c.levcnt &lt;#{nedleva}   then  0
+         when a.rela_level ='A' and c.levcnt &gt;#{nedleva}   then  b.txnum*#{rsbns1}        
+         when a.rela_level='B' and c.levcnt =#{nedlevb} then b.txnum*#{rsbns2}*#{nedlevb}
+         when a.rela_level='B' and c.levcnt &lt;#{nedlevb} then 0
+         when a.rela_level='B' and c.levcnt &gt;#{nedlevb} then b.txnum*#{rsbns2} 
+         when a.rela_level='C' and c.levcnt =#{nedlevc} then b.txnum*#{rsbns3}*#{nedlevc}
+         when a.rela_level='C' and c.levcnt &lt;#{nedlevc} then 0
+         when a.rela_level='C' and c.levcnt &gt;#{nedlevc} then b.txnum*#{rsbns3}
+         end amnt,
+        now(),
+        '',
+        '1',
+        a.syscode,
+        now(),
+        now(),
+        #{operator}
+        from tb_user_friendship a,tb_trade_detail b,tb_user_levelcnt c
+        where a.recomuser_code = b.user_code
+        and a.user_code = c.user_code
+        and a.rela_level= c.rela_level
+        and b.order_no =#{orderNo}
+    </insert>
 
 
 </mapper>
