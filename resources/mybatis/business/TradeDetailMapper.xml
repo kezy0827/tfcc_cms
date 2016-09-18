@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="TradeDetailMapper" >
+ <!--  <resultType id="BaseresultType" type="com.qkl.tfcc.api.po.trade.TradeDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="txtype" property="txtype" jdbcType="VARCHAR" />
+    <result column="cuy_type" property="cuyType" jdbcType="VARCHAR" />
+    <result column="txnum" property="txnum" jdbcType="DECIMAL" />
+    <result column="txamnt" property="txamnt" jdbcType="DECIMAL" />
+    <result column="txdate" property="txdate" jdbcType="TIMESTAMP" />
+    <result column="cntflag" property="cntflag" jdbcType="VARCHAR" />
+    <result column="caldate" property="caldate" jdbcType="TIMESTAMP" />
+    <result column="source_system" property="sourceSystem" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="revorgname" property="revorgname" jdbcType="VARCHAR" />
+    <result column="revbankaccno" property="revbankaccno" jdbcType="VARCHAR" />
+    <result column="revbankdepname" property="revbankdepname" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+  </resultType> -->
+  <sql id="Base_Column_List" >
+    id, user_code, txtype, cuy_type, txnum, txamnt, txdate, cntflag, caldate, source_system, 
+    status, revorgname, revbankaccno, revbankdepname, create_time, modify_time, operator,order_no,pay_time,reason
+  </sql>
+  <select id="selectById" resultType="pd" parameterType="pd" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_trade_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByOrderNo" resultType="pd" parameterType="pd" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_trade_detail
+    where order_no = #{order_no}
+  </select>
+  <select id="datalistPage" parameterType="page" resultType="pd" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_trade_detail
+    where 1 = 1
+    <if test="pd.cuy_type != null and pd.cuy_type != ''" >
+        and cuy_type = #{pd.cuy_type}
+    </if>
+    <if test="pd.txtype != null and pd.txtype != ''" >
+        and txtype = #{pd.txtype}
+    </if>
+    <if test="pd.startTime != null and pd.startTime != ''" >
+        and txdate &gt;= #{pd.startTime}
+    </if>
+    <if test="pd.endTime != null and pd.endTime != ''" >
+        and SUBSTR(txdate,1,10) &lt;= #{pd.endTime}
+    </if>
+    <if test="pd.source_system != null and pd.source_system != ''" >
+        and source_system = #{pd.source_system}
+    </if>
+    <if test="pd.status != null and pd.status != ''" >
+        and status = #{pd.status}
+    </if>
+    <if test="pd.revorgname != null and pd.revorgname != ''" >
+        and revorgname = '%${pd.revorgname}%'
+    </if>
+    <if test="pd.revbankaccno != null and pd.revbankaccno != ''" >
+        and revbankaccno = #{pd.revbankaccno}
+    </if>
+    <if test="pd.order_no != null and pd.order_no != ''" >
+        and order_no = #{pd.order_no}
+    </if>
+    order by create_time desc
+  </select>
+  <delete id="deleteById" parameterType="pd" >
+    delete from tb_trade_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <update id="updateByIdSelective" parameterType="pd" >
+    update tb_trade_detail
+    <set >
+      <if test="user_code != null and user_code !=''" >
+        user_code = #{user_code,jdbcType=VARCHAR},
+      </if>
+      <if test="txtype != null and txtype !='' " >
+        txtype = #{txtype,jdbcType=VARCHAR},
+      </if>
+      <if test="cuy_type != null and cuy_type != ''" >
+        cuy_type = #{cuy_type,jdbcType=VARCHAR},
+      </if>
+      <if test="txnum != null and txnum !='' " >
+        txnum = #{txnum,jdbcType=DECIMAL},
+      </if>
+      <if test="txamnt != null and txamnt != ''" >
+        txamnt = #{txamnt,jdbcType=DECIMAL},
+      </if>
+      <if test="txdate != null and txdate !=''" >
+        txdate = #{txdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cntflag != null and cntflag != ''" >
+        cntflag = #{cntflag,jdbcType=VARCHAR},
+      </if>
+      <if test="caldate != null and caldate != ''" >
+        caldate = #{caldate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source_system != null" >
+        source_system = #{source_system,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="revorgname != null" >
+        revorgname = #{revorgname,jdbcType=VARCHAR},
+      </if>
+      <if test="revbankaccno != null" >
+        revbankaccno = #{revbankaccno,jdbcType=VARCHAR},
+      </if>
+      <if test="revbankdepname != null" >
+        revbankdepname = #{revbankdepname,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="pay_time != null" >
+        pay_time = #{pay_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateStatus" parameterType="pd">
+    update tb_trade_detail
+    set status = #{status}
+    where
+    id = #{id}
+  </update>
+</mapper>

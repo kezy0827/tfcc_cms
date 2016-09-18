@@ -9,10 +9,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.entity.Page;
-import com.fh.util.Const;
+import com.fh.util.AjaxResponse;
 import com.fh.util.Logger;
 import com.fh.util.PageData;
-import com.fh.util.Tools;
 import com.fh.util.UuidUtil;
 
 public class BaseController {
@@ -21,6 +20,7 @@ public class BaseController {
 
 	private static final long serialVersionUID = 6357869213649815390L;
 	protected ModelAndView mv = this.getModelAndView();
+	protected AjaxResponse ar = new AjaxResponse();
 	protected PageData pd = new PageData();
 	protected HttpServletResponse response;
 	/**

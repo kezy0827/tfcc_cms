@@ -45,26 +45,20 @@
 		<!-- 业务模块  开始-->
 			<!-- 系统工具管理 -->
 			<mapper resource="mybatis/system/SystemMapper.xml"/>
-			<!-- 频道管理 -->
-			<mapper resource="mybatis/system/ChannelMapper.xml"/>
-			<!-- 新闻管理 -->
-			<mapper resource="mybatis/system/NewsMapper.xml"/>
-			<mapper resource="mybatis/system/NewsDataMapper.xml"/>
-			<!-- 活动管理 -->
-			<mapper resource="mybatis/system/ActivityMapper.xml"/>
-			<!-- 参赛选手管理 -->
-			<mapper resource="mybatis/system/ContestantMapper.xml"/>
 			<!-- 短信管理 -->
 			<mapper resource="mybatis/system/DictionarySmsMapper.xml"/>
-			<!-- 用户报名管理 -->
-			<mapper resource="mybatis/system/UserActivityApplyMapper.xml"/>
-			<!-- 报名场馆管理 -->
-			<mapper resource="mybatis/system/VenueActivityVenueListMapper.xml"/>
-			<!-- 公众号管理 -->
-			<mapper resource="mybatis/system/VenuePublicAccountMapper.xml"/>
 			<!-- 日志管理  -->
 			<mapper resource="mybatis/system/LogSmsMapper.xml"/>
 			<mapper resource="mybatis/system/LogPushMapper.xml"/>
+			<!-- 订单管理  -->
+			<mapper resource="mybatis/business/TradeDetailMapper.xml"/>
+			<!-- 账户管理  -->
+			<mapper resource="mybatis/business/AccDetailMapper.xml"/>
+			<mapper resource="mybatis/business/AccMapper.xml"/>
+			<!-- 用户关系管理  -->
+			<mapper resource="mybatis/business/UserFriendshipMapper.xml"/>
+			<!-- code管理  -->
+			<mapper resource="mybatis/business/SysGencodeMapper.xml"/>
 		<!-- 业务模块 结束-->
 	</mappers>
 </configuration>
