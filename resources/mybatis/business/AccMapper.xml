@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AccMapper">
 
-	<!-- -->
-	 <update id="updatetrade" parameterType="pd">    
+	 <update id="updateAcc" parameterType="pd">    
          update tb_acc 
          <set> 
                 froze_amnt = froze_amnt + #{addAmnt},
@@ -17,6 +16,23 @@
          where user_code = #{userCode}     
                and syscode = #{syscode}
      </update>
-
+    <update id="updateAllAcc" parameterType="pd">    
+         update tb_acc 
+         <set> 
+                avb_amnt = avb_amnt + #{add_amnt},
+                total_amnt = total_amnt + #{add_amnt},
+                last_caldate = now(),
+                modify_time = now(),
+                version_id = #{new_version_id},
+           <if test="operator != null and operator != ''">
+                operator = #{operator}
+           </if>     
+         </set>
+         where 1=1
+         and user_code = #{user_code}     
+         and syscode = #{syscode}
+         and version_id = #{version_id}
+               
+     </update>
 
 </mapper>

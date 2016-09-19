@@ -191,7 +191,7 @@
 		</form>
 	</div>
  
- 
+ <a  href="javascript:testTriger();">测试触发器</a>
  
  
 	<!-- PAGE CONTENT ENDS HERE -->
@@ -275,6 +275,13 @@
         function toExcel(){
             window.location.href='<%=basePath%>/trade/excel.do';
         } --%>
+//         testTriger();
+        function testTriger(){
+        	alert(132)
+        	$.post("<%=basePath%>/trade/testTriger.do",function(data){
+        		alert(data.message);
+        	});
+        }
 		</script>
 		
 	</body>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserDetail">
+    
+     <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+         id,user_code,user_name,phone,real_name,idno,crop_name,crop_person,branch_name,wxnum,bankaccno,mail_addrss,zip_code,ref_phone,
+         img_addrss,qr_code,user_type,real_stat,create_time,modify_time,operator
+    </sql>
+      
+	<select id="findByUserCode" parameterType="pd" resultMap="pd" >
+        select 
+         <include refid="Base_Column_List" />
+        from tb_user_detail  where user_code = #{user_code}
+    </select>
+</mapper>     
