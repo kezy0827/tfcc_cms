@@ -52,7 +52,7 @@
         and a.rela_level= c.rela_level
         and b.id =#{id}
     </insert>
-    <select id="selectLevReward">
+    <!-- <select id="selectLevReward">
        select 
          a.user_code,
          case        
@@ -71,7 +71,7 @@
         and a.user_code = c.user_code
         and a.rela_level= c.rela_level
         and b.id =#{id}
-    </select>
+    </select> -->
     <update id="testTriger" parameterType="pd">
         UPDATE tb_acc_detail SET amnt = amnt + 10 WHERE sub_accno = '010101' AND user_code = '10000000001'
     </update>

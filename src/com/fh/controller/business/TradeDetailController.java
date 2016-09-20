@@ -197,7 +197,7 @@ public class TradeDetailController extends BaseController{
 	@ResponseBody
 	public AjaxResponse testTriger(){
 	    try {
-            tradeDetailService.testTriger();
+            tradeDetailService.updateTriger();
             ar.setSuccess(true);
             ar.setMessage("执行成功！");
         } catch (Exception e) {

@@ -129,14 +129,6 @@ public class TradeDetailService {
             BigDecimal tjgm2=new BigDecimal(1);  
             BigDecimal tjgm3=new BigDecimal(1); 
             
-            /*  //推介注册奖励参数
-            String tjzc1_temp="";    
-            String tjzc2_temp="";    
-            String tjzc3_temp="";    
-            BigDecimal tjzc1=new BigDecimal(1);  
-            BigDecimal tjzc2=new BigDecimal(1);  
-            BigDecimal tjzc3=new BigDecimal(1);  */
-            
            //购买奖励参数
            if(tcodelist!=null&&tcodelist.size()>0){
                for(PageData tcode:tcodelist){
@@ -158,24 +150,12 @@ public class TradeDetailService {
                    if(tcode.get("codeName").toString().equals("NEDLEVC")){
                        nedlevc = tcode.getString("codeValue").toString();
                    }           
-                   /*if(tcode.get("codeName").toString().equals("TJZC1")){
-                       tjzc1_temp = tcode.getString("codeValue").toString();
-                   }           
-                   if(tcode.get("codeName").toString().equals("TJZC2")){
-                       tjzc2_temp = tcode.getString("codeValue").toString();
-                   }           
-                   if(tcode.get("codeName").toString().equals("TJZC3")){
-                       tjzc3_temp = tcode.getString("codeValue").toString();
-                   }        */   
                }       
            }
             try{
                 tjgm1=new BigDecimal(tjgm1_temp);  
                 tjgm2=new BigDecimal(tjgm2_temp);  
                 tjgm3=new BigDecimal(tjgm3_temp);              
-            /*    tjzc1=new BigDecimal(tjzc1_temp);              
-                tjzc2=new BigDecimal(tjzc2_temp);              
-                tjzc3=new BigDecimal(tjzc3_temp);  */            
             }catch(Exception e){
                   System.out.println("BigDecimal convert fail,reason is "+e.getMessage());
             }
@@ -191,14 +171,15 @@ public class TradeDetailService {
             pd.put("nedlevc", nedlevc);     
             pd.put("operator", operator);
             dao.save("AccDetailMapper.save", pd); 
-            List<PageData> levReward = (List<PageData>)dao.findForList("AccDetailMapper.selectLevReward", pd);
+            //通过触发器汇总奖励
+            /*List<PageData> levReward = (List<PageData>)dao.findForList("AccDetailMapper.selectLevReward", pd);
             pd.put("levReward", levReward);
-            dao.batchUpdate("AccMapper.update", levReward);
+            dao.batchUpdate("AccMapper.update", levReward);*/
         }
 
     }
-	public void testTriger()throws Exception{
-	    dao.update("AccDetailMapper.testTriger",null);
+	public void updateTriger()throws Exception{
+	    dao.update("AccDetailMapper.testTriger",new PageData());
 	}
 }
 
