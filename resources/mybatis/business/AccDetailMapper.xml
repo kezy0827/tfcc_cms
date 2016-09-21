@@ -29,15 +29,15 @@
         recomuser_code,
         a.rela_level,
          case        
-         when a.rela_level ='A' and c.levcnt =#{nedleva}   then  b.txnum*#{tjgm1}*#{nedleva}
+         when a.rela_level ='A' and c.levcnt =#{nedleva}   then  #{tjgm1}*(select sum(e1.txamnt) from tb_trade_detail e1 where e1.user_code =b.user_code and b.`status` ='1' )
          when a.rela_level ='A' and c.levcnt &lt;#{nedleva}   then  0
-         when a.rela_level ='A' and c.levcnt &gt;#{nedleva}   then  b.txnum*#{tjgm1}        
-         when a.rela_level='B' and c.levcnt =#{nedlevb} then b.txnum*#{tjgm2}*#{nedlevb}
+         when a.rela_level ='A' and c.levcnt &gt;#{nedleva}   then  b.txamnt*#{tjgm1}        
+         when a.rela_level='B' and c.levcnt =#{nedlevb} then #{tjgm2}*(select sum(e2.txamnt) from tb_trade_detail e2 where e2.user_code =b.user_code and b.`status` ='1' )
          when a.rela_level='B' and c.levcnt &lt;#{nedlevb} then 0
-         when a.rela_level='B' and c.levcnt &gt;#{nedlevb} then b.txnum*#{tjgm2} 
-         when a.rela_level='C' and c.levcnt =#{nedlevc} then b.txnum*#{tjgm3}*#{nedlevc}
+         when a.rela_level='B' and c.levcnt &gt;#{nedlevb} then b.txamnt*#{tjgm2} 
+         when a.rela_level='C' and c.levcnt =#{nedlevc} then #{tjgm3}*(select sum(e3.txamnt) from tb_trade_detail e3 where e3.user_code =b.user_code and b.`status` ='1' )
          when a.rela_level='C' and c.levcnt &lt;#{nedlevc} then 0
-         when a.rela_level='C' and c.levcnt &gt;#{nedlevc} then b.txnum*#{tjgm3}
+         when a.rela_level='C' and c.levcnt &gt;#{nedlevc} then b.txamnt*#{tjgm3}
          end amnt,
         now(),
         '',
@@ -49,7 +49,7 @@
         from tb_user_friendship a,tb_trade_detail b,tb_user_levelcnt c
         where a.recomuser_code = b.user_code
         and a.user_code = c.user_code
-        and a.rela_level= c.rela_level
+        and a.rela_level= c.rela_level        
         and b.id =#{id}
     </insert>
     <!-- <select id="selectLevReward">
