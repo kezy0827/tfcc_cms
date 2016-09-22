@@ -13,7 +13,7 @@
 		syscode syscode,
 		create_time createTime,
 		modify_time modifyTime		
-        from tb_user_friendship  where recomuser_code = #{usercode}
+        from tb_user_friendship  where recomuser_code = #{user_code}
 	</select>
 
 
