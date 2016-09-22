@@ -29,15 +29,15 @@
         recomuser_code,
         a.rela_level,
          case        
-         when a.rela_level ='A' and c.levcnt =#{nedleva}   then  #{tjgm1}*(select sum(e1.txamnt) from tb_trade_detail e1 where e1.user_code =b.user_code and b.`status` ='1' )
+         when a.rela_level ='A' and c.levcnt =#{nedleva}   then #{tjgm1}*(select sum(e1.txamnt) from tb_trade_detail e1,tb_user_friendship a1 where a1.user_code =a.user_code and e1.user_code = a1.recomuser_code and a1.rela_level='A'  and e1.`status` ='1' )
          when a.rela_level ='A' and c.levcnt &lt;#{nedleva}   then  0
          when a.rela_level ='A' and c.levcnt &gt;#{nedleva}   then  b.txamnt*#{tjgm1}        
-         when a.rela_level='B' and c.levcnt =#{nedlevb} then #{tjgm2}*(select sum(e2.txamnt) from tb_trade_detail e2 where e2.user_code =b.user_code and b.`status` ='1' )
-         when a.rela_level='B' and c.levcnt &lt;#{nedlevb} then 0
-         when a.rela_level='B' and c.levcnt &gt;#{nedlevb} then b.txamnt*#{tjgm2} 
-         when a.rela_level='C' and c.levcnt =#{nedlevc} then #{tjgm3}*(select sum(e3.txamnt) from tb_trade_detail e3 where e3.user_code =b.user_code and b.`status` ='1' )
-         when a.rela_level='C' and c.levcnt &lt;#{nedlevc} then 0
-         when a.rela_level='C' and c.levcnt &gt;#{nedlevc} then b.txamnt*#{tjgm3}
+         when a.rela_level='B'  and c.levcnt =#{nedlevb}   then #{tjgm2}*(select sum(e2.txamnt) from tb_trade_detail e2,tb_user_friendship a2 where a2.user_code =a.user_code and e2.user_code = a2.recomuser_code  and a2.rela_level='B'  and e2.`status` ='1' )
+         when a.rela_level='B'  and c.levcnt &lt;#{nedlevb} then 0
+         when a.rela_level='B'  and c.levcnt &gt;#{nedlevb} then b.txamnt*#{tjgm2} 
+         when a.rela_level='C'  and c.levcnt =#{nedlevc}   then #{tjgm3}*(select sum(e3.txamnt) from tb_trade_detail e3,tb_user_friendship a3 where a3.user_code =a.user_code and e3.user_code = a3.recomuser_code and a3.rela_level='C'  and e3.`status` ='1' )
+         when a.rela_level='C'  and c.levcnt &lt;#{nedlevc} then 0
+         when a.rela_level='C'  and c.levcnt &gt;#{nedlevc} then b.txamnt*#{tjgm3}
          end amnt,
         now(),
         '',
@@ -46,32 +46,26 @@
         now(),
         now(),
         #{operator}
-        from tb_user_friendship a,tb_trade_detail b,tb_user_levelcnt c
-        where a.recomuser_code = b.user_code
-        and a.user_code = c.user_code
-        and a.rela_level= c.rela_level        
-        and b.id =#{id}
+        from 
+        tb_user_friendship a,
+		tb_trade_detail b,
+		(
+		  select m1.user_code,m1.rela_level,count(distinct m1.recomuser_code) levcnt from  tb_user_friendship m1 , tb_trade_detail d1,
+		  (select e.user_code,e.rela_level  from tb_trade_detail d ,tb_user_friendship e 
+		  where d.id =#{id} 
+		  and d.user_code = e.recomuser_code) m2
+		  where m1.user_code = m2.user_code
+		  and m1.recomuser_code = d1.user_code
+		  and m1.rela_level = m2.rela_level
+		  group by m1.user_code,m1.rela_level
+		  ) c
+		WHERE
+			a.recomuser_code = b.user_code
+		  and a.user_code = c.user_code
+		  and a.rela_level = c.rela_level
+		AND b.id =#{id}
     </insert>
-    <!-- <select id="selectLevReward">
-       select 
-         a.user_code,
-         case        
-	         when a.rela_level ='A' and c.levcnt =#{nedleva}   then  b.txnum*#{tjgm1}*#{nedleva}
-	         when a.rela_level ='A' and c.levcnt &lt;#{nedleva}   then  0
-	         when a.rela_level ='A' and c.levcnt &gt;#{nedleva}   then  b.txnum*#{tjgm1}        
-	         when a.rela_level='B' and c.levcnt =#{nedlevb} then b.txnum*#{tjgm2}*#{nedlevb}
-	         when a.rela_level='B' and c.levcnt &lt;#{nedlevb} then 0
-	         when a.rela_level='B' and c.levcnt &gt;#{nedlevb} then b.txnum*#{tjgm2} 
-	         when a.rela_level='C' and c.levcnt =#{nedlevc} then b.txnum*#{tjgm3}*#{nedlevc}
-	         when a.rela_level='C' and c.levcnt &lt;#{nedlevc} then 0
-	         when a.rela_level='C' and c.levcnt &gt;#{nedlevc} then b.txnum*#{tjgm3}
-         end amnt,
-        from tb_user_friendship a,tb_trade_detail b,tb_user_levelcnt c
-        where a.recomuser_code = b.user_code
-        and a.user_code = c.user_code
-        and a.rela_level= c.rela_level
-        and b.id =#{id}
-    </select> -->
+    
     <update id="testTriger" parameterType="pd">
         UPDATE tb_acc_detail SET amnt = amnt + 10 WHERE sub_accno = '010101' AND user_code = '10000000001'
     </update>
