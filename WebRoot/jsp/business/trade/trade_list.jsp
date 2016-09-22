@@ -11,11 +11,6 @@
 	<head>
 	<base href="<%=basePath%>"><!-- jsp文件头和头部 -->
 	<%@ include file="../../system/admin/top.jsp"%> 
-	<style type="text/css">
-       button, input, select, textarea { margin: 7px;}
-   
-    
-	</style>
 	</head>
 <body>
 		
@@ -88,12 +83,15 @@
 						<th>序号</th>
 						<th>系统来源</th>
 						<th style="width:8%;">订单号</th>
+						<th>会员姓名</th>
+						<th>手机号</th>
 						<th>交易数量</th>
 						<th>交易金额</th>
-                        <th style="width:12%;">创建时间</th>
+                        <th style="width:12%;">购买时间</th>
                         <th style="width:12%;">支付时间</th>
+                        <th style="width:12%;">支付账号</th>
 						<th>订单状态</th>
-						<th>收款公司银行账户</th>
+<!-- 						<th>收款公司银行账户</th> -->
 						<th>审核</th>
 						<th class="center">操作</th>
 					</tr>
@@ -113,16 +111,18 @@
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 								<td>${var.source_system }</td>
 								<td>${var.order_no }</td>
+								<td>${var.real_name }</td>
+								<td>${var.phone }</td>
 								<td>${var.txnum}</td>
 								<td>${var.txamnt}</td>
 								<td>${fn:substring(var.txdate,0,19)}</td>
 								<td>${fn:substring(var.pay_time,0,19)}</td>
+                                <td>${var.payno}</td>
 								<td>
 									<c:if test="${var.status == 0}">未付款</c:if>
 									<c:if test="${var.status == 1}">已完成</c:if>
 									<c:if test="${var.status == 9}">已取消</c:if>
 								</td>
-								<td>${var.revbankaccno}</td>
 								<td>
                                     <c:choose>
                                         <c:when test="${var.status == 0 }"><a href="javascript:updateStatus('${var.id }','1')">通过</a>&nbsp;|&nbsp;<a href="javascript:updateStatus('${var.id }','9')">不通过</a></c:when>
@@ -173,27 +173,20 @@
 				</tbody>
 			</table>
 			
-		<div class="page-header position-relative">	
-		<table style="width:100%;">
-			<tr>
-				<%-- <td style="vertical-align:top;">
-					<c:if test="${QX.add == 1 }">
-					<a class="btn btn-small btn-success" onclick="add();">新增</a>
-					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
-					</c:if>
-				</td> --%>
-				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-			</tr>
-		</table>
-		</div>
+		<div class="page-header position-relative">
+        <table style="width:100%;">
+            <tr>
+                <%-- <td style="vertical-align:top;">
+                    <c:if test="${QX.add == 1 }">
+                    <a class="btn btn-small btn-success" onclick="add();">新增</a>
+                    </c:if>
+                </td> --%>
+                <td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+            </tr>
+        </table>
+        </div>
 		</form>
 	</div>
- 
- <a  href="javascript:testTriger();">测试触发器</a>
- 
- 
 	<!-- PAGE CONTENT ENDS HERE -->
   </div><!--/row-->
 	

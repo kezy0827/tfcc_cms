@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.service.business.user.UserDetailService;
+import com.fh.util.DateUtil;
 import com.fh.util.PageData;
 
 
@@ -41,6 +42,10 @@ public class TradeDetailService {
 	 * @return: void
 	 */
 	public void updateTradeDetail(PageData pd)throws Exception{
+	    pd.put("pay_time", DateUtil.getTime());
+	    pd.put("operator", "sys");
+	    pd.put("caldate", DateUtil.getTime());
+	    pd.put("cntflag", "1");
         dao.update("TradeDetailMapper.updateByIdSelective", pd);
         if(pd.getString("status").equals("1")){
             PageData trade = getTradeById(pd);

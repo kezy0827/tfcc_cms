@@ -54,14 +54,14 @@
 					</td>
 					<td><input class="span10 date-picker" name="ls_create_start_datetime" id="ls_create_start_datetime" value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="起始日期"/></td>
 					<td><input class="span10 date-picker" name="ls_create_end_datetime" id="ls_create_end_datetime" value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td> 
-					<td style="vertical-align:top;width:200px;"> 
+					<!-- <td style="vertical-align:top;width:200px;"> 
 						发送者:
 					 	<select class="chzn-select" name="ls_type" id="ls_type" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 					 		<option style="text-align:center;" value="">--全部--</option>
 					 		<option style="text-align:center;" value="1">动a动</option>
 					 		<option style="text-align:center;" value="2">场馆</option>
 					  	</select>
-					</td>
+					</td> -->
 					<!-- <td>是否置顶:<input style="display: block;" type="checkbox"></td> -->
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
 					<%-- <c:if test="${QX.cha == 1 }">

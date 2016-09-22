@@ -68,7 +68,7 @@ public class TradeDetailController extends BaseController{
 	
 	@RequestMapping(value="/edit")
 	@ResponseBody
-    public AjaxResponse edit(Page page) throws Exception{
+    public ModelAndView edit(Page page) throws Exception{
         logBefore(logger, "编辑");
         try{
             pd = this.getPageData();
@@ -108,10 +108,11 @@ public class TradeDetailController extends BaseController{
                 return ar;
             }*/
             tradeDetailService.updateTradeDetail(pd);
+            return new ModelAndView("redirect:/trade/tradeListPage.do");
         } catch(Exception e){
             logger.error(e.toString(), e);
         }
-        return ar;
+        return mv;
     }
 	/**
 	 * @describe:查看订单详情

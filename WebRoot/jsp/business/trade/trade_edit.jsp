@@ -13,6 +13,7 @@
 	<%@ include file="../../system/admin/top.jsp"%> 
 	<style type="text/css">
 		.text_right{text-align: right;}
+        input{width:425px;}
 	</style>
 	</head>
 <body>
@@ -64,7 +65,9 @@
 					<td>${fn:substring(pd.pay_time,0,19)}</td>
 				</tr>
 				<tr>
-					<td><label class="text_right">审核状态：</label></td>
+					<td><label class="text_right">支付账号：</label></td>
+                    <td>${pd.payno }</td>
+                    <td><label class="text_right">审核状态：</label></td>
                     <td>
                           <%-- <c:if test="${pd.status==0 }">待审核</c:if>
                           <c:if test="${pd.status==1 }">通过</c:if>
@@ -75,26 +78,26 @@
                             <option style="text-align: center;" value="9" <c:if test="${pd.status==9 }">selected="selected"</c:if>>未通过</option>
                           </select>
                     </td>
-                    <td><label class="text_right" >收款公司名称：</label></td>
+				</tr>
+				<tr>
+					<td><label class="text_right" >收款公司名称：</label></td>
                     <td>
-                        <input type="text" name="revorgname" id="revorgname" maxlength="100" value="${pd.revorgname}"/>
+                        <input type="text" name="revorgname" id="revorgname" maxlength="50" value="${pd.revorgname}" />
                     </td>
+                    <td><label class="text_right">收款公司银行账户：</label></td>
+					<td><input type="text" name="revbankaccno" id="revbankaccno" value="${pd.revbankaccno}" maxlength="20"/></td>
 				</tr>
 				<tr>
-					<td><label class="text_right">收款公司银行账户：</label></td>
-					<td><input type="text" name="revbankaccno" id="revbankaccno" value="${pd.revbankaccno}"/></td>
-					<td><label class="text_right">收款公司开户行：</label></td>
-					<td><textarea rows="5" cols="80" style="width:80%;" maxlength="100" name="revbankdepname" id="revbankdepname">${pd.revbankdepname}</textarea></td>
-				</tr>
-				<tr>
-					<td><label class="text_right"><b>审核意见：</b></label></td>
-				    <td colspan="3">
-                        <textarea rows="8"  name="reason" id="reason" style="width:427px;">${pd.reason }</textarea>
+                    <td><label class="text_right">收款公司开户行：</label></td>
+                    <td><textarea rows="5" cols="80" style="width:80%;" maxlength="50" name="revbankdepname" id="revbankdepname">${pd.revbankdepname}</textarea></td>
+					<td><label class="text_right"><b>审核意见：</b><p class="red">(限100字以内)</p></label></td>
+				    <td >
+                        <textarea rows="8"  name="reason" id="reason" style="width:427px;" maxlength="100">${pd.reason }</textarea>
 				    </td>
 				</tr>
                 <tr>
 					<td style="vertical-align:top;" colspan="4"  align="center" >
-						<c:if test="${pd.status == 0 }"><a class="btn btn-small btn-success" onclick="save();">保存</a></c:if> 
+						<c:if test="${pd.status == 0 }"><a class="btn btn-small btn-success" id="save" onclick="save();">保存</a></c:if> 
 						<a class="btn btn-small btn-success" href="javascript:history.back()">返回</a>
 					</td>
 				</tr>
@@ -131,17 +134,32 @@
 		
 		//新增
     	function save(){
-  			if($("#status").val()==0){
-  				$("#status").tips({
-  					side:3,
-  		            msg:'请修改订单状态',
-  		            bg:'#AE81FF',
-  		            time:3
-  		        });
-  				$("#status").focus();
-  				return false;
-  			}
-    		window.parent.jzts();
+    		if($("#status").val()==0){
+                $("#status").tips({
+                    side:3,
+                    msg:'请修改订单状态',
+                    bg:'#AE81FF',
+                    time:3
+                });
+                $("#status").focus();
+                return false;
+            }
+			/* var url = $("#Form").attr("action")+"?"+$("#Form").serialize();
+			$.ajax({
+	            type:'post',
+	            url:url,
+	            dataType:'json',
+	            success:function(data){
+	                 if(data.success){
+	                	 $("#save").remove();
+	                 }else{
+	                	 bootbox.alert(data.message);
+	                 }
+	            },
+	            errror:function(data){
+	                alert("系统异常！");
+	            }
+	        }); */
     		$("#Form").submit();
     	}
     	$(function() {
