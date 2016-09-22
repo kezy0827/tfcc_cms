@@ -90,6 +90,7 @@ public class TradeDetailService {
             if(trade!=null){
                 pd = new PageData();
                 pd.put("user_code", trade.get("user_code"));
+                pd.put("id", trade.get("id"));
                 /*PageData userDetail = userDetailService.findByUserCode(pd);
                 if(userDetail!=null){
                     pd.put("phone", userDetail.getString("phone"));
