@@ -53,10 +53,12 @@
 		  select m1.user_code,m1.rela_level,count(distinct m1.recomuser_code) levcnt from  tb_user_friendship m1 , tb_trade_detail d1,
 		  (select e.user_code,e.rela_level  from tb_trade_detail d ,tb_user_friendship e 
 		  where d.id =#{id} 
-		  and d.user_code = e.recomuser_code) m2
+		  and d.user_code = e.recomuser_code
+		  ) m2 
 		  where m1.user_code = m2.user_code
 		  and m1.recomuser_code = d1.user_code
 		  and m1.rela_level = m2.rela_level
+		  and d1.`status` = '1' 
 		  group by m1.user_code,m1.rela_level
 		  ) c
 		WHERE

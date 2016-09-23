@@ -47,7 +47,7 @@ public class TradeDetailService {
 	    pd.put("caldate", DateUtil.getTime());
 	    pd.put("cntflag", "1");
         dao.update("TradeDetailMapper.updateByIdSelective", pd);
-        if(pd.getString("status").equals("1")){
+        if(pd.getString("status").equals("1")){//审核通过
             PageData trade = getTradeById(pd);
             if(trade!=null){
                 pd = new PageData();
