@@ -34,5 +34,18 @@
          and version_id = #{version_id}
                
      </update>
-
+      <update id="updateAmnt" parameterType="pd">    
+         update tb_acc 
+         <set> 
+                avb_amnt = avb_amnt + #{avb_amnt},
+                total_amnt = total_amnt + #{total_amnt},
+                last_caldate = now(),
+                modify_time = now(),
+           <if test="operator != null and operator != ''">
+                operator = #{operator}
+           </if>     
+         </set>
+         where user_code = #{user_code}     
+               and syscode = #{syscode}
+     </update>
 </mapper>

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
+import com.fh.service.business.acc.AccService;
 import com.fh.service.business.user.UserDetailService;
+import com.fh.service.system.user.UserService;
 import com.fh.util.DateUtil;
 import com.fh.util.PageData;
 
@@ -22,6 +24,10 @@ public class TradeDetailService {
 	
 	@Resource(name = "userDetailService")
 	private UserDetailService userDetailService;
+	@Resource(name = "userService")
+	private UserService userService;
+	@Resource(name = "accService")
+	private AccService accService;
 	/**
 	 * @describe:分页查询交易订单
 	 * @author: zhangchunming
@@ -42,15 +48,25 @@ public class TradeDetailService {
 	 * @return: void
 	 */
 	public void updateTradeDetail(PageData pd)throws Exception{
-	    pd.put("pay_time", DateUtil.getTime());
+	    
+	    if(pd.getString("status").equals("1")){//审核通过,添加支付时间
+	        pd.put("pay_time", DateUtil.getTime());
+	        pd.put("caldate", DateUtil.getTime());
+	        pd.put("cntflag", "1");
+	    }
 	    pd.put("operator", "sys");
-	    pd.put("caldate", DateUtil.getTime());
-	    pd.put("cntflag", "1");
         dao.update("TradeDetailMapper.updateByIdSelective", pd);
         if(pd.getString("status").equals("1")){//审核通过
             PageData trade = getTradeById(pd);
+            PageData accPd = new PageData();
+            accPd.put("user_code", trade.get("user_code").toString());
+            accPd.put("avb_amnt", trade.get("txamnt").toString());//购买数量
+            accPd.put("total_amnt", trade.get("txamnt").toString());
+            accPd.put("syscode", "tfcc");
+            accService.updateAcc(accPd);
             if(trade!=null){
                 pd = new PageData();
+                pd.put("id", trade.get("id"));
                 pd.put("user_code", trade.get("user_code"));
                 /*PageData userDetail = userDetailService.findByUserCode(pd);
                 if(userDetail!=null){
@@ -84,9 +100,21 @@ public class TradeDetailService {
 	 * @return: void
 	 */
 	public void updateStatus(PageData pd)throws Exception{
-	    dao.update("TradeDetailMapper.updateStatus", pd);
-	    if(pd.getString("status").equals("1")){
+	    if(pd.getString("status").equals("1")){//审核通过,添加支付时间
+            pd.put("pay_time", DateUtil.getTime());
+            pd.put("caldate", DateUtil.getTime());
+            pd.put("cntflag", "1");
+        }
+        pd.put("operator", "sys");
+        dao.update("TradeDetailMapper.updateByIdSelective", pd);
+        if(pd.getString("status").equals("1")){//审核通过
             PageData trade = getTradeById(pd);
+            PageData accPd = new PageData();
+            accPd.put("user_code", trade.get("user_code").toString());
+            accPd.put("avb_amnt", trade.get("txamnt").toString());//购买数量
+            accPd.put("total_amnt", trade.get("txamnt").toString());
+            accPd.put("syscode", "tfcc");
+            accService.updateAcc(accPd);
             if(trade!=null){
                 pd = new PageData();
                 pd.put("user_code", trade.get("user_code"));
@@ -99,6 +127,21 @@ public class TradeDetailService {
             }
             
         }
+	   /* dao.update("TradeDetailMapper.updateStatus", pd);
+	    if(pd.getString("status").equals("1")){
+            PageData trade = getTradeById(pd);
+            if(trade!=null){
+                pd = new PageData();
+                pd.put("user_code", trade.get("user_code"));
+                pd.put("id", trade.get("id"));
+                PageData userDetail = userDetailService.findByUserCode(pd);
+                if(userDetail!=null){
+                    pd.put("phone", userDetail.getString("phone"));
+                }
+                rewardByBuy(pd);
+            }
+            
+        }*/
 	}
 	/**
 	 * @describe:根据id删除交易订单
@@ -200,5 +243,8 @@ public class TradeDetailService {
 	public void updateTriger()throws Exception{
 	    dao.update("AccDetailMapper.testTriger",new PageData());
 	}
+	public static void main(String[] args) {
+        System.out.println(DateUtil.getTime());
+    }
 }
 
