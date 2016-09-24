@@ -219,15 +219,18 @@
 			window.parent.jzts();
 			$("#Form").submit();
 		}
-		
+		var lock = 0;
 		function updateStatus(id,status){
-			$.post('<%=basePath%>/trade/updateStatus.do',{'id':id,'status':status},function(data){
-                if(data.success){
-                	window.location.reload();
-                }else{
-                	bootbox.alert(data.message);
-                }
-            });
+			++lock;
+			if(lock==1){
+				$.post('<%=basePath%>/trade/updateStatus.do',{'id':id,'status':status},function(data){
+	                if(data.success){
+	                    window.location.reload();
+	                }else{
+	                    bootbox.alert(data.message);
+	                }
+	            });
+			}
 		}
 		function toEdit(id){
 			window.parent.jzts();

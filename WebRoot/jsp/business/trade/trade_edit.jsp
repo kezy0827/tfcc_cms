@@ -133,34 +133,22 @@
 		$(window.parent.hangge());
 		
 		//新增
+		var lock = 0;
     	function save(){
-    		if($("#status").val()==0){
-                $("#status").tips({
-                    side:3,
-                    msg:'请修改订单状态',
-                    bg:'#AE81FF',
-                    time:3
-                });
-                $("#status").focus();
-                return false;
-            }
-			/* var url = $("#Form").attr("action")+"?"+$("#Form").serialize();
-			$.ajax({
-	            type:'post',
-	            url:url,
-	            dataType:'json',
-	            success:function(data){
-	                 if(data.success){
-	                	 $("#save").remove();
-	                 }else{
-	                	 bootbox.alert(data.message);
-	                 }
-	            },
-	            errror:function(data){
-	                alert("系统异常！");
-	            }
-	        }); */
-    		$("#Form").submit();
+  			if($("#status").val()==0){
+                  $("#status").tips({
+                      side:3,
+                      msg:'请修改订单状态',
+                      bg:'#AE81FF',
+                      time:3
+                  });
+                  $("#status").focus();
+                  return false;
+              }
+  			  ++lock;
+              if(lock==1){
+                $("#Form").submit();
+              }
     	}
     	$(function() {
     		//下拉框
