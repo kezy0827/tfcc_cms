@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BankInfoMapper">
+    
+    
+    
+    <!-- 查询银行信息列表 -->
+     <select id="findBankInfoList"  resultType="pd">
+        select 
+        id,
+        org_name,
+        bankaccno,
+        deposit_bankname,
+        deposit_time,
+        checkphone,
+        status,
+        create_time,
+        modify_time,
+        operator,
+        payee_name
+        from tb_bankacc
+        where 1=1
+        order by create_time desc
+    </select>
+    
+    <!-- 更新银行账户 -->
+    <update id="updateBankStatus" parameterType="pd">    
+         update tb_bankacc 
+         <set> 
+          status = 1
+         </set>
+         where id = #{id}     
+     </update>
+     
+     
+     <!-- 添加收款银行账号 -->
+     <insert id="addBankaccno"  parameterType="pd">
+      insert into tb_bankacc
+      (org_name,
+      payname,
+      payee_no,
+      checkphone)
+      values
+      (#{orgname},
+      #{payname},
+      #{payeeno},
+      #{checkphone}
+      )
+      
+      
+     
+     </insert>
+    
+</mapper>     

@@ -55,6 +55,7 @@
 			<!-- 账户管理  -->
 			<mapper resource="mybatis/business/AccDetailMapper.xml"/>
 			<mapper resource="mybatis/business/AccMapper.xml"/>
+			<mapper resource="mybatis/business/BankInfoMapper.xml"/>
 			<!-- 用户关系管理  -->
 			<mapper resource="mybatis/business/UserFriendshipMapper.xml"/>
 			<!-- code管理  -->
