@@ -20,15 +20,16 @@ public class BankInfoService {
 		return (List<PageData>) dao.findForList("BankInfoMapper.findBankInfoList",page);
 	}
 	
-	public boolean updateBankState(PageData pd) throws Exception{
+	public void updateBankState(PageData pd) throws Exception{
 		
-		return (Boolean) dao.update("BankInfoMapper.updateBankStatus", pd);
+		  dao.update("BankInfoMapper.updateBankStatus", pd);
+		  dao.update("BankInfoMapper.updateBankStatusEx", pd);
 	}
 	
 	
-	public boolean addBankAccNo(PageData pd) throws Exception{
+	public void addBankAccNo(PageData pd) throws Exception{
 		
 		
-		return (Boolean) dao.save("BankInfoMapper.addBankaccno", pd);
+		 dao.save("BankInfoMapper.addBankaccno", pd);
 	}
 }

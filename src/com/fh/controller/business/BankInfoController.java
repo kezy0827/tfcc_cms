@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value="/service/bank")
+@RequestMapping(value="/bank")
 public class BankInfoController extends BaseController {
 
 	@Resource(name="bankInfoService")
@@ -27,54 +27,49 @@ public class BankInfoController extends BaseController {
 	ModelAndView mv = this.getModelAndView();
 	try {
 		List<PageData> bankInfoList = bankInfoService.findBankInfoList(page);
-		mv.addObject(bankInfoList);
+		
+		mv.setViewName("business/account/bankinfo_list");
+		mv.addObject("varList",bankInfoList);
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 		return mv;
 	}
 	
-	@RequestMapping(value="/updatestatus",method=RequestMethod.GET)
+	@RequestMapping(value="/updatestatus",method=RequestMethod.POST)
 	@ResponseBody
-	public AjaxResponse updateBankStatus(){//更新银行账户启用状态
+	public ModelAndView updateBankStatus(PageData pd){//更新银行账户启用状态
+		ModelAndView mv = this.getModelAndView();
 		try {
 			System.out.println("+++++++++++++++++=");
 			pd=this.getPageData();
-			//int id = Integer.parseInt(pd.get("id").toString());
-			int id=0;//测试用
-			pd.put("id", id);
+			String id = pd.get("id").toString();		
 			bankInfoService.updateBankState(pd);
-			ar.setSuccess(true);
-			ar.setMessage("更新成功");
+			
+
 		} catch (Exception e) {
-			ar.setSuccess(false);
-			ar.setMessage("更新失败");
 			e.printStackTrace();
 		}
-		return ar;
+		return mv;
 	}
 	
-	@RequestMapping(value="/addbankinfo",method=RequestMethod.GET)
+	@RequestMapping(value="/addbankinfo",method=RequestMethod.POST)
 	@ResponseBody
-	public AjaxResponse addBankInfo(){//添加银行账户信息
-		
+	public ModelAndView addBankInfo(){//添加银行账户信息
+		ModelAndView mv = this.getModelAndView();
 		try {
 			System.out.println("+++++++++++++++++=");
 			pd=this.getPageData();
-			pd.put("orgname", "北京区块链公司");//测试
-			pd.put("payname", "王麻子");
-			pd.put("checkphone", "17793178879");
-			pd.put("payeeno", "296192942@qq.com");
+			pd.put("status", "0");
+			pd.put("operator", "sys");
 			bankInfoService.addBankAccNo(pd);
-			ar.setSuccess(true);
-			ar.setMessage("添加成功");
+			
 			
 		} catch (Exception e) {
 			ar.setSuccess(false);
-			ar.setMessage("添加失败");
-			e.printStackTrace();
+			
 		}
-		return ar;
+		return mv;
 	}
 	
 }

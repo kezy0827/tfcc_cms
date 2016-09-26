@@ -8,6 +8,7 @@
      <select id="findBankInfoList"  resultType="pd">
         select 
         id,
+        compay_name,
         org_name,
         bankaccno,
         deposit_bankname,
@@ -27,24 +28,41 @@
     <update id="updateBankStatus" parameterType="pd">    
          update tb_bankacc 
          <set> 
-          status = 1
+          status = '1'
          </set>
          where id = #{id}     
      </update>
-     
+      <!-- 更新银行账户 -->
+    <update id="updateBankStatusEx" parameterType="pd">    
+         update tb_bankacc 
+         <set> 
+          status = '0'
+         </set>
+        <![CDATA[ where id <> #{id}     ]]> 
+     </update>
      
      <!-- 添加收款银行账号 -->
      <insert id="addBankaccno"  parameterType="pd">
       insert into tb_bankacc
-      (org_name,
-      payname,
-      payee_no,
-      checkphone)
+      (compay_name,
+      org_name,
+      bankaccno,
+      checkphone,
+      status,
+      create_time,
+      modify_time,
+      operator
+      )
       values
-      (#{orgname},
-      #{payname},
-      #{payeeno},
-      #{checkphone}
+      (
+      #{compay_name},
+      #{orgname},
+      #{bankaccno},
+      #{checkphone},
+      #{status},
+      now(),
+      now(),
+      #{operator}
       )
       
       
