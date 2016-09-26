@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
+import com.fh.util.DateUtil;
 import com.fh.util.PageData;
 
 
@@ -124,5 +125,31 @@ public class UserService {
 		return (User) dao.findForObject("UserMapper.getUserAndRoleById", USER_ID);
 	}
 
+	/*
+	*用户列表(用户购买标识)
+	*/
+	public List<PageData> listPdPageUserbuy(Page page)throws Exception{
+		return (List<PageData>) dao.findForList("UserXMapper.userbuylistPage", page);
+	}
+	
+	/**
+	 * @describe:更新订单状态
+	 * @author: kezhiyi
+	 * @date: 2016年9月25日
+	 * @param pd
+	 * @throws Exception
+	 * @return: void
+	 */
+	public void updateBuyStatus(PageData pd)throws Exception{
+	    if(pd.getString("status").equals("1")){//审核通过,添加支付时间
+            pd.put("pay_time", DateUtil.getTime());
+            pd.put("caldate", DateUtil.getTime());
+            pd.put("cntflag", "1");
+        }
+        	pd.put("operator", "sys");
+        dao.update("UserXMapper.updatebuyflag", pd);
+           
+        }
+	
 	
 }
