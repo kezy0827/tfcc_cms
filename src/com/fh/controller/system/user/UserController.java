@@ -33,7 +33,6 @@ import com.fh.entity.system.Role;
 import com.fh.service.system.menu.MenuService;
 import com.fh.service.system.role.RoleService;
 import com.fh.service.system.user.UserService;
-import com.fh.util.AjaxResponse;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.FileDownload;
@@ -519,54 +518,4 @@ public class UserController extends BaseController {
 		mv.addObject(Const.SESSION_menuList, menuList);//菜单权限
 	}
 	/* ===============================权限================================== */
-	
-	/**
-	 * 列表
-	 */
-	@RequestMapping(value="/userbuyListPage")
-	public ModelAndView userbuyListPage(Page page) throws Exception{
-		logBefore(logger, "交易订单列表");
-		ModelAndView mv = this.getModelAndView();
-		try{
-			pd = this.getPageData();
-			page.setPd(pd);
-			List<PageData> list = userService.listPdPageUserbuy(page);
-			System.out.println("-----------------------------------------"+list.size());
-			//调用权限
-			this.getHC(); //================================================================================
-			//调用权限
-			mv.setViewName("business/user/userbuy_list");
-			mv.addObject("varList", list);
-			mv.addObject("pd", pd);
-		} catch(Exception e){
-			logger.error(e.toString(), e);
-		}
-		return mv;
-	}
-	
-	/**
-	 * @describe:审核
-	 * @author: kezhiyi
-	 * @date: 2016年9月25日下午5:48:27
-	 * @throws Exception
-	 * @return: ModelAndView
-	 */
-	@RequestMapping(value="/updatebuyStatus")
-	@ResponseBody
-	public AjaxResponse updatebuyStatus() throws Exception{
-	    logBefore(logger, "更新用户购买状态");
-	    try{
-	        pd = this.getPageData();
-	        userService.updateBuyStatus(pd);
-	        ar.setSuccess(true);
-	        ar.setMessage("更新完毕！");
-	    } catch(Exception e){
-	        logger.error(e.toString(), e);
-	        ar.setSuccess(false);
-            ar.setMessage("系统异常，审核失败！");
-	    }
-	    return ar;
-	}
-	
-	
 }

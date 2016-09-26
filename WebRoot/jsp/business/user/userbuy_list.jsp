@@ -35,7 +35,7 @@
 	<div class="row-fluid">
 	
 			<!-- 检索  -->
-			<form action="user/userbuyListPage.do" method="post" name="Form" id="Form">
+			<form action="user/business/userbuyListPage.do" method="post" name="Form" id="Form">
 			<table >
 				<tr>
 					<!-- <td>
@@ -94,7 +94,7 @@
 									<label><input type='checkbox' name='ids' value="${var.news_id}" /><span class="lbl"></span></label>
 								</td> --%>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-								<td>${var.phone }</td>
+								<td><a href="/business/user/getUserDetail">${var.phone }</a></td>
 								<td>${var.real_name }</td>
 								<td>${var.wxnum }</td>
 								<td>
@@ -196,7 +196,7 @@
 		}
 		
 		function updateStatus(id,buy_flag){
-			$.post('<%=basePath%>/user/updatebuyStatus.do',{'id':id,'buy_flag':buy_flag},function(data){
+			$.post('<%=basePath%>/business/user/updatebuyStatus.do',{'id':id,'buy_flag':buy_flag},function(data){
                 if(data.success){
                 	window.location.reload();
                 }else{
@@ -206,7 +206,7 @@
 		}
 		function toEdit(id){
 			window.parent.jzts();
-			window.location.href='<%=basePath%>/user/toEdit.do?id='+id;
+			window.location.href='<%=basePath%>/business/user/toEdit.do?id='+id;
 		}
 		function del(id){
 			$.post('<%=basePath%>/trade/del.do',{'id':id},function(data){

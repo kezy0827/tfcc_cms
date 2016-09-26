@@ -299,40 +299,5 @@
              </foreach>
 	</delete>
 	<!-- ================================================================================================== -->
-	<!-- 用户列表(用户组) -->
-	<select id="userbuylistPage" parameterType="page" resultType="pd">
-		select 
-		id,
-		user_code,
-		user_name,phone,
-		real_name,
-		wxnum,
-		bankaccno,
-		mail_addrss,
-		zip_code,
-		user_type,
-		buy_flag
-		from tb_user_detail u
-		where 1=1
-		<if test="pd.phone != null and pd.phone != ''"><!-- 关键词检索 -->
-			and  u.phone like CONCAT(CONCAT('%', #{pd.phone}),'%')			
-		</if>
-		order by u.modify_time desc
-	</select>
-	
-	
-	<update id="updatebuyflag" parameterType="pd">    
-         update tb_user_detail 
-         <set> 
-                buy_flag = #{buy_flag},
-                modify_time = now(),
-           <if test="operator != null and operator != ''">
-                operator = #{operator}
-           </if>     
-         </set>
-         where user_code = #{user_code}     
-     </update>
-	
-	
 	
 </mapper>
