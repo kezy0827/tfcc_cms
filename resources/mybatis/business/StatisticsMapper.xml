@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StatisticsMapper">
+    <!-- 统计会员信息 -->
+    <select id="getRegisterNum" parameterType="pd" resultType="pd">
+        select count(*)totalNum ,
+        (select count(*) from tb_user where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10))todayNum
+        from tb_user
+    </select>
+    <!-- 购买SAN 统计 -->
+    <select id="getBuySAN" parameterType="pd" resultType="pd">
+        SELECT count(*) orderNum,SUM(t.txnum) BuyNum ,
+		(select count(*) from tb_trade_detail where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayOrderNum,
+		(select SUM(txnum) from tb_trade_detail where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayBuyNum
+		FROM tb_trade_detail t
+    </select>
+   <!--  统计转账SAN -->
+    <select id="getZZSAN" parameterType="pd" resultType="pd">
+        SELECT sum(t.outamnt) outAmnt,
+		(select sum(outamnt) from tb_acc_outdetail where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayOutAmnt,
+		(select sum(froze_amnt) from tb_acc)frozeAmnt
+        FROM tb_acc_outdetail t
+    </select>
+    <!-- 统计发放奖励 -->
+    <select id="getReward" parameterType="pd" resultType="pd">
+		select sum(t.amnt) totalReward,
+		(select sum(amnt) from tb_acc_detail where sub_accno='010301' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10))todayReward
+		from tb_acc_detail t
+		where t.sub_accno='010301'
+    </select>
+    <!-- SAN额度 -->
+    <select id="getSysSAN" parameterType="pd" resultType="pd">
+		select t.credit_limit ,(select sum(total_amnt) from tb_acc )total_amnt
+        from  tb_acc_limitdef t where t.acc_no='00'
+    </select>
+</mapper>

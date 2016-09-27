@@ -62,6 +62,8 @@
 			<mapper resource="mybatis/business/UserDetailMapper.xml"/>
 			<!-- code管理  -->
 			<mapper resource="mybatis/business/SysGencodeMapper.xml"/>
+			<!-- 统计管理  -->
+			<mapper resource="mybatis/business/StatisticsMapper.xml"/>
 		<!-- 业务模块 结束-->
 	</mappers>
 </configuration>

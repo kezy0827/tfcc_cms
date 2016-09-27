@@ -19,8 +19,8 @@
 	<div id="breadcrumbs">
 	
 	<ul class="breadcrumb">
-		<li><i class="icon-home"></i> <a>资讯管理</a><span class="divider"><i class="icon-angle-right"></i></span></li>
-		<li class="active"><a>用户列表</a></li>
+		<li><i class="icon-home"></i> <a>会员管理</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+		<li class="active"><a>会员列表</a></li>
 	</ul><!--.breadcrumb-->
 	
 	<div id="nav-search">

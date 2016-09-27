@@ -15,14 +15,14 @@
     </select>
     <!-- 用户列表(用户组) -->
     <select id="userbuylistPage" parameterType="page" resultType="pd">
-        select a.*,b.real_name ref_real_name,c.avb_amnt,
-        (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101')total_reward,
-        (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010401')total_out,d.`status`
-        from tb_user_detail a,tb_user_detail b,tb_acc c,tb_user d
-        where 1=1
-        and a.ref_phone = b.phone 
-        and a.user_code = c.user_code
-        and a.user_code = d.user_code
+        select a.*,b.real_name ref_real_name,c.avb_amnt, 
+		(select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
+		(select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` 
+		from tb_user_detail a,tb_user_detail b,tb_acc c,tb_user d 
+		where 1=1 
+		and a.ref_phone = b.phone 
+		and a.user_code = c.user_code 
+		and a.user_code = d.user_code 
         <!-- 关键词检索 -->
         <if test="pd.phone != null and pd.phone != ''">
             and  a.phone like CONCAT(CONCAT('%', #{pd.phone}),'%')          
