@@ -83,7 +83,7 @@
                                  </c:if>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.compay_name}</td>
+										<td>${var.org_name}</td>
 										<%-- <td>${var.org_name}</td> --%>
 										<td>${var.bankaccno}</td>
 										<td>${var.checkphone}</td>
@@ -200,14 +200,18 @@
 		}
 		
 		/* $(function(){ 
+			
+			var c=$("input[name='id']").attr("checked");
+			if(c=="checked"){
+				$("tr").css("color","red");
+			}
 			document.getElementById("org_name").value;
 			$('table tr').click(function(){        
 				$('table tr').removeClass('on');       
 				$(this).addClass('on');   
 				});
 				}); */
-		
-		
+				
 		function change(){
 			
 		    //var	 id=document.getElementById("first").value;
