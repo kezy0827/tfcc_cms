@@ -17,7 +17,7 @@ public class BankInfoService {
 	private DaoSupport dao;
 	
 	public List<PageData> findBankInfoList(Page page) throws Exception{
-		return (List<PageData>) dao.findForList("BankInfoMapper.findBankInfoList",page);
+		return (List<PageData>) dao.findForList("BankInfoMapper.findBankInfoListPage",page);
 	}
 	
 	public void updateBankState(PageData pd) throws Exception{

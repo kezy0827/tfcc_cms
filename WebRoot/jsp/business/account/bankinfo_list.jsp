@@ -75,7 +75,7 @@
 							<tr>
 								<td class='center' style="width: 30px;">
 								 <c:if test="${var.status == 1 }">
-								 <label><input type='radio' name='id'  value="${var.id}"  checked/><span class="lbl"></span></label>                                  
+								 <label><input type='radio' name='id'  value="${var.id}"  checked="checked"/><span class="lbl"></span></label>                                  
                                  </c:if>
                                   <c:if test="${var.status == 0 }">
 								 <label><input type='radio' name='id'  value="${var.id}" /><span class="lbl"></span></label>                                  
@@ -108,16 +108,18 @@
 			</tr>
 		</table>
 		</div>
+           <div style="text-align:center">
 		<a class="btn btn-small btn-success" id="change" onclick="change();">更改账号</a>
 		<a class="btn btn-small btn-success" id="save" onclick="save();">保存</a>
 		
-		
-		
+		</div>
+		</form>
 	</div>
-	</form>
+	
      
    <form action="bank/addbankinfo.do" method="post" name="Form1" id="Form1">
-   <div class="page-header position-relative">	
+   <div class="page-header position-relative" style="text-align:center">	
+   
   			      <tr>
 					<td><label class="text_right" >公司名称：</label></td>
                     <td>
@@ -135,10 +137,12 @@
 					<td><input type="text" name="checkphone" id="checkphone" value="${pd.checkphone}"/></td>
 				</tr>
 				</div>
+         <div  style="text-align:center">
 				<tr>
-  				   <a class="btn btn-small btn-success" id="save1" onclick="save1();">保存</a>
+                    <!-- <input type="submit" id="submit" name="submitname" onclick="winclose()" value="保存"/> -->
+  				   <a  class="btn btn-small btn-success" id="save1" onclick="save1();">保存</a>
               </tr>
-   
+       </div>
    </form>
  
  
@@ -168,6 +172,9 @@
 		
 		$(window.parent.hangge());
 		
+		
+		 
+		
 		//检索
 		function save(){
 		
@@ -175,8 +182,14 @@
 		}
 		function save1(){			
 			$("#Form1").submit();
+			<%-- //window.location.href='<%=basePath%>/bank/addbankifo.do'; --%>
 		}
 		
+		
+		function change(){         
+            $("#Form").submit();
+            <%-- //window.location.href='<%=basePath%>/bank/addbankifo.do'; --%>
+        }
 		
 		//新增
 		function add(){

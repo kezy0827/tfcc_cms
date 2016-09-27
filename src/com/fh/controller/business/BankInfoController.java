@@ -56,20 +56,18 @@ public class BankInfoController extends BaseController {
 	@RequestMapping(value="/addbankinfo",method=RequestMethod.POST)
 	@ResponseBody
 	public ModelAndView addBankInfo(){//添加银行账户信息
-		ModelAndView mv = this.getModelAndView();
+		//ModelAndView mv = this.getModelAndView();
 		try {
-			System.out.println("+++++++++++++++++=");
 			pd=this.getPageData();
 			pd.put("status", "0");
 			pd.put("operator", "sys");
 			bankInfoService.addBankAccNo(pd);
 			
-			
 		} catch (Exception e) {
 			ar.setSuccess(false);
 			
 		}
-		return mv;
+		return  new ModelAndView("redirect:/bank/getbankinfo.do");
 	}
 	
 }
