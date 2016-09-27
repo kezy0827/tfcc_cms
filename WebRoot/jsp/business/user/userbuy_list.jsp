@@ -35,7 +35,7 @@
 	<div class="row-fluid">
 	
 			<!-- 检索  -->
-			<form action="user/business/userbuyListPage.do" method="post" name="Form" id="Form">
+			<form action="business/user/userbuyListPage.do" method="post" name="Form" id="Form">
 			<table >
 				<tr>
 					<!-- <td>
@@ -45,21 +45,22 @@
 						</span>
 					</td> -->
                     
-                    <td ><span>手机号:</span><input class="span20" name="phone" id="phone" value="${pd.phone}" type="text" style="width:200px;" placeholder="订单号"/></td>	
-                    				<%-- <td > 
-						<span>订单状态:</span>
-					 	<select class="chzn-select" name="status" id="status" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-					 		<option style="text-align: center;" value=""  <c:if test="${pd.status =='' }">selected='selected'</c:if>>--请选择--</option>
-				 			<option style="text-align: center;" value="0" <c:if test="${pd.status =='0' }">selected='selected'</c:if>>未付款</option>
-				 			<option style="text-align: center;" value="1" <c:if test="${pd.status =='1' }">selected='selected'</c:if>>已完成</option>
-				 			<option style="text-align: center;" value="9" <c:if test="${pd.status =='9' }">selected='selected'</c:if>>已取消</option>
-					  	</select>
-					</td> --%>
-					<!-- <td>是否置顶:<input style="display: block;" type="checkbox"></td> -->
+                    <td ><span>手机号:</span><input class="span20" name="phone" id="phone" value="${pd.phone}" type="text" style="width:200px;" placeholder="手机号"/></td>	
+                    <td >
+                        <span>会员状态:</span>
+                        <select class="chzn-select" name="status" id="status" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
+                            <option style="text-align: center;" value=""  <c:if test="${pd.status =='' }">selected='selected'</c:if>>--请选择--</option>
+                            <option style="text-align: center;" value="1" <c:if test="${pd.status =='1' }">selected='selected'</c:if>>有效</option>
+                            <option style="text-align: center;" value="0" <c:if test="${pd.status =='0' }">selected='selected'</c:if>>无效</option>
+                        </select>
+                    </td>
+                    <td >
+                    <span>注册时间:</span><input class="span10 date-picker" name="startTime" id="startTime" value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/>-
+                    <input class="span10 date-picker" name="endTime" id="endTime" value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
 					<td ><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<%-- <c:if test="${QX.cha == 1 }">
+					<c:if test="${QX.cha == 1 }">
 					<td ><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if> --%>
+					</c:if>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -72,12 +73,19 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th> -->
 						<th>序号</th>
-						<th>手机号</th>
 						<th>真实姓名</th>
-						<th>微信号</th>
-						<th>用户类型</th>
+						<th>手机号</th>
+						<th>推介人</th>
+						<th>推介人手机号</th>
+						<th>注册时间</th>
+						<th>累积奖励</th>
+						<th>累积转出</th>
+						<th>账户余额</th>
+						<th>密码重置</th>
 						<th>购买标识</th>
-						<th>审核</th>
+						<th>用户类型</th>
+						<th>会员状态</th>
+						<th>操作</th>
 						<!-- <th class="center">操作</th> -->
 					</tr>
 				</thead>
@@ -94,16 +102,29 @@
 									<label><input type='checkbox' name='ids' value="${var.news_id}" /><span class="lbl"></span></label>
 								</td> --%>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-								<td><a href="/business/user/getUserDetail">${var.phone }</a></td>
 								<td>${var.real_name }</td>
-								<td>${var.wxnum }</td>
-								<td>
-									<c:if test="${var.user_type == 1}">普通会员</c:if>
-									<c:if test="${var.user_type == 4}">机构会员</c:if>
-								</td>
-								<td>
-                                        <a href="javascript:updateStatus('${var.id }','1')">允许购买</a>&nbsp;|&nbsp;<a href="javascript:updateStatus('${var.id }','0')">禁止购买</a>
+								<td><a href="javascript:getUserDetail('${var.phone }')">${var.phone }</a></td>
+								<td>${var.ref_real_name }</td>
+								<td>${var.ref_phone }</td>
+								<td><fmt:formatDate value="${var.create_time}" type="both"/></td>
+								<td>${var.total_reward }</td>
+								<td>${var.total_out }</td>
+								<td>${var.avb_amnt }</td>
+								<td><a href="javascript:resetPassword('${var.user_code }')">密码重置</a></td>
+                                <td>
+                                     <c:if test="${var.buy_flag == 0 }"><a href="javascript:updateFlag('${var.id }','1')">允许购买</a>&nbsp;|&nbsp;<font color="grey">禁止购买</font></c:if>
+                                     <c:if test="${var.buy_flag == 1 }"><font color="grey">禁止购买</font>&nbsp;|&nbsp;<a href="javascript:updateFlag('${var.id }','0')"><font color="red">禁止购买</font></a></c:if>
                                 </td>
+                                <td>
+                                    <c:if test="${var.user_type == 1}">普通会员</c:if>
+                                    <c:if test="${var.user_type == 4}">机构会员</c:if>
+                                </td>
+                                <td><c:if test="${var.status ==1 }">有效</c:if><c:if test="${var.status ==0 }">禁用</c:if></td>
+                                <td class="center">
+                                    <c:if test="${var.status ==1 }"><font color="grey">已启用</font>&nbsp;|&nbsp;<a href="javascript:disableStatus('${var.user_code }','0')"><font color="red">禁用 </a></font></c:if>
+                                    <c:if test="${var.status ==0 }"><a href="javascript:disableStatus('${var.user_code }','1')">启用</a>&nbsp;|&nbsp;<font color="grey">已禁用</font></c:if>
+                                </td>
+								
 								<%-- <td style="width: 30px;" class="center">
 									<div class='hidden-phone visible-desktop btn-group'>
 										<c:if test="${QX.edit != 1}">
@@ -195,7 +216,7 @@
 			$("#Form").submit();
 		}
 		
-		function updateStatus(id,buy_flag){
+		function updateFlag(id,buy_flag){
 			$.post('<%=basePath%>/business/user/updatebuyStatus.do',{'id':id,'buy_flag':buy_flag},function(data){
                 if(data.success){
                 	window.location.reload();
@@ -217,7 +238,37 @@
 				}
 			});
         }
-		
+		function getUserDetail(phone){
+			var f = document.createElement("form");
+	        document.body.appendChild(f);
+	        var i = document.createElement("input");
+	        i.type = "hidden";
+	        f.appendChild(i);
+	        i.value = phone;
+	        i.name = "phone";
+	        f.action = "<%=basePath%>/business/user/getUserDetail.do";
+	        f.submit();
+		}
+		function disableStatus(user_code,status){
+			var url = "<%=basePath%>/business/user/disableStatus.do";
+			$.post(url,{'user_code':user_code,'status':status},function(data){
+				if(data.success){
+					window.location.reload();
+				}else{
+					alert(data.message);
+				}
+			});
+		}
+		function resetPassword(user_code){
+			 bootbox.confirm("确定要重置吗？", function (result) {  
+                if(result) {  
+                	var url = "<%=basePath%>/business/user/resetPassword.do";
+                    $.post(url,{'user_code':user_code},function(data){
+                        bootbox.alert(data.message);
+                    });
+                }
+             });  
+		}
 	    $(function() {
             
             //下拉框
@@ -239,13 +290,11 @@
             }); */
             
         });
-        <%-- //导出excel
+        //导出excel
         function toExcel(){
             window.location.href='<%=basePath%>/trade/excel.do';
-        } --%>
-//         testTriger();
+        }
         function testTriger(){
-        	alert(132)
         	$.post("<%=basePath%>/trade/testTriger.do",function(data){
         		alert(data.message);
         	});

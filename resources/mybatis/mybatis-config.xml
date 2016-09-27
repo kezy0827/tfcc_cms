@@ -57,6 +57,8 @@
 			<mapper resource="mybatis/business/AccMapper.xml"/>
 			<!-- 用户关系管理  -->
 			<mapper resource="mybatis/business/UserFriendshipMapper.xml"/>
+			<!-- 用户管理  -->
+			<mapper resource="mybatis/business/UserDetailMapper.xml"/>
 			<!-- code管理  -->
 			<mapper resource="mybatis/business/SysGencodeMapper.xml"/>
 		<!-- 业务模块 结束-->

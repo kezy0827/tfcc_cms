@@ -2,16 +2,12 @@ package com.fh.service.business.trade;
 
 import java.math.BigDecimal;
 import java.util.List;
-
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
-
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.service.business.acc.AccService;
 import com.fh.service.business.user.UserDetailService;
-import com.fh.service.system.user.UserService;
 import com.fh.util.DateUtil;
 import com.fh.util.PageData;
 
@@ -24,8 +20,6 @@ public class TradeDetailService {
 	
 	@Resource(name = "userDetailService")
 	private UserDetailService userDetailService;
-	@Resource(name = "userService")
-	private UserService userService;
 	@Resource(name = "accService")
 	private AccService accService;
 	/**

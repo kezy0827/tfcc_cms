@@ -149,6 +149,13 @@
 				/admin00/login/** = anon
 				/assets/** = anon
 	           	/avatars/** = anon
+	           	/font/** = anon
+	           	/FusionCharts/** = anon
+	           	/jcrop/** = anon
+	           	/template/** = anon
+	           	/ueditor/** = anon
+	           	/UI_new/** = anon
+	           	/uploadify/** = anon
 	           	/css/** = anon
 	           	/ueditor/** = anon
 	           	/font/** = anon
