@@ -89,7 +89,7 @@
 										<td>${var.checkphone}</td>
                                         <td>
                                         <c:if test="${var.status==0}">未启用</c:if>
-                                        <c:if test="${var.status==1}">已启用</c:if>
+                                        <c:if test="${var.status==1}"><span style="color:blue;">已启用</span></c:if>
                                         </td>
 							</tr>
 						
@@ -132,7 +132,7 @@
                         <input type="text" name=bankaccno id="bankaccno" maxlength="50" value="${pd.bankaccno}" />&nbsp;<span style="color:red">*</span>
                     </td>
                     <td><label class="text_right">财务对账电话：</label></td>
-					<td><input type="text" name="checkphone" id="checkphone" maxlength="50" value="${pd.checkphone}"/></td>
+					<td><input type="text" name="checkphone" id="checkphone" maxlength="50" value="${pd.checkphone}"/>&nbsp;<span style="color:#fff">*</span></td>
 				</tr>
 				</div>
          <div  style="text-align:center">
@@ -171,6 +171,7 @@
 		//检索
 		function save(){
 			$("#Form").submit();
+			alert("切换成功");
 		}
 		function save1(){
 			var   name=$.trim(document.getElementById("org_name").value);
@@ -198,7 +199,13 @@
 			<%-- //window.location.href='<%=basePath%>/bank/addbankifo.do'; --%>
 		}
 		
-		
+		/* $(function(){ 
+			document.getElementById("org_name").value;
+			$('table tr').click(function(){        
+				$('table tr').removeClass('on');       
+				$(this).addClass('on');   
+				});
+				}); */
 		
 		
 		function change(){
