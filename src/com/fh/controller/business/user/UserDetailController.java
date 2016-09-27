@@ -160,7 +160,7 @@ public class UserDetailController extends BaseController {
 	    try{
 	        //密码重置为000000
 	        pd = this.getPageData();
-	        pd.put("pwdhash", MD5Util.getMd5Code("000000"));
+	        pd.put("pwdhash", MD5Util.getMd5Code("s111111"));
 	        userDetailService.resetPassword(pd);
 	        ar.setSuccess(true);
 	        ar.setMessage("密码重置成功");
