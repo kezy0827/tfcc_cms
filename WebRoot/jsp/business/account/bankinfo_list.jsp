@@ -58,10 +58,11 @@
 						<th class="center">
 						</th>
 						<th>序号</th>
-						<th>公司名称</th>
+						<!-- <th>公司名称</th> -->
 						<th>姓名</th>
 						<th>支付宝账号</th>
 						<th>财务对账电话</th>
+                        <th>状态</th>
 					</tr>
 				</thead>
 										
@@ -83,9 +84,13 @@
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 										<td>${var.compay_name}</td>
-										<td>${var.org_name}</td>
+										<%-- <td>${var.org_name}</td> --%>
 										<td>${var.bankaccno}</td>
 										<td>${var.checkphone}</td>
+                                        <td>
+                                        <c:if test="${var.status==0}">未启用</c:if>
+                                        <c:if test="${var.status==1}">已启用</c:if>
+                                        </td>
 							</tr>
 						
 						</c:forEach>									
@@ -100,20 +105,13 @@
 				
 				</tbody>
 			</table>
-			
-		<div class="page-header position-relative">	
-		<table style="width:100%;">
-			<tr>
-				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-			</tr>
-		</table>
+
+         <div style="text-align:center">
+            
+    		<a class="btn btn-small btn-success" id="save" onclick="save();">切换账号</a>
+		    <!-- <a class="btn btn-small btn-success" id="save" onclick="save();">保存</a> -->
 		</div>
-           <div style="text-align:center">
-		<a class="btn btn-small btn-success" id="change" onclick="change();">更改账号</a>
-		<a class="btn btn-small btn-success" id="save" onclick="save();">保存</a>
-		
-		</div>
-		</form>
+	</form>
 	</div>
 	
      
@@ -121,20 +119,20 @@
    <div class="page-header position-relative" style="text-align:center">	
    
   			      <tr>
-					<td><label class="text_right" >公司名称：</label></td>
+					<%-- <td><label class="text_right" >公司名称：</label></td>
                     <td>
                         <input type="text" name=compay_name id="compay_name" maxlength="50" value="${pd.compay_name}" />
-                    </td>
+                    </td> --%>
                     <td><label class="text_right">姓名：</label></td>
-					<td><input type="text" name="org_name" id="org_name" value="${pd.org_name}"/></td>
+					<td><input type="text" name="org_name" id="org_name" value="${pd.org_name}"/>&nbsp;<span style="color:red">*</span></td>
 				</tr>
    				<tr>
 					<td><label class="text_right" >支付宝账号：</label></td>
                     <td>
-                        <input type="text" name=bankaccno id="bankaccno" maxlength="50" value="${pd.bankaccno}" />
+                        <input type="text" name=bankaccno id="bankaccno" maxlength="50" value="${pd.bankaccno}" />&nbsp;<span style="color:red">*</span>
                     </td>
                     <td><label class="text_right">财务对账电话：</label></td>
-					<td><input type="text" name="checkphone" id="checkphone" value="${pd.checkphone}"/></td>
+					<td><input type="text" name="checkphone" id="checkphone" maxlength="50" value="${pd.checkphone}"/></td>
 				</tr>
 				</div>
          <div  style="text-align:center">
@@ -162,7 +160,6 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/ace-elements.min.js"></script>
 		<script src="js/ace.min.js"></script>
-		
 		<script type="text/javascript" src="js/chosen.jquery.min.js"></script><!-- 下拉框 -->
 		<script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script><!-- 日期框 -->
 		<script type="text/javascript" src="js/bootbox.min.js"></script><!-- 确认窗口 -->
@@ -170,23 +167,43 @@
 		<script type="text/javascript" src="js/jquery.tips.js"></script><!--提示框-->
 		<script type="text/javascript">
 		
-		$(window.parent.hangge());
-		
-		
-		 
-		
+		 $(window.parent.hangge()); 		
 		//检索
 		function save(){
-		
 			$("#Form").submit();
 		}
-		function save1(){			
+		function save1(){
+			var   name=$.trim(document.getElementById("org_name").value);
+			var   bankaccno=$.trim(document.getElementById("bankaccno").value);
+			var  reg = /[a-zA-Z\d+]{6,16}/;
+			if(name==""){
+				alert("姓名不能为空");
+				return false;
+			}
+			if(bankaccno==""){
+				alert("账号不能为空");
+                return false;
+			}else{
+		        if(reg.test(bankaccno)){
+		            
+	            }else{
+	                alert('请输入正确的支付宝账号:手机号/邮箱');
+	                return false;
+	            };
+	        }
 			$("#Form1").submit();
+			alert("保存成功");
+			$("#org_name").val("");
+			$("#bankaccno").val("");
 			<%-- //window.location.href='<%=basePath%>/bank/addbankifo.do'; --%>
 		}
 		
 		
-		function change(){         
+		
+		
+		function change(){
+			
+		    //var	 id=document.getElementById("first").value;
             $("#Form").submit();
             <%-- //window.location.href='<%=basePath%>/bank/addbankifo.do'; --%>
         }
@@ -215,19 +232,12 @@
 			 };
 			 diag.show();
 		} --%>
-		function edit(id){
+		<%-- function edit(id){
 			window.parent.jzts();
 			window.location.href='<%=basePath%>/news/goEdit.do?news_id='+id;
-		}
+		} --%>
 		</script>
-		
-		<script type="text/javascript">		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>/news/excel.do';
-		}
-		</script>
-		<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
 		
 	</body>
 </html>

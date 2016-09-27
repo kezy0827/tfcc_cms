@@ -38,19 +38,19 @@ public class BankInfoController extends BaseController {
 	
 	@RequestMapping(value="/updatestatus",method=RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView updateBankStatus(PageData pd){//更新银行账户启用状态
+	public ModelAndView updateBankStatus(){//更新银行账户启用状态
 		ModelAndView mv = this.getModelAndView();
 		try {
-			System.out.println("+++++++++++++++++=");
 			pd=this.getPageData();
 			String id = pd.get("id").toString();		
 			bankInfoService.updateBankState(pd);
 			
 
 		} catch (Exception e) {
+			System.out.println("+++++++++++++++++=");
 			e.printStackTrace();
 		}
-		return mv;
+		return  new ModelAndView("redirect:/bank/getbankinfo.do");
 	}
 	
 	@RequestMapping(value="/addbankinfo",method=RequestMethod.POST)

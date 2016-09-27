@@ -56,7 +56,7 @@
       values
       (
       #{compay_name},
-      #{org_ name},
+      #{org_name},
       #{bankaccno},
       #{checkphone},
       #{status},
