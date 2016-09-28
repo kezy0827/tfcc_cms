@@ -78,7 +78,13 @@
         and a.revbankaccno = #{pd.revbankaccno}
     </if>
     <if test="pd.order_no != null and pd.order_no != ''" >
-        and a.order_no = #{pd.order_no}
+        and a.order_no = like CONCAT(CONCAT('%', #{pd.order_no}),'%')        
+    </if>
+    <if test="pd.phone != null and pd.phone != ''" >
+        and b.phone = like CONCAT(CONCAT('%', #{pd.phone}),'%')        
+    </if>
+    <if test="pd.payno != null and pd.payno != ''" > 
+        and a.payno like CONCAT(CONCAT('%', #{pd.payno}),'%')         
     </if>
     order by a.create_time desc
   </select>

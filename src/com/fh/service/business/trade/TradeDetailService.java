@@ -54,8 +54,8 @@ public class TradeDetailService {
             PageData trade = getTradeById(pd);
             PageData accPd = new PageData();
             accPd.put("user_code", trade.get("user_code").toString());
-            accPd.put("avb_amnt", trade.get("txamnt").toString());//购买数量
-            accPd.put("total_amnt", trade.get("txamnt").toString());
+            accPd.put("avb_amnt", trade.get("txnum").toString());//购买数量
+            accPd.put("total_amnt", trade.get("txnum").toString());
             accPd.put("syscode", "tfcc");
             accService.updateAcc(accPd);
             if(trade!=null){
@@ -105,8 +105,8 @@ public class TradeDetailService {
             PageData trade = getTradeById(pd);
             PageData accPd = new PageData();
             accPd.put("user_code", trade.get("user_code").toString());
-            accPd.put("avb_amnt", trade.get("txamnt").toString());//购买数量
-            accPd.put("total_amnt", trade.get("txamnt").toString());
+            accPd.put("avb_amnt", trade.get("txnum").toString());//购买数量
+            accPd.put("total_amnt", trade.get("txnum").toString());
             accPd.put("syscode", "tfcc");
             accService.updateAcc(accPd);
             if(trade!=null){

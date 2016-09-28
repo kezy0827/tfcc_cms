@@ -52,6 +52,8 @@
                             <option style="text-align: center;" value="商城" <c:if test="${pd.source_system =='商城' }">selected='selected'</c:if>>商城</option>
                         </select>
                     </td>
+                    <td ><span>手机号:</span><input class="span20" name="phone" id="phone" value="${pd.phone}" type="text" style="width:200px;" placeholder="手机号"/></td>
+                    <td ><span>支付宝账号:</span><input class="span20" name="payno" id="payno" value="${pd.payno}" type="text" style="width:200px;" placeholder="支付宝账号"/></td>
                     <td ><span>订单号:</span><input class="span20" name="order_no" id="order_no" value="${pd.order_no}" type="text" style="width:200px;" placeholder="订单号"/></td>
 					<td ><span>交易开始时间:</span><input class="span10 date-picker" name="startTime" id="startTime" value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
 					<td ><span>交易结束时间:</span><input class="span10 date-picker" name="endTime" id="endTime" value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
