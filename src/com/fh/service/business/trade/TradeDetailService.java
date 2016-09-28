@@ -2,14 +2,18 @@ package com.fh.service.business.trade;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.service.business.acc.AccService;
 import com.fh.service.business.user.UserDetailService;
 import com.fh.util.DateUtil;
 import com.fh.util.PageData;
+import com.fh.util.SmsSend;
 
 
 @Service("tradeDetailService")
@@ -57,8 +61,8 @@ public class TradeDetailService {
             accPd.put("avb_amnt", trade.get("txnum").toString());//购买数量
             accPd.put("total_amnt", trade.get("txnum").toString());
             accPd.put("syscode", "tfcc");
-            accService.updateAcc(accPd);
-            if(trade!=null){
+            boolean result = accService.updateAcc(accPd);
+            if(result&&trade!=null){
                 pd = new PageData();
                 pd.put("id", trade.get("id"));
                 pd.put("user_code", trade.get("user_code"));
@@ -67,8 +71,16 @@ public class TradeDetailService {
                     pd.put("phone", userDetail.getString("phone"));
                 }*/
                 rewardByBuy(pd);
+                //审核通过给用户发送短信
+                pd = new PageData();
+                pd.put("user_code",trade.get("user_code").toString());
+                PageData userDetail = userDetailService.findByUserCode(pd);
+                if(userDetail!=null&&userDetail.get("phone")!=null&&"".equals(userDetail.get("phone").toString())){
+                    String phone = userDetail.get("phone").toString();
+                    String content = "尊敬的会员【"+phone+"】您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请登录网站查收！";
+                    SmsSend.sendSms(phone, content);
+                }
             }
-            
         }
     }
 	/**
@@ -108,8 +120,8 @@ public class TradeDetailService {
             accPd.put("avb_amnt", trade.get("txnum").toString());//购买数量
             accPd.put("total_amnt", trade.get("txnum").toString());
             accPd.put("syscode", "tfcc");
-            accService.updateAcc(accPd);
-            if(trade!=null){
+            boolean result = accService.updateAcc(accPd);
+            if(result&&trade!=null){
                 pd = new PageData();
                 pd.put("user_code", trade.get("user_code"));
                 pd.put("id", trade.get("id"));
@@ -118,6 +130,14 @@ public class TradeDetailService {
                     pd.put("phone", userDetail.getString("phone"));
                 }*/
                 rewardByBuy(pd);
+                pd = new PageData();
+                pd.put("user_code",trade.get("user_code").toString());
+                PageData userDetail = userDetailService.findByUserCode(pd);
+                if(userDetail!=null&&userDetail.get("phone")!=null&&"".equals(userDetail.get("phone").toString())){
+                    String phone = userDetail.get("phone").toString();
+                    String content = "尊敬的会员【"+phone+"】您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
+                    SmsSend.sendSms(phone, content);
+                }
             }
             
         }
