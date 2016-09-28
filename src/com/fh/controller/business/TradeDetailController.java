@@ -1,5 +1,7 @@
 package com.fh.controller.business;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ import com.fh.entity.system.Menu;
 import com.fh.service.business.syscode.SysGencodeService;
 import com.fh.service.business.trade.TradeDetailService;
 import com.fh.util.AjaxResponse;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /** 
@@ -209,5 +212,76 @@ public class TradeDetailController extends BaseController{
         }
 	    return ar;
 	}
+	
+	/*
+	 * 导出用户信息到EXCEL
+	 * @return
+	 */
+	@RequestMapping(value="/excel")
+	public ModelAndView exportExcel(){
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try{
+			
+			//检索条件===
+			String USERNAME = pd.getString("USERNAME");
+			if(null != USERNAME && !"".equals(USERNAME)){
+				USERNAME = USERNAME.trim();
+				pd.put("USERNAME", USERNAME);
+			}
+			String lastLoginStart = pd.getString("lastLoginStart");
+			String lastLoginEnd = pd.getString("lastLoginEnd");
+			if(lastLoginStart != null && !"".equals(lastLoginStart)){
+				lastLoginStart = lastLoginStart+" 00:00:00";
+				pd.put("lastLoginStart", lastLoginStart);
+			}
+			if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
+				lastLoginEnd = lastLoginEnd+" 00:00:00";
+				pd.put("lastLoginEnd", lastLoginEnd);
+			} 
+			//检索条件===
+			
+			Map<String,Object> dataMap = new HashMap<String,Object>();
+			List<String> titles = new ArrayList<String>();
+			
+			titles.add("订单号"); 		//1
+			titles.add("姓名");  		//2
+			titles.add("手机");			//3
+			titles.add("交易量");			//4
+			titles.add("交易金额");			//5
+			titles.add("购买时间");			//6
+			titles.add("支付时间");		//7
+			titles.add("支付宝账号");	//8
+			
+			dataMap.put("titles", titles);
+			
+			List<PageData> userList = tradeDetailService.listAllTrade(pd);
+			List<PageData> varList = new ArrayList<PageData>();
+			for(int i=0;i<userList.size();i++){
+				PageData vpd = new PageData();
+				vpd.put("var1", userList.get(i).getString("USERNAME"));		//1
+				vpd.put("var2", userList.get(i).getString("NUMBER"));		//2
+				vpd.put("var3", userList.get(i).getString("NAME"));			//3
+				vpd.put("var4", userList.get(i).getString("ROLE_NAME"));	//4
+				vpd.put("var5", userList.get(i).getString("PHONE"));		//5
+				vpd.put("var6", userList.get(i).getString("EMAIL"));		//6
+				vpd.put("var7", userList.get(i).getString("LAST_LOGIN"));	//7
+				vpd.put("var8", userList.get(i).getString("IP"));			//8
+				varList.add(vpd);
+			}
+			
+			dataMap.put("varList", varList);
+			
+			ObjectExcelView erv = new ObjectExcelView();					//执行excel操作
+			
+			mv = new ModelAndView(erv,dataMap);
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
+	
+	
 }
 

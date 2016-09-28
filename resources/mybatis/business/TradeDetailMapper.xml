@@ -159,4 +159,20 @@
     where
     id = #{id}
   </update>
+  
+  
+  
+<!-- 用户列表(全部) -->
+	<select id="listAllTrade" parameterType="pd" resultType="pd">
+		select  a.user_code ,
+              a.order_no , b.real_name ,b.phone ,a.txnum ,a.txamnt ,a.txdate ,a.pay_time,a.payno ,
+             case when  a.`status`='0' then '待审核' 
+			    when  a.`status`='1' then '通过' 
+          when a.`status`='9' then '取消'
+          else '待审核'  end status         
+     from tb_trade_detail a,tb_user_detail b
+    where 1 = 1
+        and a.user_code = b.user_code
+		
+	</select>
 </mapper>
