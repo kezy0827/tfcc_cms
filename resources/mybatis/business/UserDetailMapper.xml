@@ -15,7 +15,7 @@
     </select>
     <!-- 用户列表(用户组) -->
     <select id="userbuylistPage" parameterType="page" resultType="pd">
-        select a.*,b.real_name ref_real_name,c.avb_amnt, 
+        select a.*,b.real_name ref_real_name,c.total_amnt,c.avb_amnt,c.froze_amnt, 
 		(select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
 		(select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` 
 		from tb_user_detail a,tb_user_detail b,tb_acc c,tb_user d 
@@ -43,7 +43,7 @@
     </select>
     <!-- 查询符合条件的所有信息 -->
     <select id="userbuylist" parameterType="pd" resultType="pd">
-        select a.*,b.real_name ref_real_name,c.avb_amnt, 
+        select a.*,b.real_name ref_real_name,c.total_amnt,c.avb_amnt,c.froze_amnt, 
         (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
         (select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` 
         from tb_user_detail a,tb_user_detail b,tb_acc c,tb_user d 

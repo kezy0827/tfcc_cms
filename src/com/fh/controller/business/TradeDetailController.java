@@ -224,35 +224,19 @@ public class TradeDetailController extends BaseController{
 		pd = this.getPageData();
 		try{
 			
-			//检索条件===
-			String USERNAME = pd.getString("USERNAME");
-			if(null != USERNAME && !"".equals(USERNAME)){
-				USERNAME = USERNAME.trim();
-				pd.put("USERNAME", USERNAME);
-			}
-			String lastLoginStart = pd.getString("lastLoginStart");
-			String lastLoginEnd = pd.getString("lastLoginEnd");
-			if(lastLoginStart != null && !"".equals(lastLoginStart)){
-				lastLoginStart = lastLoginStart+" 00:00:00";
-				pd.put("lastLoginStart", lastLoginStart);
-			}
-			if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
-				lastLoginEnd = lastLoginEnd+" 00:00:00";
-				pd.put("lastLoginEnd", lastLoginEnd);
-			} 
-			//检索条件===
-			
 			Map<String,Object> dataMap = new HashMap<String,Object>();
 			List<String> titles = new ArrayList<String>();
 			
-			titles.add("订单号"); 		//1
-			titles.add("姓名");  		//2
-			titles.add("手机");			//3
-			titles.add("交易量");			//4
-			titles.add("交易金额");			//5
-			titles.add("购买时间");			//6
-			titles.add("支付时间");		//7
-			titles.add("支付宝账号");	//8
+			titles.add("系统来源"); 		//1
+			titles.add("订单号");  		//2
+			titles.add("会员姓名");			//3
+			titles.add("手机号");			//4
+			titles.add("交易数量");			//5
+			titles.add("交易金额");			//6
+			titles.add("购买时间");		//7
+			titles.add("支付时间");	//8
+			titles.add("支付账号");	//9
+			titles.add("订单状态");	//10
 			
 			dataMap.put("titles", titles);
 			
@@ -260,17 +244,18 @@ public class TradeDetailController extends BaseController{
 			List<PageData> varList = new ArrayList<PageData>();
 			for(int i=0;i<userList.size();i++){
 				PageData vpd = new PageData();
-				vpd.put("var1", userList.get(i).getString("USERNAME"));		//1
-				vpd.put("var2", userList.get(i).getString("NUMBER"));		//2
-				vpd.put("var3", userList.get(i).getString("NAME"));			//3
-				vpd.put("var4", userList.get(i).getString("ROLE_NAME"));	//4
-				vpd.put("var5", userList.get(i).getString("PHONE"));		//5
-				vpd.put("var6", userList.get(i).getString("EMAIL"));		//6
-				vpd.put("var7", userList.get(i).getString("LAST_LOGIN"));	//7
-				vpd.put("var8", userList.get(i).getString("IP"));			//8
+				vpd.put("var1", userList.get(i).getString("source_system"));		//1
+				vpd.put("var2", userList.get(i).getString("order_no"));		//2
+				vpd.put("var3", userList.get(i).getString("real_name"));			//3
+				vpd.put("var4", userList.get(i).getString("phone"));	//4
+				vpd.put("var5", userList.get(i).getString("txnum"));		//5
+				vpd.put("var6", userList.get(i).getString("txamnt"));		//6
+				vpd.put("var7", userList.get(i).getString("txdate"));	//7
+				vpd.put("var8", userList.get(i).getString("pay_time"));			//8
+				vpd.put("var8", userList.get(i).getString("payno"));			//9
+				vpd.put("var8", userList.get(i).getString("status"));			//10
 				varList.add(vpd);
 			}
-			
 			dataMap.put("varList", varList);
 			
 			ObjectExcelView erv = new ObjectExcelView();					//执行excel操作

@@ -80,7 +80,9 @@
 						<th>注册时间</th>
 						<th>累积奖励</th>
 						<th>累积转出</th>
-						<th>账户余额</th>
+						<th>账户总额</th>
+						<th>可用余额</th>
+						<th>冻结余额</th>
 						<th>密码重置</th>
 						<th>购买标识</th>
 						<th>用户类型</th>
@@ -109,7 +111,9 @@
 								<td><fmt:formatDate value="${var.create_time}" type="both"/></td>
 								<td><c:if test="${var.total_reward =='0.0000'}"></c:if><c:if test="${var.total_reward !='0.0000'}">${var.total_reward }</c:if> </td>
 								<td>${var.total_out }</td>
+								<td>${var.total_amnt }</td>
 								<td>${var.avb_amnt }</td>
+								<td>${var.froze_amnt }</td>
 								<td><a href="javascript:resetPassword('${var.user_code }')">密码重置</a></td>
                                 <td>
                                      <c:if test="${var.buy_flag == 0 }"><a href="javascript:updateFlag('${var.id }','1')">允许购买</a>&nbsp;|&nbsp;<font color="grey">禁止购买</font></c:if>

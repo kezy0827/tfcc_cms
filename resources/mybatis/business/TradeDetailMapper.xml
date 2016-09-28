@@ -46,9 +46,55 @@
     from tb_trade_detail
     where order_no = #{order_no}
   </select>
+  <!-- 分页查询 -->
   <select id="datalistPage" parameterType="page" resultType="pd" >
     select 
     a.*,b.real_name,b.phone
+    
+    from tb_trade_detail a,tb_user_detail b
+    where 1 = 1
+        and a.user_code = b.user_code
+    <if test="pd.cuy_type != null and pd.cuy_type != ''" >
+        and a.cuy_type = #{pd.cuy_type}
+    </if>
+    <if test="pd.txtype != null and pd.txtype != ''" >
+        and a.txtype = #{pd.txtype}
+    </if>
+    <if test="pd.startTime != null and pd.startTime != ''" >
+        and a.txdate &gt;= #{pd.startTime}
+    </if>
+    <if test="pd.endTime != null and pd.endTime != ''" >
+        and SUBSTR(a.txdate,1,10) &lt;= #{pd.endTime}
+    </if>
+    <if test="pd.source_system != null and pd.source_system != ''" >
+        and a.source_system = #{pd.source_system}
+    </if>
+    <if test="pd.status != null and pd.status != ''" >
+        and a.status = #{pd.status}
+    </if>
+    <if test="pd.revorgname != null and pd.revorgname != ''" >
+        and a.revorgname = '%${pd.revorgname}%'
+    </if>
+    <if test="pd.revbankaccno != null and pd.revbankaccno != ''" >
+        and a.revbankaccno = #{pd.revbankaccno}
+    </if>
+    <if test="pd.order_no != null and pd.order_no != ''" >
+        and a.order_no like CONCAT(CONCAT('%', #{pd.order_no}),'%')        
+    </if>
+    <if test="pd.phone != null and pd.phone != ''" >
+        and b.phone like CONCAT(CONCAT('%', #{pd.phone}),'%')        
+    </if>
+    <if test="pd.payno != null and pd.payno != ''" > 
+        and a.payno like CONCAT(CONCAT('%', #{pd.payno}),'%')         
+    </if>
+    order by a.create_time desc
+  </select>
+  <!-- 导出报表 -->
+  <select id="datalistPage" parameterType="page" resultType="pd" >
+    select 
+    a.source_system,a.order_no,b.real_name,b.phone,a.txnum,a.txamnt,
+    substring(a.txdate,1,19) txdate,substring(a.pay_time,1,19) pay_time,
+    a.payno,(case when a.`status`='0' then '未付款' when a.`status`='1' then '完成' when a.`status`='9' then '已取消' end)`status`
     
     from tb_trade_detail a,tb_user_detail b
     where 1 = 1
