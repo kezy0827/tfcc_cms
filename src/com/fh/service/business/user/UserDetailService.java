@@ -22,12 +22,25 @@ public class UserDetailService {
 	    return (PageData)dao.findForObject("UserDetailMapper.findByUserCode", pd);
 	}
 	
-	/*
-    *用户列表(用户购买标识)
-    */
+	/**
+	 * @describe:分页查询用户列表
+	 * @author: zhangchunming
+	 * @date: 2016年9月28日下午4:51:06
+	 * @param page
+	 * @throws Exception
+	 * @return: List<PageData>
+	 */
     public List<PageData> listPageUserDetail(Page page)throws Exception{
         return (List<PageData>) dao.findForList("UserDetailMapper.userbuylistPage", page);
     }
+    /**导出报表查询符合条件所有数据
+     * @describe:
+     * @author: zhangchunming
+     * @date: 2016年9月28日下午4:51:21
+     * @param pd
+     * @throws Exception
+     * @return: List<PageData>
+     */
     public List<PageData> listUserDetail(PageData pd)throws Exception{
         return (List<PageData>) dao.findForList("UserDetailMapper.userbuylist", pd);
     }

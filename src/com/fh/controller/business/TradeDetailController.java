@@ -1,5 +1,6 @@
 package com.fh.controller.business;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -248,12 +249,12 @@ public class TradeDetailController extends BaseController{
 				vpd.put("var2", userList.get(i).getString("order_no"));		//2
 				vpd.put("var3", userList.get(i).getString("real_name"));			//3
 				vpd.put("var4", userList.get(i).getString("phone"));	//4
-				vpd.put("var5", userList.get(i).getString("txnum"));		//5
-				vpd.put("var6", userList.get(i).getString("txamnt"));		//6
+				vpd.put("var5", userList.get(i).get("txnum")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("txnum").toString()))); 
+				vpd.put("var6", userList.get(i).get("txamnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("txamnt").toString()))); 
 				vpd.put("var7", userList.get(i).getString("txdate"));	//7
 				vpd.put("var8", userList.get(i).getString("pay_time"));			//8
-				vpd.put("var8", userList.get(i).getString("payno"));			//9
-				vpd.put("var8", userList.get(i).getString("status"));			//10
+				vpd.put("var9", userList.get(i).getString("payno"));			//9
+				vpd.put("var10", userList.get(i).getString("status"));			//10
 				varList.add(vpd);
 			}
 			dataMap.put("varList", varList);

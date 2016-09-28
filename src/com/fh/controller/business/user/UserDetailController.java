@@ -1,5 +1,6 @@
 package com.fh.controller.business.user;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -206,32 +207,41 @@ public class UserDetailController extends BaseController {
             Map<String,Object> dataMap = new HashMap<String,Object>();
             List<String> titles = new ArrayList<String>();
             
-            titles.add("用户名");      //1
-            titles.add("编号");       //2
-            titles.add("姓名");           //3
-            titles.add("职位");           //4
-            titles.add("手机");           //5
-            titles.add("邮箱");           //6
-            titles.add("最近登录");     //7
-            titles.add("上次登录IP");   //8
+            titles.add("真实姓名");      //1
+            titles.add("手机号");       //2
+            titles.add("推介人");           //3
+            titles.add("推介人手机号");           //4
+            titles.add("注册时间");           //5
+            titles.add("累计奖励");           //6
+            titles.add("累计转出");     //7
+            titles.add("账户总额");   //8
+            titles.add("可用余额");   //9
+            titles.add("冻结余额");   //10
+            titles.add("购买标识");   //11
+            titles.add("用户类型");   //12
+            titles.add("会员状态");   //13
             
             dataMap.put("titles", titles);
             
-            List<PageData> list = userDetailService.listUserDetail(pd);
+            List<PageData> userList = userDetailService.listUserDetail(pd);
             List<PageData> varList = new ArrayList<PageData>();
-            /*for(int i=0;i<userList.size();i++){
+            for(int i=0;i<userList.size();i++){
                 PageData vpd = new PageData();
-                vpd.put("var1", userList.get(i).getString("USERNAME"));     //1
-                vpd.put("var2", userList.get(i).getString("NUMBER"));       //2
-                vpd.put("var3", userList.get(i).getString("NAME"));         //3
-                vpd.put("var4", userList.get(i).getString("ROLE_NAME"));    //4
-                vpd.put("var5", userList.get(i).getString("PHONE"));        //5
-                vpd.put("var6", userList.get(i).getString("EMAIL"));        //6
-                vpd.put("var7", userList.get(i).getString("LAST_LOGIN"));   //7
-                vpd.put("var8", userList.get(i).getString("IP"));           //8
+                vpd.put("var1", userList.get(i).getString("real_name"));     //1
+                vpd.put("var2", userList.get(i).getString("phone"));       //2
+                vpd.put("var3", userList.get(i).getString("ref_real_name"));         //3
+                vpd.put("var4", userList.get(i).getString("ref_phone"));    //4
+                vpd.put("var5", userList.get(i).getString("create_time1"));        //5
+                vpd.put("var6", userList.get(i).get("total_reward")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("total_reward").toString())));        //6
+                vpd.put("var7", userList.get(i).get("total_out")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("total_out").toString())));        //7
+                vpd.put("var8", userList.get(i).get("total_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("total_amnt").toString())));        //8
+                vpd.put("var9", userList.get(i).get("avb_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("avb_amnt").toString())));        //9
+                vpd.put("var10", userList.get(i).get("froze_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("froze_amnt").toString())));        //10
+                vpd.put("var11", userList.get(i).getString("buy_flag1"));           //11
+                vpd.put("var12", userList.get(i).getString("user_type1"));           //12
+                vpd.put("var13", userList.get(i).getString("status"));           //13
                 varList.add(vpd);
-            }*/
-            
+            }
             dataMap.put("varList", varList);
             
             ObjectExcelView erv = new ObjectExcelView();                    //执行excel操作

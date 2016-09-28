@@ -217,6 +217,7 @@
 		//检索
 		function search(){
 			window.parent.jzts();
+			$("#Form").attr("action","<%=basePath%>/business/user/userbuyListPage.do");
 			$("#Form").submit();
 		}
 		
@@ -296,7 +297,9 @@
         });
         //导出excel
         function toExcel(){
-            window.location.href='<%=basePath%>/trade/excel.do';
+<%--             window.location.href='<%=basePath%>/business/user/excel.do'; --%>
+            $("form").attr("action","<%=basePath%>/business/user/excel.do");
+            $("form").submit();
         }
         function testTriger(){
         	$.post("<%=basePath%>/trade/testTriger.do",function(data){

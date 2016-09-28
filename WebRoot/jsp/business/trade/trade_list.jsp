@@ -68,9 +68,9 @@
 					</td>
 					<!-- <td>是否置顶:<input style="display: block;" type="checkbox"></td> -->
 					<td ><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<%-- <c:if test="${QX.cha == 1 }">
+					<c:if test="${QX.cha == 1 }">
 					<td ><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if> --%>
+					</c:if>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -219,6 +219,7 @@
 		//检索
 		function search(){
 			window.parent.jzts();
+			$("#Form").attr("action","<%=basePath%>/trade/tradeListPage.do");
 			$("#Form").submit();
 		}
 		var lock = 0;
@@ -269,10 +270,12 @@
             }); */
             
         });
-        <%-- //导出excel
+        //导出excel
         function toExcel(){
-            window.location.href='<%=basePath%>/trade/excel.do';
-        } --%>
+<%--             window.location.href='<%=basePath%>/trade/excel.do'; --%>
+            $("form").attr("action","<%=basePath%>/trade/excel.do");
+            $("form").submit();
+        }
 //         testTriger();
         function testTriger(){
         	alert(132)
