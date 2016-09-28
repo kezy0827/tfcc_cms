@@ -107,13 +107,13 @@
 								<td>${var.ref_real_name }</td>
 								<td>${var.ref_phone }</td>
 								<td><fmt:formatDate value="${var.create_time}" type="both"/></td>
-								<td>${var.total_reward }</td>
+								<td><c:if test="${var.total_reward =='0.0000'}"></c:if><c:if test="${var.total_reward !='0.0000'}">${var.total_reward }</c:if> </td>
 								<td>${var.total_out }</td>
 								<td>${var.avb_amnt }</td>
 								<td><a href="javascript:resetPassword('${var.user_code }')">密码重置</a></td>
                                 <td>
                                      <c:if test="${var.buy_flag == 0 }"><a href="javascript:updateFlag('${var.id }','1')">允许购买</a>&nbsp;|&nbsp;<font color="grey">禁止购买</font></c:if>
-                                     <c:if test="${var.buy_flag == 1 }"><font color="grey">禁止购买</font>&nbsp;|&nbsp;<a href="javascript:updateFlag('${var.id }','0')"><font color="red">禁止购买</font></a></c:if>
+                                     <c:if test="${var.buy_flag == 1 }"><font color="grey">允许购买</font>&nbsp;|&nbsp;<a href="javascript:updateFlag('${var.id }','0')"><font color="red">禁止购买</font></a></c:if>
                                 </td>
                                 <td>
                                     <c:if test="${var.user_type == 1}">普通会员</c:if>
