@@ -37,6 +37,12 @@ public class TradeDetailService {
 	public List<PageData> listPage(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("TradeDetailMapper.datalistPage", page);
 	}
+	 /*
+	    *用户列表(全部)
+	    */
+	public List<PageData> listAllTrade(PageData pd)throws Exception{
+	  return (List<PageData>) dao.findForList("TradeDetailMapper.listAllTrade", pd);
+	}
 	/**
 	 * @describe:审核编辑
 	 * @author: zhangchunming
