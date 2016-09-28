@@ -83,7 +83,7 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th> -->
 						<th>序号</th>
-						<th>系统来源</th>
+<!-- 						<th>系统来源</th> -->
 						<th style="width:8%;">订单号</th>
 						<th>会员姓名</th>
 						<th>手机号</th>
@@ -111,7 +111,7 @@
 									<label><input type='checkbox' name='ids' value="${var.news_id}" /><span class="lbl"></span></label>
 								</td> --%>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-								<td>${var.source_system }</td>
+<%-- 								<td>${var.source_system }</td> --%>
 								<td>${var.order_no }</td>
 								<td>${var.real_name }</td>
 								<td>${var.phone }</td>

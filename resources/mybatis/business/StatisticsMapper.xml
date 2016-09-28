@@ -10,9 +10,9 @@
     <!-- 购买SAN 统计 -->
     <select id="getBuySAN" parameterType="pd" resultType="pd">
         SELECT count(*) orderNum,SUM(t.txnum) BuyNum ,
-		(select count(*) from tb_trade_detail where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayOrderNum,
-		(select SUM(txnum) from tb_trade_detail where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayBuyNum
-		FROM tb_trade_detail t
+		(select count(*) from tb_trade_detail where  `status`='1' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayOrderNum,
+		(select SUM(txnum) from tb_trade_detail where `status`='1' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayBuyNum
+		FROM tb_trade_detail t where t.`status`='1'
     </select>
    <!--  统计转账SAN -->
     <select id="getZZSAN" parameterType="pd" resultType="pd">
@@ -21,12 +21,19 @@
 		(select sum(froze_amnt) from tb_acc)frozeAmnt
         FROM tb_acc_outdetail t
     </select>
-    <!-- 统计发放奖励 -->
+    <!-- 统计发放 -->
     <select id="getReward" parameterType="pd" resultType="pd">
 		select sum(t.amnt) totalReward,
 		(select sum(amnt) from tb_acc_detail where sub_accno='010301' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10))todayReward
 		from tb_acc_detail t
 		where t.sub_accno='010301'
+    </select>
+    <!-- 统计购买奖励-->
+    <select id="getBonuses" parameterType="pd" resultType="pd">
+		select sum(t.amnt) totalBonuses,
+		(select sum(amnt) from tb_acc_detail where sub_accno='010101' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10))todayBonuses
+		from tb_acc_detail t
+		where t.sub_accno='010101'
     </select>
     <!-- SAN额度 -->
     <select id="getSysSAN" parameterType="pd" resultType="pd">

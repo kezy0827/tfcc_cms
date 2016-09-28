@@ -45,6 +45,7 @@ public class StatisticsController extends BaseController{
 			PageData buySAN = statisticsService.getBuySAN(pd);
 			PageData zZSAN = statisticsService.getZZSAN(pd);
 			PageData reward = statisticsService.getReward(pd);
+			PageData bonuses = statisticsService.getBonuses(pd);
 			PageData sysSAN = statisticsService.getSysSAN(pd);
 			//调用权限
 			this.getHC(); //================================================================================
@@ -54,6 +55,7 @@ public class StatisticsController extends BaseController{
 			mv.addObject("buySAN", buySAN);
 			mv.addObject("zZSAN", zZSAN);
 			mv.addObject("reward", reward);
+			mv.addObject("bonuses", bonuses);
 			mv.addObject("sysSAN", sysSAN);
 			mv.addObject("pd", pd);
 		} catch(Exception e){

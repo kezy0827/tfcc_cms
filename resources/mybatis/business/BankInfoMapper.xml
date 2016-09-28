@@ -17,8 +17,7 @@
         status,
         create_time,
         modify_time,
-        operator,
-        payee_name
+        operator
         from tb_bankacc
         where 1=1
         order by create_time desc

@@ -228,7 +228,7 @@ public class TradeDetailController extends BaseController{
 			Map<String,Object> dataMap = new HashMap<String,Object>();
 			List<String> titles = new ArrayList<String>();
 			
-			titles.add("系统来源"); 		//1
+//			titles.add("系统来源"); 		//1
 			titles.add("订单号");  		//2
 			titles.add("会员姓名");			//3
 			titles.add("手机号");			//4
@@ -245,16 +245,16 @@ public class TradeDetailController extends BaseController{
 			List<PageData> varList = new ArrayList<PageData>();
 			for(int i=0;i<userList.size();i++){
 				PageData vpd = new PageData();
-				vpd.put("var1", userList.get(i).getString("source_system"));		//1
-				vpd.put("var2", userList.get(i).getString("order_no"));		//2
-				vpd.put("var3", userList.get(i).getString("real_name"));			//3
-				vpd.put("var4", userList.get(i).getString("phone"));	//4
-				vpd.put("var5", userList.get(i).get("txnum")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("txnum").toString()))); 
-				vpd.put("var6", userList.get(i).get("txamnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("txamnt").toString()))); 
-				vpd.put("var7", userList.get(i).getString("txdate"));	//7
-				vpd.put("var8", userList.get(i).getString("pay_time"));			//8
-				vpd.put("var9", userList.get(i).getString("payno"));			//9
-				vpd.put("var10", userList.get(i).getString("status"));			//10
+//				vpd.put("var1", userList.get(i).getString("source_system"));		//1
+				vpd.put("var1", userList.get(i).getString("order_no"));		//2
+				vpd.put("var2", userList.get(i).getString("real_name"));			//3
+				vpd.put("var3", userList.get(i).getString("phone"));	//4
+				vpd.put("var4", userList.get(i).get("txnum")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("txnum").toString()))); 
+				vpd.put("var5", userList.get(i).get("txamnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("txamnt").toString()))); 
+				vpd.put("var6", userList.get(i).getString("txdate"));	//7
+				vpd.put("var7", userList.get(i).getString("pay_time"));			//8
+				vpd.put("var8", userList.get(i).getString("payno"));			//9
+				vpd.put("var9", userList.get(i).getString("status"));			//10
 				varList.add(vpd);
 			}
 			dataMap.put("varList", varList);

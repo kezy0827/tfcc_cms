@@ -46,7 +46,7 @@ public class StatisticsService {
 	    return (PageData)dao.findForObject("StatisticsMapper.getZZSAN", null);
 	}
 	/**
-	 * @describe:统计发放奖励
+	 * @describe:统计发放
 	 * @author: zhangchunming
 	 * @date: 2016年9月27日下午4:15:28
 	 * @param pd
@@ -55,6 +55,17 @@ public class StatisticsService {
 	 */
 	public PageData getReward(PageData pd)throws Exception{
 	    return (PageData)dao.findForObject("StatisticsMapper.getReward", null);
+	}
+	/**
+	 * @describe:统计奖励
+	 * @author: zhangchunming
+	 * @date: 2016年9月28日下午8:34:13
+	 * @param pd
+	 * @throws Exception
+	 * @return: PageData
+	 */
+	public PageData getBonuses(PageData pd)throws Exception{
+	    return (PageData)dao.findForObject("StatisticsMapper.getBonuses", null);
 	}
 	/**
 	 * @describe:SAN额度

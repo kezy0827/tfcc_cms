@@ -38,7 +38,7 @@
         <div class="row-fluid">
     <div class="span4">
         <div class="widget-box pricing-box">
-            <div class="widget-header header-color-dark">
+            <div class="widget-header header-color-grey">
                 <h5 class="bigger lighter">会员信息</h5>
             </div>
             <div class="widget-body">
@@ -93,13 +93,29 @@
     <div class="span4">
         <div class="widget-box pricing-box">
             <div class="widget-header header-color-green">
-                <h5 class="bigger lighter">奖励</h5>
+                <h5 class="bigger lighter">发放</h5>
             </div>
             <div class="widget-body">
                 <div class="widget-main">
                     <ul class="unstyled spaced2">
                         <li><i class="icon-ok green"></i> 今日发放 :${reward.todayReward }</li>
                         <li><i class="icon-ok green"></i> 累计发放 :${reward.totalReward } </li>
+                    </ul>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="widget-box pricing-box">
+            <div class="widget-header header-color-purple">
+                <h5 class="bigger lighter">奖励</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <ul class="unstyled spaced2">
+                        <li><i class="icon-ok green"></i> 今日奖励 :${bonuses.todayBonuses }</li>
+                        <li><i class="icon-ok green"></i> 累计奖励 :${bonuses.totalBonuses }</li>
                     </ul>
                     <hr />
                 </div>
