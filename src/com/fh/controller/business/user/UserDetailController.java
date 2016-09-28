@@ -2,7 +2,9 @@ package com.fh.controller.business.user;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import com.fh.service.business.user.UserDetailService;
 import com.fh.util.AjaxResponse;
 import com.fh.util.Const;
 import com.fh.util.MD5Util;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /** 
@@ -190,5 +193,53 @@ public class UserDetailController extends BaseController {
         mv.addObject(Const.SESSION_menuList, menuList);//菜单权限
     }
     /* ===============================权限================================== */
-	
+    /*
+     * 导出用户信息到EXCEL
+     * @return
+     */
+    @RequestMapping(value="/excel")
+    public ModelAndView exportExcel(){
+        ModelAndView mv = this.getModelAndView();
+        pd = this.getPageData();
+        try{
+            
+            Map<String,Object> dataMap = new HashMap<String,Object>();
+            List<String> titles = new ArrayList<String>();
+            
+            titles.add("用户名");      //1
+            titles.add("编号");       //2
+            titles.add("姓名");           //3
+            titles.add("职位");           //4
+            titles.add("手机");           //5
+            titles.add("邮箱");           //6
+            titles.add("最近登录");     //7
+            titles.add("上次登录IP");   //8
+            
+            dataMap.put("titles", titles);
+            
+            List<PageData> list = userDetailService.listUserDetail(pd);
+            List<PageData> varList = new ArrayList<PageData>();
+            /*for(int i=0;i<userList.size();i++){
+                PageData vpd = new PageData();
+                vpd.put("var1", userList.get(i).getString("USERNAME"));     //1
+                vpd.put("var2", userList.get(i).getString("NUMBER"));       //2
+                vpd.put("var3", userList.get(i).getString("NAME"));         //3
+                vpd.put("var4", userList.get(i).getString("ROLE_NAME"));    //4
+                vpd.put("var5", userList.get(i).getString("PHONE"));        //5
+                vpd.put("var6", userList.get(i).getString("EMAIL"));        //6
+                vpd.put("var7", userList.get(i).getString("LAST_LOGIN"));   //7
+                vpd.put("var8", userList.get(i).getString("IP"));           //8
+                varList.add(vpd);
+            }*/
+            
+            dataMap.put("varList", varList);
+            
+            ObjectExcelView erv = new ObjectExcelView();                    //执行excel操作
+            
+            mv = new ModelAndView(erv,dataMap);
+        } catch(Exception e){
+            logger.error(e.toString(), e);
+        }
+        return mv;
+    }
 }

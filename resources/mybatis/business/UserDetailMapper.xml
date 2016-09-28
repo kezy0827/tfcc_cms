@@ -41,6 +41,34 @@
         </if>
         order by a.id desc
     </select>
+    <!-- 查询符合条件的所有信息 -->
+    <select id="userbuylist" parameterType="pd" resultType="pd">
+        select a.*,b.real_name ref_real_name,c.avb_amnt, 
+        (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
+        (select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` 
+        from tb_user_detail a,tb_user_detail b,tb_acc c,tb_user d 
+        where 1=1 
+        and a.ref_phone = b.phone 
+        and a.user_code = c.user_code 
+        and a.user_code = d.user_code 
+        <!-- 关键词检索 -->
+        <if test="phone != null and phone != ''">
+            and  a.phone like CONCAT(CONCAT('%', #{phone}),'%')          
+        </if>
+        <if test="ref_phone != null and ref_phone != ''">
+            and  a.ref_phone like CONCAT(CONCAT('%', #{ref_phone}),'%')          
+        </if>
+        <if test="status != null and status != ''">
+            and  d.`status` = #{status}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and  a.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and  substring(a.create_time,1,10)&lt;= #{endTime}
+        </if>
+        order by a.id desc
+    </select>
     <update id="updatebuyflag" parameterType="pd">    
          update tb_user_detail 
          <set> 

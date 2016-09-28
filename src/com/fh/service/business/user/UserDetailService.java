@@ -28,6 +28,9 @@ public class UserDetailService {
     public List<PageData> listPageUserDetail(Page page)throws Exception{
         return (List<PageData>) dao.findForList("UserDetailMapper.userbuylistPage", page);
     }
+    public List<PageData> listUserDetail(PageData pd)throws Exception{
+        return (List<PageData>) dao.findForList("UserDetailMapper.userbuylist", pd);
+    }
     /**
      * @describe:查询下级会员，及对应奖励
      * @author: zhangchunming
