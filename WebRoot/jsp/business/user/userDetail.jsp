@@ -126,7 +126,7 @@
                </div>
               </div>
           </div>
-      </div>
+      </div> 
     </div>
              <form action="business/user/getUserDetail.do" method="post" name="Form" id="Form">
              <input type="hidden" name="phone" value="${userDetail.phone }"/>
