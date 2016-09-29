@@ -47,7 +47,7 @@
                         <li><i class="icon-ok green"></i> 注册总人数 ：${registerNum.totalNum }</li>
                         <li><i class="icon-ok green"></i> 今日新增 :${registerNum.todayNum }</li>
                     </ul>
-                    <hr />
+                    <hr/>
                 </div>
             </div>
         </div>

@@ -52,7 +52,7 @@
                     Raw denim you probably haven't heard of them jean shorts Austin.
                 </p> -->
                 <div class="row-fluid">
-                <div class="span6">
+                <div class="span4">
                     <ul>
                         <li class="text-info">注册时间：${userDetail.create_time }</li>
                         <li class="text-info">会员类型：<c:if test="${userDetail.user_type==1 }">普通会员</c:if><c:if test="${userDetail.user_type==4 }">投资机构</c:if></li>
@@ -63,9 +63,7 @@
                         <li><em>List Item in emphasis tag</em></li> -->
                     </ul>
                 </div>
-                
-                
-                <div class="span6">
+                <div class="span4">
                     <ul>
                         <li class="text-info">推介人：${userDetail.ref_real_name }</li>
                         <li class="text-info">微信号：${userDetail.wxnum }</li>
@@ -79,6 +77,15 @@
                         <li class="text-success"><b>.text-success</b> Ordered List Item</li>
                         <li class="text-warning">.text-warning Ordered List Item</li>
                         <li class="muted">.muted Ordered List Item</li> -->
+                    </ul>
+                </div>
+                <div class="span4">
+                    <ul>
+                        <li class="text-info">账户总额：${userDetail.total_amnt }</li>
+                        <li class="text-info">可用余额：${userDetail.avb_amnt }</li>
+                        <li class="text-info">冻结余额：${userDetail.froze_amnt }</li>
+                        <li class="text-info">获得奖励：${userDetail.bonuses }</li>
+                        <li class="text-info">获得发放：${userDetail.reward }</li>
                     </ul>
                 </div>
                </div>
@@ -110,7 +117,7 @@
 <!--                   <table class="alert alert-success"> -->
                   <table id="table_report" class="table table-striped table-bordered table-hover">
                     <tr>
-                      <td>推介会员：${vip.tNum }</td>
+                      <td>推介会员：<c:if test="${vip.tNum ==null}">0</c:if></td>
                       <td>A级会员：<c:if test="${vip.aNum ==null}">0</c:if><c:if test="${vip.aNum !=null}">${vip.aNum }</c:if> </td>
                       <td>B级会员：<c:if test="${vip.bNum ==null}">0</c:if><c:if test="${vip.bNum !=null}">${vip.bNum }</c:if> </td>
                       <td>C级会员：<c:if test="${vip.cNum ==null}">0</c:if><c:if test="${vip.cNum !=null}">${vip.cNum }</c:if> </td>
@@ -136,6 +143,7 @@
                         <th>会员账号</th>
                         <th>会员名称</th>
                         <th>会员类型</th>
+                        <th>购买数量</th>
                         <th>注册时间</th>
                         <th>会员状态</th>
                         <th>推介奖励SAN</th>
@@ -154,6 +162,7 @@
                                 <td>${var.phone }</td>
                                 <td>${var.real_name }</td>
                                 <td><c:if test="${var.user_type ==1 }">普通用户</c:if><c:if test="${var.user_type ==4 }">投资机构</c:if> </td>
+                                <td>${var.total_buyNum }</td>
                                 <td>${var.create_time }</td>
                                 <td>${var.status }</td>
                                 <td>${var.total_reward }</td>

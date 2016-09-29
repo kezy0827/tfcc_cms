@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -76,24 +77,37 @@ public class UserDetailController extends BaseController {
 	    try{
 	        pd = this.getPageData();
 	        //查询用户详细信息
-	        PageData userDetail = userDetailService.findByPhone(pd);
-	        pd.put("user_code", userDetail.get("user_code").toString());
-	        
-	        //查询会员数量
-	        PageData vip = userDetailService.findcount(pd);
-	        
-	        //查询会员奖励列表
-	        page.setPd(pd);
-	        List<PageData> list = userDetailService.listPageVIP(page);
-	        
-	        System.out.println("-----------------------------------------"+list.size());
+//	        PageData userDetail = userDetailService.findByPhone(pd);
+	        PageData userDetail = userDetailService.findUserInfoByPhone(pd.getString("phone"));
+	        if(userDetail!=null){
+	            String total_amnt = userDetail.get("total_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userDetail.get("total_amnt").toString()));
+	            String avb_amnt = userDetail.get("avb_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userDetail.get("avb_amnt").toString()));
+	            String froze_amnt = userDetail.get("froze_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userDetail.get("froze_amnt").toString()));
+	            String reward = userDetail.get("reward")==null?"0.0000":String.format("%.4f",new BigDecimal(userDetail.get("reward").toString()));//下级会员购买获得的奖励
+	            String bonuses = userDetail.get("bonuses")==null?"0.0000":String.format("%.4f",new BigDecimal(userDetail.get("bonuses").toString()));//发放的SAN
+	            
+	            userDetail.put("total_amnt", total_amnt); 
+	            userDetail.put("avb_amnt", avb_amnt); 
+	            userDetail.put("froze_amnt", froze_amnt); 
+	            userDetail.put("reward", reward); 
+	            userDetail.put("bonuses", bonuses); 
+	            pd.put("user_code", userDetail.get("user_code").toString());
+	            //查询会员数量
+	            PageData vip = userDetailService.findcount(pd);
+	            
+	            //查询会员奖励列表
+	            page.setPd(pd);
+	            List<PageData> list = userDetailService.listPageVIP(page);
+	            
+	            System.out.println("-----------------------------------------"+list.size());
+	            mv.addObject("vip", vip);
+	            mv.addObject("userDetail", userDetail);
+	            mv.addObject("varList", list); 
+	        }
 	        //调用权限
-	        this.getHC(); //================================================================================
-	        //调用权限
-	        mv.setViewName("business/user/userDetail");
-	        mv.addObject("vip", vip);
-	        mv.addObject("userDetail", userDetail);
-	        mv.addObject("varList", list);
+            this.getHC(); //================================================================================
+            //调用权限
+            mv.setViewName("business/user/userDetail");
 	        mv.addObject("pd", pd);
 	    } catch(Exception e){
 	        logger.error(e.toString(), e);

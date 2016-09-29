@@ -115,5 +115,8 @@ public class UserDetailService {
     public PageData findcount(PageData pd)throws Exception{
         return (PageData)dao.findForObject("UserDetailMapper.findcount", pd);
     }
+    public PageData findUserInfoByPhone(String phone)throws Exception{
+        return (PageData)dao.findForObject("UserDetailMapper.findUserInfoByPhone", phone);
+    }
 }
 

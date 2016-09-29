@@ -114,6 +114,18 @@
         and a.ref_phone = b.phone
         and a.phone = #{phone}
     </select>
+    <!-- 查询用户信息和奖励、发放、账户余额 -->
+     <select id="findUserInfoByPhone" parameterType="java.lang.String" resultType="pd" >
+       select a.*,b.real_name ref_real_name,c.avb_amnt,c.froze_amnt,c.total_amnt,
+        (select sum(amnt) from tb_acc_detail where user_code = a.user_code and sub_accno = '010101') reward,
+        (select sum(amnt) from tb_acc_detail where user_code = a.user_code and sub_accno = '010301') bonuses
+        from 
+        tb_user_detail  a left join 
+        tb_user_detail b on a.ref_phone = b.phone left join 
+        tb_acc c on a.user_code = c.user_code
+        where 1=1  
+        and a.phone = #{phone}
+    </select>
     
     <!-- 查询各类会员的数量 -->
     <select id="findcount" parameterType="pd" resultType="pd">
@@ -141,7 +153,8 @@
 			b.rela_level,
 			b.recomuser_code,
 			c.`status`,
-			(select sum(amnt) from tb_acc_detail where user_code = b.recomuser_code and sub_accno = '010101')total_reward
+			(select sum(amnt) from tb_acc_detail where user_code = b.recomuser_code and sub_accno = '010101')total_reward,
+			(select sum(txnum) from tb_trade_detail where user_code = b.recomuser_code and `status` = '1')total_buyNum 
 		FROM
 		    tb_user_detail a,
 		    tb_user_friendship b,tb_user c
