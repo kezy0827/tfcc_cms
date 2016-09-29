@@ -76,6 +76,7 @@ public class TradeDetailService {
                 if(userDetail!=null){
                     pd.put("phone", userDetail.getString("phone"));
                 }*/
+                
                 rewardByBuy(pd);
                 //审核通过给用户发送短信
                 pd = new PageData();
@@ -126,8 +127,11 @@ public class TradeDetailService {
             accPd.put("avb_amnt", trade.get("txnum").toString());//购买数量
             accPd.put("total_amnt", trade.get("txnum").toString());
             accPd.put("syscode", "tfcc");
+           
             boolean result = accService.updateAcc(accPd);
+            System.out.println("***************begin result "+result +",trade is "+trade);
             if(result&&trade!=null){
+            	 System.out.println("***************begin rewardByBuy");
                 pd = new PageData();
                 pd.put("user_code", trade.get("user_code"));
                 pd.put("id", trade.get("id"));
@@ -241,7 +245,9 @@ public class TradeDetailService {
             }catch(Exception e){
                   System.out.println("BigDecimal convert fail,reason is "+e.getMessage());
             }
+            System.out.println("************1111111 "+nedleva);
             String operator ="sys";//后台登陆用户
+            System.out.println("tjgm1"+tjgm1);
             pd.put("sub_accno", "010101");
             pd.put("bouns_source1", "15");
             pd.put("bouns_source2", "1501");
@@ -252,7 +258,7 @@ public class TradeDetailService {
             pd.put("nedlevb", nedlevb);       
             pd.put("nedlevc", nedlevc);     
             pd.put("operator", operator);
-            dao.save("AccDetailMapper.save", pd); 
+            dao.save("AccDetailMapper.update", pd); 
             //通过触发器汇总奖励
             /*List<PageData> levReward = (List<PageData>)dao.findForList("AccDetailMapper.selectLevReward", pd);
             pd.put("levReward", levReward);

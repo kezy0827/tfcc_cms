@@ -14,7 +14,6 @@
            </if>     
          </set>
          where user_code = #{userCode}     
-               and syscode = #{syscode}
      </update>
     <update id="updateAllAcc" parameterType="pd">    
          update tb_acc 
@@ -30,7 +29,6 @@
          </set>
          where 1=1
          and user_code = #{user_code}     
-         and syscode = #{syscode}
          and version_id = #{version_id}
                
      </update>
@@ -46,6 +44,5 @@
            </if>     
          </set>
          where user_code = #{user_code}     
-               and syscode = #{syscode}
      </update>
 </mapper>
