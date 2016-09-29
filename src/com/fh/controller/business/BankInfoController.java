@@ -42,12 +42,12 @@ public class BankInfoController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		try {
 			pd=this.getPageData();
-			String id = pd.get("id").toString();		
+			//String id = pd.get("id").toString();		
 			bankInfoService.updateBankState(pd);
 			
 
 		} catch (Exception e) {
-			System.out.println("+++++++++++++++++=");
+			
 			e.printStackTrace();
 		}
 		return  new ModelAndView("redirect:/bank/getbankinfo.do");
