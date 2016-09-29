@@ -73,7 +73,7 @@
 					<c:when test="${not empty varList}">
 						
 						<c:forEach items="${varList}" var="var" varStatus="vs">
-							<tr>
+							<tr id="tr">
 								<td class='center' style="width: 30px;">
 								 <c:if test="${var.status == 1 }">
 								 <label><input type='radio' name='id'  value="${var.id}"  checked="checked"/><span class="lbl"></span></label>                                  
@@ -199,19 +199,26 @@
 			<%-- //window.location.href='<%=basePath%>/bank/addbankifo.do'; --%>
 		}
 		
-		/* $(function(){ 
-			
-			var c=$("input[name='id']").attr("checked");
-			if(c=="checked"){
-				$("tr").css("color","red");
-			}
-			document.getElementById("org_name").value;
-			$('table tr').click(function(){        
-				$('table tr').removeClass('on');       
-				$(this).addClass('on');   
-				});
-				}); */
-				
+		   /*  $(function(){
+		    	 var cbs = document.getElementsById("table_report");
+		    	 var rows;
+		    	 var cells;
+		    	   for(var i;i<cbs.rows.length;i--){
+		    		   rows= cbs.rows[i];
+		    		   alert(rows);
+		    		   cells=rows[0];
+		    		   alert(cells);
+		    	     if(cbs[i].checked==true){
+		    	    	 alert(11);
+		    	       cbs[i].parentNode.parentNode.slblings().style.backgroundColor="green";
+		    	   };
+		    	};
+		    });   
+			 
+		 */
+		
+		
+       	
 		function change(){
 			
 		    //var	 id=document.getElementById("first").value;
