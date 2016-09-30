@@ -58,9 +58,9 @@
 						<th class="center">
 						</th>
 						<th>序号</th>
-						<!-- <th>公司名称</th> -->
+						<th>所属银行</th>
 						<th>姓名</th>
-						<th>支付宝账号</th>
+						<th>银行账号</th>
 						<th>财务对账电话</th>
                         <th>状态</th>
 					</tr>
@@ -83,7 +83,8 @@
                                  </c:if>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.org_name}</td>
+										<td>${var.deposit_bankname}</td>
+                                        <td>${var.org_name}</td>
 										<%-- <td>${var.org_name}</td> --%>
 										<td>${var.bankaccno}</td>
 										<td>${var.checkphone}</td>
@@ -123,13 +124,17 @@
                     <td>
                         <input type="text" name=compay_name id="compay_name" maxlength="50" value="${pd.compay_name}" />
                     </td> --%>
-                    <td><label class="text_right">姓名：</label></td>
+                    <td><label class="text_right">账户名：</label></td>
 					<td><input type="text" name="org_name" id="org_name" value="${pd.org_name}"/>&nbsp;<span style="color:red">*</span></td>
+                    <td><label class="text_right" >银行名称：</label></td>
+                    <td>
+                        <input type="text" name="compay_name" id="compay_name" maxlength="50" value="${pd.compay_name}" />&nbsp;<span style="color:red">*</span>
+                    </td>
 				</tr>
    				<tr>
-					<td><label class="text_right" >支付宝账号：</label></td>
+					<td><label class="text_right" >银行账号：</label></td>
                     <td>
-                        <input type="text" name=bankaccno id="bankaccno" maxlength="50" value="${pd.bankaccno}" />&nbsp;<span style="color:red">*</span>
+                        <input type="text" name="bankaccno" id="bankaccno" maxlength="50" value="${pd.bankaccno}" />&nbsp;<span style="color:red">*</span>
                     </td>
                     <td><label class="text_right">财务对账电话：</label></td>
 					<td><input type="text" name="checkphone" id="checkphone" maxlength="50" value="${pd.checkphone}"/>&nbsp;<span style="color:#fff">*</span></td>
@@ -175,12 +180,18 @@
 		}
 		function save1(){
 			var   name=$.trim(document.getElementById("org_name").value);
+			var   compayname=$.trim(document.getElementById("compay_name").value);
 			var   bankaccno=$.trim(document.getElementById("bankaccno").value);
 			var  reg = /[a-zA-Z\d+]{6,16}/;
 			if(name==""){
-				alert("姓名不能为空");
+				alert("账户名不能为空");
 				return false;
 			}
+			
+			if(compayname==""){
+                alert("银行不能为空");
+                return false;
+            }
 			if(bankaccno==""){
 				alert("账号不能为空");
                 return false;
@@ -188,7 +199,7 @@
 		        if(reg.test(bankaccno)){
 		            
 	            }else{
-	                alert('请输入正确的支付宝账号:手机号/邮箱');
+	                alert('请输入正确的支付宝账号:手机号/邮箱/银行卡号');
 	                return false;
 	            };
 	        }
