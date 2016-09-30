@@ -43,9 +43,10 @@
      <!-- 添加收款银行账号 -->
      <insert id="addBankaccno"  parameterType="pd">
       insert into tb_bankacc
-      (compay_name,
+      (
       org_name,
       bankaccno,
+      deposit_bankname,
       checkphone,
       status,
       create_time,
@@ -54,9 +55,9 @@
       )
       values
       (
-      #{compay_name},
       #{org_name},
       #{bankaccno},
+      #{compay_name},
       #{checkphone},
       #{status},
       now(),
