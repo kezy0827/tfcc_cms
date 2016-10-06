@@ -145,7 +145,7 @@ public class TradeDetailService {
                 PageData userDetail = userDetailService.findByUserCode(pd);
                 if(userDetail!=null&&userDetail.get("phone")!=null&&"".equals(userDetail.get("phone").toString())){
                     String phone = userDetail.get("phone").toString();
-                    String content = "尊敬的会员【"+phone+"】您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
+                    String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
                     SmsSend.sendSms(phone, content);
                 }
             }
