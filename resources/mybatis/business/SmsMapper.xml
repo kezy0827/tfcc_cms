@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SmsMapper">
+	<!-- 列表 -->                
+	<select id="findSendSmsListPage" parameterType="page" resultType="pd">
+		select * from tb_sms where 1=1 
+		<if test="pd.status != null  and pd.status!=''">
+			and status like concat(concat('%', #{pd.status}),'%')
+		</if>
+		<if test="pd.type != null  and pd.type!=''">
+			and type like concat(concat('%', #{pd.type}),'%')
+		</if>
+		<if test="pd.title != null and pd.title != ''">
+			and title=#{pd.title}
+		</if>
+		    order by send_time desc
+	</select>
+	
+	<!-- 添加短信 -->
+	<insert id="addSms" parameterType="pd">
+	insert into tb_sms 
+	(title,
+	content,
+	phone,
+	send_type,
+	type,
+	status,
+	send_time,
+	operator_accno,
+	operator_name,
+	create_time,
+	update_time) 
+	values
+	(
+	#{title},
+	#{content},
+	#{phone},
+	#{sendtype},
+    #{type},
+    #{status},
+    #{sendtime},
+    #{operatoraccno},
+    #{operatorname},
+    #{createtime},
+    #{updatetime}
+    )
+	
+	</insert>
+	
+	
+	<!-- 查询用户手机号是否进入黑名单 -->
+	<select id="findBlackPhoneIsExist"  parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(1) from tb_sms_blacklist where phone=#{phone}
+	</select>
+</mapper>

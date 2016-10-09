@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.service.business.acc.AccService;
+import com.fh.service.business.sms.SmsService;
 import com.fh.service.business.user.UserDetailService;
 import com.fh.util.DateUtil;
 import com.fh.util.PageData;
@@ -26,6 +27,9 @@ public class TradeDetailService {
 	private UserDetailService userDetailService;
 	@Resource(name = "accService")
 	private AccService accService;
+	@Resource(name = "smsService")
+	private SmsService smsService;
+	
 	/**
 	 * @describe:分页查询交易订单
 	 * @author: zhangchunming
@@ -82,10 +86,16 @@ public class TradeDetailService {
                 pd = new PageData();
                 pd.put("user_code",trade.get("user_code").toString());
                 PageData userDetail = userDetailService.findByUserCode(pd);
-                if(userDetail!=null&&userDetail.get("phone")!=null&&"".equals(userDetail.get("phone").toString())){
+                if(userDetail!=null&&userDetail.get("phone")!=null&&!"".equals(userDetail.get("phone").toString())){
                     String phone = userDetail.get("phone").toString();
-                    String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请登录网站查收！";
-                    SmsSend.sendSms(phone, content);
+                    int num = smsService.findsmsPhone(phone);
+                    if (num==0) {
+                    	 String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请登录网站查收！";
+                         SmsSend.sendSms(phone, content);
+					}else {
+						System.out.println("此人已进入短信黑名单");
+					}
+                   
                 }
             }
         }
@@ -143,10 +153,16 @@ public class TradeDetailService {
                 pd = new PageData();
                 pd.put("user_code",trade.get("user_code").toString());
                 PageData userDetail = userDetailService.findByUserCode(pd);
-                if(userDetail!=null&&userDetail.get("phone")!=null&&"".equals(userDetail.get("phone").toString())){
+                if(userDetail!=null&&userDetail.get("phone")!=null&&!"".equals(userDetail.get("phone").toString())){
                     String phone = userDetail.get("phone").toString();
-                    String content = "尊敬的会员【"+phone+"】您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
-                    SmsSend.sendSms(phone, content);
+                    int num = smsService.findsmsPhone(phone);
+                    if (num==0) {
+                    	String content = "尊敬的会员【"+phone+"】您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
+                        SmsSend.sendSms(phone, content);
+					}else {
+						System.out.println("此人已进入短信黑名单");
+					}
+                    
                 }
             }
             
