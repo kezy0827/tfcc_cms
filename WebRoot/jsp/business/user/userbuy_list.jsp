@@ -44,8 +44,15 @@
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td> -->
-                    
+                     <td ><span>姓名:</span><input class="span20" name="real_name" id="realname" value="${pd.real_name}" type="text" style="width:200px;" placeholder="姓名"/></td>  
                     <td ><span>手机号:</span><input class="span20" name="phone" id="phone" value="${pd.phone}" type="text" style="width:200px;" placeholder="手机号"/></td>	
+                    <td ><span>推荐人:</span><input class="span20" name="ref_real_name" id="refrealname" value="${pd.ref_real_name}" type="text" style="width:200px;" placeholder="推荐人"/></td>   
+                    <td ><span>推荐人手机号:</span><input class="span20" name="ref_phone" id="refphone" value="${pd.refphone}" type="text" style="width:200px;" placeholder="推荐人手机号"/></td>   
+                   <td >
+                    <span>账户总额:</span>
+                    <input  name="start_total_amnt" id="starttotalamnt" value="${pd.start_total_amnt}" type="text"  style="width:88px;" placeholder="开始值"/>--
+                    <input  name="end_total_amnt" id="endtotalamnt" value="${pd.end_total_amnt}" type="text"  style="width:88px;" placeholder="结束值"/></td>
+                   
                     <td >
                         <span>会员状态:</span>
                         <select class="chzn-select" name="status" id="status" data-placeholder="请选择" style="vertical-align:top;width: 120px;">

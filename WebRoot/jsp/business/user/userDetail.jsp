@@ -145,6 +145,7 @@
                         <th>会员类型</th>
                         <th>购买数量</th>
                         <th>注册时间</th>
+                        <th>会员级别</th>
                         <th>会员状态</th>
                         <th>推介奖励SAN</th>
                     </tr>
@@ -164,7 +165,11 @@
                                 <td><c:if test="${var.user_type ==1 }">普通用户</c:if><c:if test="${var.user_type ==4 }">投资机构</c:if> </td>
                                 <td>${var.total_buyNum }</td>
                                 <td>${var.create_time }</td>
-                                <td>${var.status }</td>
+                                <td>${var.rela_level}</td>
+                                <td>
+                                <c:if test="${var.status=='1'}">有效</c:if>
+                                <c:if test="${var.status=='0'}">无效</c:if>
+                                </td>
                                 <td>${var.total_reward }</td>
                             </tr>
                         </c:forEach>
