@@ -32,12 +32,26 @@
 		LEFT JOIN tb_user d ON a.user_code = d.user_code 
 		where 1=1 
         <!-- 关键词检索 -->
+        
+         <if test="pd.real_name != null and pd.real_name != ''">
+            and  a.real_name like CONCAT(CONCAT('%', #{pd.real_name}),'%')          
+        </if>
         <if test="pd.phone != null and pd.phone != ''">
             and  a.phone like CONCAT(CONCAT('%', #{pd.phone}),'%')          
+        </if>
+        <if test="pd.ref_real_name != null and pd.ref_real_name != ''">
+            and  b.real_name like CONCAT(CONCAT('%', #{pd.ref_real_name}),'%')          
         </if>
         <if test="pd.ref_phone != null and pd.ref_phone != ''">
             and  a.ref_phone like CONCAT(CONCAT('%', #{pd.ref_phone}),'%')          
         </if>
+         <if test="pd.start_total_amnt != null and pd.start_total_amnt != ''">
+            and  c.total_amnt &gt;= #{pd.start_total_amnt}
+        </if>
+        <if test="pd.end_total_amnt != null and pd.end_total_amnt != ''">
+            and  c.total_amnt &lt;= #{pd.end_total_amnt}
+        </if>
+        
         <if test="pd.status != null and pd.status != ''">
             and  d.`status` = #{pd.status}
         </if>
@@ -131,7 +145,7 @@
         left join tb_user_detail b on a.ref_phone = b.phone 
         left join tb_acc c on a.user_code = c.user_code
         where 1=1  
-        and a.phone = #{phone}
+        and a.phone = #{phone} 
     </select>
     
     <!-- 查询各类会员的数量 -->
