@@ -117,7 +117,7 @@
 <!--                   <table class="alert alert-success"> -->
                   <table id="table_report" class="table table-striped table-bordered table-hover">
                     <tr>
-                      <td>推介会员：<c:if test="${vip.tNum ==null}">0</c:if></td>
+                      <td>推介会员：<c:if test="${vip.tNum ==null}">0</c:if><c:if test="${vip.tNum !=null}">${vip.tNum }</c:if> </td>
                       <td>A级会员：<c:if test="${vip.aNum ==null}">0</c:if><c:if test="${vip.aNum !=null}">${vip.aNum }</c:if> </td>
                       <td>B级会员：<c:if test="${vip.bNum ==null}">0</c:if><c:if test="${vip.bNum !=null}">${vip.bNum }</c:if> </td>
                       <td>C级会员：<c:if test="${vip.cNum ==null}">0</c:if><c:if test="${vip.cNum !=null}">${vip.cNum }</c:if> </td>
