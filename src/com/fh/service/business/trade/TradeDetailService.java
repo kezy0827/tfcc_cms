@@ -13,6 +13,7 @@ import com.fh.service.business.acc.AccService;
 import com.fh.service.business.sms.SmsService;
 import com.fh.service.business.user.UserDetailService;
 import com.fh.util.DateUtil;
+import com.fh.util.Logger;
 import com.fh.util.PageData;
 import com.fh.util.SmsSend;
 
@@ -30,6 +31,7 @@ public class TradeDetailService {
 	@Resource(name = "smsService")
 	private SmsService smsService;
 	
+	private Logger logger = Logger.getLogger(this.getClass());
 	/**
 	 * @describe:分页查询交易订单
 	 * @author: zhangchunming
@@ -93,7 +95,8 @@ public class TradeDetailService {
                     	 String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请登录网站查收！";
                          SmsSend.sendSms(phone, content);
 					}else {
-						System.out.println("此人已进入短信黑名单");
+						logger.debug("此人已进入短信黑名单");
+						//System.out.println("此人已进入短信黑名单");
 					}
                    
                 }
@@ -160,7 +163,8 @@ public class TradeDetailService {
                     	String content = "尊敬的会员【"+phone+"】您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
                         SmsSend.sendSms(phone, content);
 					}else {
-						System.out.println("此人已进入短信黑名单");
+						logger.debug("此人已进入短信黑名单");
+						//System.out.println("此人已进入短信黑名单");
 					}
                     
                 }
