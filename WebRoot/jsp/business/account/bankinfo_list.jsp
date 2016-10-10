@@ -41,10 +41,10 @@
 			<table >
 				<tr>
 					<td>
-						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="n_title"  placeholder="收款账户信息" />
+						<!-- <span class="input-icon">
+							<input autocomplete="off" id="nav-search-input" type="text" name="n_title" placeholder="收款账户信息" />
 							<i id="nav-search-icon" class="icon-search"></i>
-						</span>
+						</span> -->
 					</td>
 					
 				</tr>
@@ -228,8 +228,6 @@
 			 
 		 */
 		
-		
-       	
 		function change(){
 			
 		    //var	 id=document.getElementById("first").value;
