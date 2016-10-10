@@ -92,7 +92,9 @@ public class TradeDetailService {
                     String phone = userDetail.get("phone").toString();
                     int num = smsService.findsmsPhone(phone);
                     if (num==0) {
+                         logger.info("订单编辑审核短信--------start---------");
                     	 String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请登录网站查收！";
+                    	 logger.info("订单编辑审核短信--------end:content="+content);
                          SmsSend.sendSms(phone, content);
 					}else {
 						logger.debug("此人已进入短信黑名单");
@@ -160,8 +162,10 @@ public class TradeDetailService {
                     String phone = userDetail.get("phone").toString();
                     int num = smsService.findsmsPhone(phone);
                     if (num==0) {
+                        logger.info("订单审核短信--------start---------");
                         String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
                         SmsSend.sendSms(phone, content);
+                        logger.info("订单审核短信--------end:content="+content);
 					}else {
 						logger.debug("此人已进入短信黑名单");
 						//System.out.println("此人已进入短信黑名单");
