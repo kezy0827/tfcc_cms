@@ -10,14 +10,14 @@
     <!-- 购买SAN 统计 -->
     <select id="getBuySAN" parameterType="pd" resultType="pd">
         SELECT count(*) orderNum,SUM(t.txnum) BuyNum ,
-		(select count(*) from tb_trade_detail where  `status`='1' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayOrderNum,
-		(select SUM(txnum) from tb_trade_detail where `status`='1' and SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayBuyNum
+		(select count(*) from tb_trade_detail where  `status`='1' and SUBSTRING(pay_time,1,10)=SUBSTRING(now(),1,10)) todayOrderNum,
+		(select SUM(txnum) from tb_trade_detail where `status`='1' and SUBSTRING(pay_time,1,10)=SUBSTRING(now(),1,10)) todayBuyNum
 		FROM tb_trade_detail t where t.`status`='1'
     </select>
    <!--  统计转账SAN -->
     <select id="getZZSAN" parameterType="pd" resultType="pd">
         SELECT sum(t.outamnt) outAmnt,
-		(select sum(outamnt) from tb_acc_outdetail where SUBSTRING(create_time,1,10)=SUBSTRING(now(),1,10)) todayOutAmnt,
+		(select sum(outamnt) from tb_acc_outdetail where SUBSTRING(confirm_time,1,10)=SUBSTRING(now(),1,10)) todayOutAmnt,
 		(select sum(froze_amnt) from tb_acc)frozeAmnt
         FROM tb_acc_outdetail t
     </select>
