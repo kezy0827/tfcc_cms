@@ -143,7 +143,8 @@
          <div  style="text-align:center">
 				<tr>
                     <!-- <input type="submit" id="submit" name="submitname" onclick="winclose()" value="保存"/> -->
-  				   <a  class="btn btn-small btn-success" id="save1" onclick="save1();">保存</a>
+  				  <td> <a  class="btn btn-small btn-success" id="save1" onclick="save1();">保存</a></td>
+                  <td><a class="btn btn-small btn-success" onclick="cl()">取消</a></td>
               </tr>
        </div>
    </form>
@@ -227,6 +228,14 @@
 		    });   
 			 
 		 */
+		 
+		 
+		 function cl(){
+		 document.getElementById('org_name').value="";
+		 document.getElementById('compay_name').value="";
+		 document.getElementById('bankaccno').value="";
+		 document.getElementById('checkphone').value="";
+		 }
 		
 		function change(){
 			
