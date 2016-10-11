@@ -25,7 +25,8 @@
 		and a.user_code = d.user_code  -->
         select a.*,b.real_name ref_real_name,c.total_amnt,c.avb_amnt,c.froze_amnt, 
 		(select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
-		(select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` 
+		(select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` ,
+		(select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010301' and t.rela_usercode = a.user_code) bofu_amnt
 		from tb_user_detail a 
 		LEFT JOIN tb_user_detail b on a.ref_phone = b.phone  
 		LEFT JOIN tb_acc c on a.user_code = c.user_code 
@@ -65,10 +66,13 @@
     </select>
     <!-- 查询符合条件的所有信息 -->
     <select id="userbuylist" parameterType="pd" resultType="pd">
-        select a.*,b.real_name ref_real_name,c.total_amnt,c.avb_amnt,c.froze_amnt,date_format(a.create_time,'%Y-%m-%d %T') create_time1,
+        select a.phone,a.real_name,b.real_name ref_real_name,b.phone ref_phone,c.total_amnt,c.avb_amnt,c.froze_amnt,date_format(a.create_time,'%Y-%m-%d %T') create_time1,
         (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
         (select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,
-        (case when d.`status`='1' then '有效' else '禁用' end)`status`,(case when a.buy_flag ='1' then '允许购买' else '禁止购买' end)buy_flag1,(case when a.user_type ='1' then '普通会员' else '投资机构' end)user_type1
+        (case when d.`status`='1' then '有效' else '禁用' end)`status`,
+        (case when a.buy_flag ='1' then '允许购买' else '禁止购买' end)buy_flag1,
+        (case when a.user_type ='1' then '普通会员' else '投资机构' end)user_type1,
+        (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010301' and t.rela_usercode = a.user_code) bofu_amnt
         from tb_user_detail a 
         LEFT JOIN tb_user_detail b on a.ref_phone = b.phone  
         LEFT JOIN tb_acc c on a.user_code = c.user_code 

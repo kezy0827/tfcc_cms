@@ -231,9 +231,10 @@ public class UserDetailController extends BaseController {
             titles.add("账户总额");   //8
             titles.add("可用余额");   //9
             titles.add("冻结余额");   //10
-            titles.add("购买标识");   //11
-            titles.add("用户类型");   //12
-            titles.add("会员状态");   //13
+            titles.add("拨付金额");   //11
+            titles.add("购买标识");   //12
+            titles.add("用户类型");   //13
+            titles.add("会员状态");   //14
             
             dataMap.put("titles", titles);
             
@@ -251,11 +252,13 @@ public class UserDetailController extends BaseController {
                 vpd.put("var8", userList.get(i).get("total_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("total_amnt").toString())));        //8
                 vpd.put("var9", userList.get(i).get("avb_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("avb_amnt").toString())));        //9
                 vpd.put("var10", userList.get(i).get("froze_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("froze_amnt").toString())));        //10
-                vpd.put("var11", userList.get(i).getString("buy_flag1"));           //11
-                vpd.put("var12", userList.get(i).getString("user_type1"));           //12
-                vpd.put("var13", userList.get(i).getString("status"));           //13
+                vpd.put("var11", userList.get(i).get("bofu_amnt")==null?"0.0000":String.format("%.4f",new BigDecimal(userList.get(i).get("bofu_amnt").toString())));           //11
+                vpd.put("var12", userList.get(i).getString("buy_flag1"));           //12
+                vpd.put("var13", userList.get(i).getString("user_type1"));           //13
+                vpd.put("var14", userList.get(i).getString("status"));           //14
                 varList.add(vpd);
             }
+            
             dataMap.put("varList", varList);
             
             ObjectExcelView erv = new ObjectExcelView();                    //执行excel操作

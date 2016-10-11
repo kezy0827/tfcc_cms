@@ -11,6 +11,9 @@
 	<head>
 	<base href="<%=basePath%>"><!-- jsp文件头和头部 -->
 	<%@ include file="../../system/admin/top.jsp"%> 
+    <style type="text/css">
+        .right{text-align: right;}
+    </style>
 	</head>
 <body>
 		
@@ -36,7 +39,7 @@
 	
 			<!-- 检索  -->
 			<form action="business/user/userbuyListPage.do" method="post" name="Form" id="Form">
-			<table >
+			<table class="searchTable" style="width: 1300px;">
 				<tr>
 					<!-- <td>
 						<span class="input-icon">
@@ -48,7 +51,9 @@
                     <td ><span>手机号:</span><input class="span20" name="phone" id="phone" value="${pd.phone}" type="text" style="width:200px;" placeholder="手机号"/></td>	
                     <td ><span>推荐人:</span><input class="span20" name="ref_real_name" id="refrealname" value="${pd.ref_real_name}" type="text" style="width:200px;" placeholder="推荐人"/></td>   
                     <td ><span>推荐人手机号:</span><input class="span20" name="ref_phone" id="refphone" value="${pd.refphone}" type="text" style="width:200px;" placeholder="推荐人手机号"/></td>   
-                   <td >
+				</tr>
+                <tr>
+                    <td >
                     <span>账户总额:</span>
                     <input  name="start_total_amnt" id="starttotalamnt" value="${pd.start_total_amnt}" type="text"  style="width:88px;" placeholder="开始值"/>--
                     <input  name="end_total_amnt" id="endtotalamnt" value="${pd.end_total_amnt}" type="text"  style="width:88px;" placeholder="结束值"/></td>
@@ -64,11 +69,14 @@
                     <td >
                     <span>注册时间:</span><input class="span10 date-picker" name="startTime" id="startTime" value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/>-
                     <input class="span10 date-picker" name="endTime" id="endTime" value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
-					<td ><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<c:if test="${QX.cha == 1 }">
-					<td ><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if>
-				</tr>
+                    <td >
+                    <button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button>
+                    <c:if test="${QX.cha == 1 }">
+                        <a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a>
+                    </c:if>
+                    <input class="btn btn-mini btn-light" type="button" onclick="clearValue()" value="重置"></input>
+                    </td>
+                </tr>
 			</table>
 			<!-- 检索  -->
 		
@@ -82,16 +90,17 @@
 						<th>序号</th>
 						<th>真实姓名</th>
 						<th>手机号</th>
-						<th>推介人</th>
-						<th>推介人手机号</th>
+						<th>推荐人</th>
+						<th>推荐人手机号</th>
 						<th>注册时间</th>
 						<th>累计奖励</th>
 						<th>累计转出</th>
 						<th>账户总额</th>
 						<th>可用余额</th>
 						<th>冻结余额</th>
+						<th>拨付金额</th>
 						<th>密码重置</th>
-						<th>购买标识</th>
+						<th>购买操作</th>
 						<th>用户类型</th>
 						<th>会员状态</th>
 						<th>操作</th>
@@ -121,6 +130,7 @@
 								<td>${var.total_amnt }</td>
 								<td>${var.avb_amnt }</td>
 								<td>${var.froze_amnt }</td>
+								<td>${var.bofu_amnt }</td>
 								<td><a href="javascript:resetPassword('${var.user_code }')">密码重置</a></td>
                                 <td>
                                      <c:if test="${var.buy_flag == 0 }"><a href="javascript:updateFlag('${var.id }','1')">允许购买</a>&nbsp;|&nbsp;<font color="grey">禁止购买</font></c:if>
@@ -223,11 +233,22 @@
 		$(window.parent.hangge());
 		//检索
 		function search(){
-			window.parent.jzts();
-			$("#Form").attr("action","<%=basePath%>/business/user/userbuyListPage.do");
-			$("#Form").submit();
+// 			window.parent.jzts();
+<%-- 			$("#Form").attr("action","<%=basePath%>/business/user/userbuyListPage.do"); --%>
+// 			$("#Form").submit();
 		}
-		
+		function clearValue(){
+			$("input").not("input[type='button']").val("");
+			setChosenValue('status','');
+		}
+		function setChosenValue(selector,value){
+            var selectObj = $("#"+selector);
+            selectObj.parent().children().remove('div');
+            selectObj.removeClass();
+            $("#"+selector).val(value); 
+            selectObj.addClass("chzn-select");  
+            selectObj.chosen();
+        }
 		function updateFlag(id,buy_flag){
 			$.post('<%=basePath%>/business/user/updatebuyStatus.do',{'id':id,'buy_flag':buy_flag},function(data){
                 if(data.success){

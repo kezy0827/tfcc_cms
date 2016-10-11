@@ -67,10 +67,13 @@
 					  	</select>
 					</td>
 					<!-- <td>是否置顶:<input style="display: block;" type="checkbox"></td> -->
-					<td ><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<c:if test="${QX.cha == 1 }">
-					<td ><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if>
+					<td >
+                        <button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button>
+					    <c:if test="${QX.cha == 1 }">
+					       <a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a>
+					    </c:if>
+                        <input class="btn btn-mini btn-light" type="button" onclick="clearValue()" value="重置"></input>
+                    </td>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -222,6 +225,20 @@
 			$("#Form").attr("action","<%=basePath%>/trade/tradeListPage.do");
 			$("#Form").submit();
 		}
+		function clearValue(){
+            $("input").not("input[type='button']").val("");
+            setChosenValue('source_system','');
+            setChosenValue('status','');
+        }
+		function setChosenValue(selector,value){
+			var selectObj = $("#"+selector);
+			selectObj.parent().children().remove('div');
+			selectObj.removeClass();
+			$("#"+selector).val(value); 
+			selectObj.addClass("chzn-select");  
+			selectObj.chosen();
+		}
+			
 		var lock = 0;
 		function updateStatus(id,status){
 			++lock;
