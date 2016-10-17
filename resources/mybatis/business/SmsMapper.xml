@@ -1,55 +1,279 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="SmsMapper">
-	<!-- 列表 -->                
-	<select id="findSendSmsListPage" parameterType="page" resultType="pd">
-		select * from tb_sms where 1=1 
-		<if test="pd.status != null  and pd.status!=''">
-			and status like concat(concat('%', #{pd.status}),'%')
-		</if>
-		<if test="pd.type != null  and pd.type!=''">
-			and type like concat(concat('%', #{pd.type}),'%')
-		</if>
-		<if test="pd.title != null and pd.title != ''">
-			and title=#{pd.title}
-		</if>
-		    order by send_time desc
-	</select>
-	
-	<!-- 添加短信 -->
-	<insert id="addSms" parameterType="pd">
-	insert into tb_sms 
-	(title,
-	content,
-	phone,
-	send_type,
-	type,
-	status,
-	send_time,
-	operator_accno,
-	operator_name,
-	create_time,
-	update_time) 
-	values
-	(
-	#{title},
-	#{content},
-	#{phone},
-	#{sendtype},
-    #{type},
-    #{status},
-    #{sendtime},
-    #{operatoraccno},
-    #{operatorname},
-    #{createtime},
-    #{updatetime}
-    )
-	
-	</insert>
-	
-	
+	<!-- <resultType id="BaseresultType" type="project.model.Sms" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="send_type" property="sendType" jdbcType="VARCHAR" />
+    <result column="sms_type" property="smsType" jdbcType="VARCHAR" />
+    <result column="sms_status" property="smsStatus" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="operator_accno" property="operatorAccno" jdbcType="VARCHAR" />
+    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="syscode" property="syscode" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultType> -->
+ <!--  <resultType id="resultTypeWithBLOBs" type="project.model.Sms" extends="BaseresultType" >
+    <result column="phone" property="phone" jdbcType="LONGVARCHAR" />
+  </resultType> -->
+  <sql id="Base_Column_List" >
+    id, title, content, send_type, sms_type, sms_status, send_time, operator_accno, operator_name, 
+    create_time, update_time, syscode, modify_time,flow_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    phone
+  </sql>
+  <select id="selectById" resultType="pd" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_sms
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from tb_sms
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="pd" >
+    insert into tb_sms (title, content, 
+      send_type, sms_type, sms_status, 
+      send_time, operator_accno, operator_name, 
+      create_time, update_time, syscode, 
+      modify_time, phone,flow_id)
+    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{sendType,jdbcType=VARCHAR}, #{smsType,jdbcType=VARCHAR}, #{smsStatus,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{operatorAccno,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{syscode,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{phone,jdbcType=LONGVARCHAR},#{flowId,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="pd" >
+    insert into tb_sms
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="sendType != null" >
+        send_type,
+      </if>
+      <if test="smsType != null" >
+        sms_type,
+      </if>
+      <if test="smsStatus != null" >
+        sms_status,
+      </if>
+        send_time,
+      <if test="operatorAccno != null" >
+        operator_accno,
+      </if>
+      <if test="operatorName != null" >
+        operator_name,
+      </if>
+        create_time,
+      <if test="syscode != null" >
+        syscode,
+      </if>
+        modify_time,
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="flowId != null" >
+        flow_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendType != null" >
+        #{sendType,jdbcType=VARCHAR},
+      </if>
+      <if test="smsType != null" >
+        #{smsType,jdbcType=VARCHAR},
+      </if>
+      <if test="smsStatus != null" >
+        #{smsStatus,jdbcType=VARCHAR},
+      </if>
+      now(),
+      <if test="operatorAccno != null" >
+        #{operatorAccno,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorName != null" >
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+       now(),
+      <if test="syscode != null" >
+        #{syscode,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="phone != null" >
+        #{phone,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="flowId != null" >
+        #{flowId,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByIdSelective" parameterType="pd" >
+    update tb_sms
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendType != null" >
+        send_type = #{sendType,jdbcType=VARCHAR},
+      </if>
+      <if test="smsType != null" >
+        sms_type = #{smsType,jdbcType=VARCHAR},
+      </if>
+      <if test="smsStatus != null" >
+        sms_status = #{smsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorAccno != null" >
+        operator_accno = #{operatorAccno,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorName != null" >
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="syscode != null" >
+        syscode = #{syscode,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="flowId != null" >
+        flow_id = #{flowId,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByIdWithBLOBs" parameterType="pd" >
+    update tb_sms
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      send_type = #{sendType,jdbcType=VARCHAR},
+      sms_type = #{smsType,jdbcType=VARCHAR},
+      sms_status = #{smsStatus,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      operator_accno = #{operatorAccno,jdbcType=VARCHAR},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      syscode = #{syscode,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      phone = #{phone,jdbcType=LONGVARCHAR},
+      flow_id = #{flowId,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateStatusByFlowId" parameterType="pd" >
+    update tb_sms
+    set sms_status = #{smsStatus,jdbcType=VARCHAR}
+    where flow_id = #{flowId,jdbcType=BIGINT}
+  </update>
+  <!-- <update id="updateById" parameterType="pd" >
+    update tb_sms
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      send_type = #{sendType,jdbcType=VARCHAR},
+      sms_type = #{smsType,jdbcType=VARCHAR},
+      sms_status = #{smsStatus,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      operator_accno = #{operatorAccno,jdbcType=VARCHAR},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      syscode = #{syscode,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update> -->
+  <select id="listPageSms" resultType="pd" parameterType="page">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_sms
+    where 1=1
+    <if test="pd.sms_status != null and pd.sms_status !=''" >
+        and sms_status = #{pd.sms_status,jdbcType=TIMESTAMP}
+    </if>
+    <if test="pd.sms_type != null and pd.sms_type !=''" >
+        and sms_type = #{pd.sms_type,jdbcType=TIMESTAMP}
+    </if>
+    <if test="pd.title != null and pd.title !=''" >
+        and title like '%${pd.title}%'
+    </if>
+    <if test="pd.operator_accno != null and pd.operator_accno !=''" >
+        and operator_accno like '%${pd.operator_accno}%'
+    </if>
+    <if test="pd.operator_name != null and pd.operator_name !=''" >
+        and operator_name like '%${pd.operator_name}%'
+    </if>
+    <if test="pd.startTime != null and pd.startTime !=''" >
+        and create_time &gt;= #{pd.startTime}
+    </if>
+    <if test="pd.endTime != null and pd.endTime !=''" >
+        and substring(create_time,1,10) &lt;= #{pd.endTime}
+    </if>
+    order by create_time desc
+  </select>
 	<!-- 查询用户手机号是否进入黑名单 -->
 	<select id="findBlackPhoneIsExist"  parameterType="java.lang.String" resultType="java.lang.Integer">
-	select count(1) from tb_sms_blacklist where phone=#{phone}
+	   select count(1) from tb_sms_blacklist where phone=#{phone}
 	</select>
+	<!-- 查询会员列表 -->
+	<select id="listPageVip"  parameterType="page" resultType="pd">
+	   select a.user_type,a.phone,a.real_name,a.idno,a.create_time,a.ref_phone,b.real_name ref_real_name 
+       from tb_user_detail a left join tb_user_detail b 
+       on a.ref_phone = b.phone
+       where 1=1
+	   <if test="pd.user_type != null and pd.user_type !=''" >
+        and a.user_type in (#{pd.user_type})
+       </if>
+	</select>
+	<select id="getOneSms"  parameterType="pd" resultType="pd">
+       select * from tb_sms where id=#{id}
+    </select>
+    <update id="updateStatusById" parameterType="pd">
+        update tb_sms
+	    set sms_status = #{smsStatus,jdbcType=VARCHAR},
+	    <if test="content != null and content !=''" >
+         content = #{content},
+        </if>
+        <if test="phone != null and phone !=''" >
+         phone = #{phone},
+        </if>
+        <if test="operator_accno != null and operator_accno !=''" >
+         operator_accno = #{operator_accno},
+        </if>
+        <if test="operator_name != null and operator_name !=''" >
+         operator_name = #{operator_name},
+        </if>
+        send_time = now(),
+        modify_time = now()
+	    where id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>

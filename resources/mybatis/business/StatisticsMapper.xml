@@ -17,9 +17,10 @@
    <!--  统计转账SAN -->
     <select id="getZZSAN" parameterType="pd" resultType="pd">
         SELECT sum(t.outamnt) outAmnt,
-		(select sum(outamnt) from tb_acc_outdetail where SUBSTRING(confirm_time,1,10)=SUBSTRING(now(),1,10)) todayOutAmnt,
+		(select sum(outamnt) from tb_acc_outdetail where `status` = 1 and SUBSTRING(confirm_time,1,10)=SUBSTRING(now(),1,10)) todayOutAmnt,
 		(select sum(froze_amnt) from tb_acc)frozeAmnt
         FROM tb_acc_outdetail t
+        where `status` = 1
     </select>
     <!-- 统计发放 -->
     <select id="getReward" parameterType="pd" resultType="pd">
@@ -35,7 +36,7 @@
 		from tb_acc_detail t
 		where t.sub_accno='010101'
     </select>
-    <!-- SAN额度 -->
+    <!-- 系统发行量,SAN额度 -->
     <select id="getSysSAN" parameterType="pd" resultType="pd">
 		select t.credit_limit ,(select sum(total_amnt) from tb_acc )total_amnt
         from  tb_acc_limitdef t where t.acc_no='00'

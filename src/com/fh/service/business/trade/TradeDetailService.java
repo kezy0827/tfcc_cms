@@ -163,7 +163,7 @@ public class TradeDetailService {
                     int num = smsService.findsmsPhone(phone);
                     if (num==0) {
                         logger.info("订单审核短信--------start---------");
-                        String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请到'我的账户'中查看。";
+                        String content = "尊敬的【"+phone+"】会员您好,您提交的订单号【"+trade.get("order_no").toString()+"】已审核通过，请登录网站查收！";
                         SmsSend.sendSms(phone, content);
                         logger.info("订单审核短信--------end:content="+content);
 					}else {
