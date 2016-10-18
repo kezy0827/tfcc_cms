@@ -41,7 +41,8 @@ public class BankInfoController extends BaseController {
 	public ModelAndView updateBankStatus(){//更新银行账户启用状态
 		ModelAndView mv = this.getModelAndView();
 		try {
-			pd=this.getPageData();
+		    PageData pd = new PageData();
+		    pd=this.getPageData();
 			//String id = pd.get("id").toString();		
 			bankInfoService.updateBankState(pd);
 			
@@ -58,7 +59,8 @@ public class BankInfoController extends BaseController {
 	public ModelAndView addBankInfo(){//添加银行账户信息
 		//ModelAndView mv = this.getModelAndView();
 		try {
-			pd=this.getPageData();
+		    PageData pd = new PageData();
+		    pd=this.getPageData();
 			pd.put("status", "0");
 			pd.put("operator", "sys");
 			bankInfoService.addBankAccNo(pd);

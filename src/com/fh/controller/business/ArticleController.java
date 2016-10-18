@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.service.business.article.ArticleService;
+import com.fh.util.PageData;
 
 
 @Controller
@@ -26,6 +27,7 @@ public class ArticleController extends BaseController  {
 	private ModelAndView addArticleInfo(){
 		
 		try {
+		    PageData pd = new PageData();
 			pd=this.getPageData();
 			articleService.addArticleInfo(pd);
 			ar.setSuccess(true);

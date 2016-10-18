@@ -40,7 +40,8 @@ public class StatisticsController extends BaseController{
 		logBefore(logger, "网站统计");
 		ModelAndView mv = this.getModelAndView();
 		try{
-			pd = this.getPageData();
+		    PageData pd = new PageData();
+		    pd = this.getPageData();
 			PageData registerNum = statisticsService.getRegisterNum(pd);
 			PageData buySAN = statisticsService.getBuySAN(pd);
 			PageData zZSAN = statisticsService.getZZSAN(pd);

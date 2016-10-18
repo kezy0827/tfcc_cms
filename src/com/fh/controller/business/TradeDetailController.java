@@ -47,7 +47,8 @@ public class TradeDetailController extends BaseController{
 		logBefore(logger, "交易订单列表");
 		ModelAndView mv = this.getModelAndView();
 		try{
-			pd = this.getPageData();
+		    PageData pd = new PageData();
+		    pd = this.getPageData();
 			page.setPd(pd);
 			List<PageData> list = tradeDetailService.listPage(page);
 			System.out.println("-----------------------------------------"+list.size());
@@ -75,6 +76,7 @@ public class TradeDetailController extends BaseController{
     public ModelAndView edit(Page page) throws Exception{
         logBefore(logger, "编辑");
         try{
+            PageData pd = new PageData();
             pd = this.getPageData();
             //查询购买上下限
             /*pd.put("groupcode", "REWARD_DEF");
@@ -130,6 +132,7 @@ public class TradeDetailController extends BaseController{
         logBefore(logger, "交易订单详情");
         ModelAndView mv = this.getModelAndView();
         try{
+            PageData pd = new PageData();
             pd = this.getPageData();
             pd = tradeDetailService.getTradeById(pd);
             //调用权限
@@ -154,6 +157,7 @@ public class TradeDetailController extends BaseController{
 	public AjaxResponse updateStatus() throws Exception{
 	    logBefore(logger, "更新订单状态");
 	    try{
+	        PageData pd = new PageData();
 	        pd = this.getPageData();
 	        tradeDetailService.updateStatus(pd);
 	        ar.setSuccess(true);
@@ -177,6 +181,7 @@ public class TradeDetailController extends BaseController{
     public AjaxResponse del() throws Exception{
         logBefore(logger, "删除订单");
         try{
+            PageData pd = new PageData();
             pd = this.getPageData();
             tradeDetailService.updateIsShow(pd);
             ar.setSuccess(true);

@@ -55,7 +55,8 @@ public class UserDetailController extends BaseController {
 		logBefore(logger, "查询会员列表");
 		ModelAndView mv = this.getModelAndView();
 		try{
-			pd = this.getPageData();
+		    PageData pd = new PageData();
+		    pd = this.getPageData();
 			page.setPd(pd);
 			List<PageData> list = userDetailService.listPageUserDetail(page);
 			System.out.println("-----------------------------------------"+list.size());
@@ -75,6 +76,7 @@ public class UserDetailController extends BaseController {
 	    logBefore(logger, "查询下级会员列表");
 	    ModelAndView mv = this.getModelAndView();
 	    try{
+	        PageData pd = new PageData();
 	        pd = this.getPageData();
 	        //查询用户详细信息
 //	        PageData userDetail = userDetailService.findByPhone(pd);
@@ -119,6 +121,7 @@ public class UserDetailController extends BaseController {
 	    logBefore(logger, "查询会员详情");
 	    ModelAndView mv = this.getModelAndView();
 	    try{
+	        PageData pd = new PageData();
 	        pd = this.getPageData();
 	        page.setPd(pd);
 	        PageData userDetail = userDetailService.findByPhone(pd);
@@ -145,6 +148,7 @@ public class UserDetailController extends BaseController {
 	public AjaxResponse updatebuyStatus() throws Exception{
 	    logBefore(logger, "更新用户购买状态");
 	    try{
+	        PageData pd = new PageData();
 	        pd = this.getPageData();
 	        userDetailService.updateBuyStatus(pd);
 	        ar.setSuccess(true);
@@ -161,6 +165,7 @@ public class UserDetailController extends BaseController {
 	public AjaxResponse disableStatus() throws Exception{
 	    logBefore(logger, "修改用户状态");
 	    try{
+	        PageData pd = new PageData();
 	        pd = this.getPageData();
 	        userDetailService.updateUserStatus(pd);
 	        ar.setSuccess(true);
@@ -177,6 +182,7 @@ public class UserDetailController extends BaseController {
 	    logBefore(logger, "重置密码");
 	    try{
 	        //密码重置为000000
+	        PageData pd = new PageData();
 	        pd = this.getPageData();
 	        pd.put("pwdhash", MD5Util.getMd5Code("s111111"));
 	        userDetailService.resetPassword(pd);
@@ -215,6 +221,7 @@ public class UserDetailController extends BaseController {
     @RequestMapping(value="/excel")
     public ModelAndView exportExcel(){
         ModelAndView mv = this.getModelAndView();
+        PageData pd = new PageData();
         pd = this.getPageData();
         try{
             
