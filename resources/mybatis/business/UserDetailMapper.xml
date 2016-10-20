@@ -68,7 +68,7 @@
     <select id="userbuylist" parameterType="pd" resultType="pd">
         select a.phone,a.real_name,b.real_name ref_real_name,b.phone ref_phone,c.total_amnt,c.avb_amnt,c.froze_amnt,date_format(a.create_time,'%Y-%m-%d %T') create_time1,
         (select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
-        (select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,
+        (select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code and t.`status`=1)total_out,
         (case when d.`status`='1' then '有效' else '禁用' end)`status`,
         (case when a.buy_flag ='1' then '允许购买' else '禁止购买' end)buy_flag1,
         (case when a.user_type ='1' then '普通会员' else '投资机构' end)user_type1,
@@ -190,5 +190,14 @@
 		and b.rela_level  &lt;&gt;''
 		and b.rela_level is not NULL
 		order by a.id desc 
+    </select>
+    <select id="findAllPhoneByCondition" parameterType="pd"  resultType="pd" >
+        SELECT phone
+		FROM
+		    tb_user_detail 
+		where 1=1
+		<if test="freeze_flag != null and freeze_flag != ''">
+           AND freeze_flag = #{freeze_flag}
+        </if>
     </select>
 </mapper>     

@@ -19,7 +19,7 @@
 <div id="breadcrumbs">
 <ul class="breadcrumb">
 	<li><i class="icon-home"></i> <a>短信管理</a><span class="divider"><i class="icon-angle-right"></i></span></li>
-	<li class="active">短信管理</li>
+	<li class="active">回收站</li>
 </ul><!--.breadcrumb-->
 
 <div id="nav-search">
@@ -181,7 +181,7 @@
                     diag.show();
                     var url = "<%=basePath%>/sms/reSend.do";
                     $.post(url,{'id':id},function(data){
-                    	diag.hide();
+                    	diag.close();
                     	if(data.success){
                     		window.location.reload();
                     	}else{

@@ -21,7 +21,7 @@
   </resultType> -->
   <sql id="Base_Column_List" >
     id, title, content, send_type, sms_type, sms_status, send_time, operator_accno, operator_name, 
-    create_time, update_time, syscode, modify_time,flow_id
+    create_time, update_time, syscode, modify_time,flow_id,send_range
   </sql>
   <sql id="Blob_Column_List" >
     phone
@@ -43,12 +43,12 @@
       send_type, sms_type, sms_status, 
       send_time, operator_accno, operator_name, 
       create_time, update_time, syscode, 
-      modify_time, phone,flow_id)
+      modify_time, phone,flow_id,send_range)
     values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{sendType,jdbcType=VARCHAR}, #{smsType,jdbcType=VARCHAR}, #{smsStatus,jdbcType=VARCHAR}, 
       #{sendTime,jdbcType=TIMESTAMP}, #{operatorAccno,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{syscode,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{phone,jdbcType=LONGVARCHAR},#{flowId,jdbcType=LONGVARCHAR})
+      #{modifyTime,jdbcType=TIMESTAMP}, #{phone,jdbcType=LONGVARCHAR},#{flowId,jdbcType=LONGVARCHAR},#{send_range,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="pd" >
     insert into tb_sms
@@ -86,6 +86,9 @@
       <if test="flowId != null" >
         flow_id,
       </if>
+      <if test="sendRange != null" >
+        send_range,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="title != null" >
@@ -120,6 +123,9 @@
       </if>
       <if test="flowId != null" >
         #{flowId,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sendRange != null" >
+        #{sendRange,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -168,6 +174,9 @@
       <if test="flowId != null" >
         flow_id = #{flowId,jdbcType=LONGVARCHAR},
       </if>
+      <if test="sendRange != null" >
+        send_range = #{sendRange,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -187,6 +196,7 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       phone = #{phone,jdbcType=LONGVARCHAR},
       flow_id = #{flowId,jdbcType=LONGVARCHAR}
+      send_range = #{sendRange,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateStatusByFlowId" parameterType="pd" >
@@ -250,9 +260,10 @@
        from tb_user_detail a left join tb_user_detail b 
        on a.ref_phone = b.phone
        where 1=1
-	   <if test="pd.user_type != null and pd.user_type !=''" >
-        and a.user_type in (#{pd.user_type})
+	   <if test="pd.freeze_flag != null and pd.freeze_flag !=''" >
+        and a.freeze_flag = #{pd.freeze_flag}
        </if>
+       order by a.create_time desc
 	</select>
 	<select id="getOneSms"  parameterType="pd" resultType="pd">
        select * from tb_sms where id=#{id}
@@ -260,6 +271,12 @@
     <update id="updateStatusById" parameterType="pd">
         update tb_sms
 	    set sms_status = #{smsStatus,jdbcType=VARCHAR},
+	    <if test="sendType != null and sendType !=''" >
+         send_type = #{sendType},
+        </if>
+	    <if test="sendRange != null and sendRange !=''" >
+         send_range = #{sendRange},
+        </if>
 	    <if test="content != null and content !=''" >
          content = #{content},
         </if>

@@ -33,7 +33,7 @@
 		<!--提示框-->
 		<script type="text/javascript" src="js/jquery.tips.js"></script>
         <style type="text/css">
-          ul li{
+         table ul li{
               float: left;
               margin-left: 20px;
               list-style-type:none;
@@ -47,25 +47,38 @@
 	</head>
 <body>
 <div class="container-fluid" id="main-container">
-  <div id="breadcrumbs">
-    <ul class="breadcrumb">
-        <li><i class="icon-home"></i> <a>短信管理</a><span class="divider"><i class="icon-angle-right"></i></span></li>
-        <li class="active">短信发送</li>
-    </ul><!--.breadcrumb-->
-  
-    <div id="nav-search">
-    </div><!--#nav-search-->
-  
-  </div><!--#breadcrumbs-->
+ <div id="breadcrumbs">
+<ul class="breadcrumb">
+    <li><i class="icon-home"></i> <a>短信管理</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+    <li class="active">短信发送</li>
+</ul><!--.breadcrumb-->
+
+<div id="nav-search">
+</div><!--#nav-search-->
+
+</div><!--#breadcrumbs-->
   
   <div id="page-content" class="clearfix">
                         
   <div class="row-fluid">
-  <form id="form" action="sms/toSingleSend.do" method="POST" name="Form" id="Form">
-    <input type="hidden" id="send_type" name="send_type" value="1"/>
+  <form name="Form" id="Form" action="sms/toSingleSend.do" method="POST" >
     <input type="hidden" id="id" name="id" value="${pd.id }"/>
+    <input type="hidden" id="send_type" name="send_type" value="${pd.send_type }"/>
+    <input type="hidden" id="send_range" name="send_range" value="${pd.send_range }"/>
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
+            <tr>
+                <td ><label class="right">发送方式:</label></td>
+                <td>
+                    <ul class="radio">
+                        <li><label><input type="radio" name="send_type_radio"  value="1" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${empty pd.send_type }">checked="checked"</c:if>  <c:if test="${pd.send_type=='1' }">checked="checked"</c:if>/><span class="lbl">&nbsp;全部发送</span></label></li>
+                        <li><label><input type="radio" name="send_type_radio" value="2" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${pd.send_type=='2' }">checked="checked"</c:if>/><span class="lbl">&nbsp;单个发送</span></label></li>
+                        <%-- <li><label><input type="radio" name="user_type" class="serach" id="general"  value="1" <c:if test="${pd.user_type=='1' }">checked="checked"</c:if>/><span class="lbl">&nbsp;普通会员</span></label></li>
+                        <li><label><input type="radio" name="user_type" class="serach" id="invest" value="4" <c:if test="${pd.user_type=='4' }">checked="checked"</c:if>/><span class="lbl">&nbsp;投资公司</span></label></li> --%>
+                        
+                    </ul>
+                </td>
+            </tr>
 			<tr>
                 <td width="20%"><label class="right">短信类型:</label></td>
 				<td>
@@ -93,31 +106,33 @@
                 <td><input type="type"  name="title"  id="title"  value="${pd.title }" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> maxlength="20"/><font color="red" >*</font></td>
             </tr>
             <tr>
-                <td ><label class="right">短信内容:</label></td>
+                <td ><label class="right">短信内容:</label><label class="right"><font color="red" >（请严格按照短信模板发送，否则发送失败）</font></label></td>
                 <td>
                     <textarea name="content"  id="content" <c:if test="${not empty pd.id and pd.sms_status!=0}">disabled="disabled"</c:if> maxlength="200">${pd.content }</textarea><font color="red" >*</font>&nbsp;&nbsp;&nbsp;&nbsp;
                     <c:if test="${empty pd.id or pd.sms_status==0 }"><input type="button" onclick="sendSms(this)" class="btn btn-primary" value="发送"></input></c:if>
                 </td>
 			</tr>
-			<%-- <tr>
-                <td ><label class="right">发送范围:</label></td>
-				<td>
-					<ul class="radio">
-                        <li><label><input type="radio" name="user_type" id="single" checked="checked"/><span class="lbl">&nbsp;单个发送</span></label></li>
-                        <li><label><input type="radio" name="user_type" class="serach" id="all" value="" <c:if test="${pd.user_type=='' }">checked="checked"</c:if>/><span class="lbl">&nbsp;全部</span></label></li>
-                        <li><label><input type="radio" name="user_type" class="serach" id="general"  value="1" <c:if test="${pd.user_type=='1' }">checked="checked"</c:if>/><span class="lbl">&nbsp;普通会员</span></label></li>
-                        <li><label><input type="radio" name="user_type" class="serach" id="invest" value="4" <c:if test="${pd.user_type=='4' }">checked="checked"</c:if>/><span class="lbl">&nbsp;投资公司</span></label></li>
-                        
-                    </ul>
-				</td>
-			</tr> --%>
-			<tr id="phoneDisplay" >
+			<tr id="phoneDisplay" <c:if test="${pd.send_type ==1 }">style="display:none;"</c:if> >
                 <td ><label class="right">手机号:</label><label class="right"><font color="red" >（多个手机号，中间请用英文逗号隔开）</font></label></td>
 				<td>
 					<textarea rows="5" cols="250" name="phone" id="phone" <c:if test="${not empty pd.id and pd.sms_status!=0}">disabled="disabled"</c:if>>${pd.phone }</textarea><font color="red" >*</font>
 				</td>
 			</tr>
+            <tr>
+                <td ><label class="right">发送范围:</label></td>
+                <td>
+                    <ul class="radio">
+                        <li><label><input type="radio" name="send_range_radio" value="1" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${empty pd.send_range}">checked="checked"</c:if> <c:if test="${pd.send_range=='1' }">checked="checked"</c:if>/><span class="lbl">&nbsp;全部用户</span></label></li>
+                        <li><label><input type="radio" name="send_range_radio" value="2" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${pd.send_range=='2' }">checked="checked"</c:if>/><span class="lbl">&nbsp;普通用户</span></label></li>
+                        <li><label><input type="radio" name="send_range_radio" value="3" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${pd.send_range=='3' }">checked="checked"</c:if>/><span class="lbl">&nbsp;投资机构</span></label></li>
+                        <%-- <li><label><input type="radio" name="user_type" class="serach" id="general"  value="1" <c:if test="${pd.user_type=='1' }">checked="checked"</c:if>/><span class="lbl">&nbsp;普通会员</span></label></li>
+                        <li><label><input type="radio" name="user_type" class="serach" id="invest" value="4" <c:if test="${pd.user_type=='4' }">checked="checked"</c:if>/><span class="lbl">&nbsp;投资公司</span></label></li> --%>
+                        
+                    </ul>
+                </td>
+            </tr>
 		</table>
+      <div id="userDisplay" <c:if test="${pd.send_type ==1 }">style="display:none;"</c:if>>
        <c:if test="${empty pd.sms_status or pd.sms_status == '0'}">
         <div class="row-fluid" id="vipDisplay" >
             <table id="table_report" class="table table-striped table-bordered table-hover">
@@ -189,6 +204,7 @@
             <!-- <div id="pageDisplay"></div> -->
         </div>
         </c:if>
+        </div>
         </form>
         </div>
 		<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
@@ -268,28 +284,29 @@
                     $("#content").focus();
                     return false;
                 }
-                
-                if($.trim($("#phone").val())==""){
-                    
-                    $("#phone").tips({
-                        side:3,
-                        msg:'请输入电话号',
-                        bg:'#AE81FF',
-                        time:2
-                    });
-                    $("#phone").focus();
-                    return false;
-                }
-                var reg = /^(1\d{10}(,)?)+$/;
-                if(!reg.test($("#phone").val())){
-                     $("#phone").tips({
-                         side:3,
-                         msg:'电话号输入格式有误！',
-                         bg:'#AE81FF',
-                         time:2
-                     });
-                     $("#content").focus();
-                     return false;
+                if($("#send_type").val()=='2'){//单个发送时验证手机号
+                	if($.trim($("#phone").val())==""){
+                        
+                        $("#phone").tips({
+                            side:3,
+                            msg:'请输入电话号',
+                            bg:'#AE81FF',
+                            time:2
+                        });
+                        $("#phone").focus();
+                        return false;
+                    }
+                	 var reg = /^(1\d{10}(,)?)+$/;
+                     if(!reg.test($("#phone").val())){
+                          $("#phone").tips({
+                              side:3,
+                              msg:'电话号输入格式有误！',
+                              bg:'#AE81FF',
+                              time:2
+                          });
+                          $("#content").focus();
+                          return false;
+                     }
                 }
                 var click = $(obj).attr("click");
                 $(obj).removeAttr("click");
@@ -298,8 +315,10 @@
                 var content = $.trim($("#content").val());
                 var phone = $.trim($("#phone").val());
                 var id=$("#id").val();
+                var sendType=$("#send_type").val();
+                var sendRange=$("#send_range").val();
                 var url = "sms/sendSms.do";
-                var data = {smsType:sms_type,title:title,content:content,phone:phone,id:id};
+                var data = {smsType:sms_type,title:title,content:content,phone:phone,id:id,sendType:sendType,sendRange:sendRange};
                 $("#zhongxin").hide();
                 $("#zhongxin2").show();
                 $.post(url,data,function(data){
@@ -329,6 +348,22 @@
                     }
                 });
             }); */
+            $("input[name='send_type_radio']").each(function(){
+            	$(this).on("click",function(){
+            		if($(this).attr("checked")){
+            			if($(this).val()=='1'){
+            				$("#send_type").val("1");
+            				$("#phoneDisplay").hide();
+            				$("#userDisplay").hide();
+            			}else if($(this).val()=='2'){
+            				$("#send_type").val("2");
+            				$("#phoneDisplay").show();
+                            $("#userDisplay").show();
+            			}
+            		}
+            	});
+            	
+            });
             $("input[name='ids']").each(function(){
             	$(this).on("click",function(){
             		var phone = $("#phone").text();
@@ -342,6 +377,22 @@
             	});
             	
             });
+            $("input[name='send_range_radio']").each(function(){
+            	$(this).on("click",function(){
+            		if($(this).attr("checked")){
+                        if($(this).val()=='1'){//全部
+                            $("#send_range").val("1");
+                        }else if($(this).val()=='2'){//投资机构
+                            $("#send_range").val("2");
+                        }else if($(this).val()=='3'){//普通会员
+                            $("#send_range").val("3");
+                        }
+                    }
+            		if($("#send_type").val()=='2'){//单个发送时
+                        $("#Form").submit();
+                    }
+            	});
+            });
                 $("#zcheckbox").on("click",function(){
                 	var phone = "";
                     if($(this).attr("checked")){
@@ -353,6 +404,7 @@
                         $("#phone").text('');
                     }
                 });
+                
             /* function reload_table(currentPage,showCount){
             	var url = "sms/listPageVip.do";
             	$.get(url,{'user_type':user_type},function(data){

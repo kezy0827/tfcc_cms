@@ -45,6 +45,7 @@ public class SmsController extends BaseController {
 	@ResponseBody
 	public AjaxResponse sendSms(HttpServletRequest request){
 	    logBefore(logger,"SmsController.sendSms--------批量发送短信---------");
+	    AjaxResponse ar = new AjaxResponse();
 		try {
 		   //shiro管理的session
             Subject currentUser = SecurityUtils.getSubject();  
@@ -53,40 +54,73 @@ public class SmsController extends BaseController {
             
 			PageData pd = new PageData();
 			pd=this.getPageData();
-			String phoneStr=pd.getString("phone").trim();//要发送短信的手机号
-			if(!Validator.isPhoneStr(phoneStr)){
-			    ar.setSuccess(false);
-                ar.setMessage("手机号格式有误！"); 
-                return ar;
-			}
-			if(!StringUtils.isEmpty(phoneStr)&&!StringUtils.isEmpty(pd.getString("content"))){//需添加手机号格式校验
-			    if(StringUtils.isEmpty(pd.get("id").toString())){
-			        pd.put("smsStatus", "2");//发送中
-			        pd.put("flowId", FlowNoGenerater.generateOrderNo());
-                }
-			    pd.put("operatorAccno", user.getUSERNAME());
-                pd.put("operatorName", user.getNAME());
-		        boolean  smsResult = smsService.sendBatchSms(phoneStr,pd);
-		        if(smsResult){
-		            ar.setSuccess(true);
-	                ar.setMessage("发送成功"); 
-	                return ar;
-		        }else{
-		            ar.setSuccess(false);
-                    ar.setMessage("发送失败"); 
-                    return ar;
-		        }
-			}else{
-			    if(StringUtils.isEmpty(phoneStr)){
+			if("1".equals(pd.getString("sendType"))){//全部发送时，根据条件从库里查询手机号
+			    if(StringUtils.isEmpty(pd.getString("content"))){
 			        ar.setSuccess(false);
-	                ar.setMessage("手机号不能为空！");
-	                return ar;
-			    }else if(StringUtils.isEmpty(pd.getString("content"))){
-			        ar.setSuccess(false);
-                    ar.setMessage("短信内容不能为空！");
+                    ar.setMessage("请输入短信内容！"); 
                     return ar;
 			    }
+			    if("1".equals(pd.getString("sendRange"))){//全部用户
+			        pd.put("freeze_flag", "");
+			    }else if("2".equals(pd.getString("sendRange"))){//普通会员
+			        pd.put("freeze_flag", "1");
+			    }else if("3".equals(pd.getString("sendRange"))){//投资机构
+                    pd.put("freeze_flag", "0");
+                }
+			    if(StringUtils.isEmpty(pd.get("id").toString())){
+                    pd.put("smsStatus", "2");//发送中
+                    pd.put("flowId", FlowNoGenerater.generateOrderNo());
+                }
+                pd.put("operatorAccno", user.getUSERNAME());
+                pd.put("operatorName", user.getNAME());
+			    boolean smsResult = smsService.sendAllSms(pd);
+			    if(smsResult){
+                    ar.setSuccess(true);
+                    ar.setMessage("发送成功"); 
+                    return ar;
+                }else{
+                    ar.setSuccess(false);
+                    ar.setMessage("发送失败"); 
+                    return ar;
+                }
+			}else{
+			    String phoneStr=pd.getString("phone").trim();//要发送短信的手机号
+	            if(!StringUtils.isEmpty(phoneStr)&&!StringUtils.isEmpty(pd.getString("content"))){//需添加手机号格式校验
+	                if(!Validator.isPhoneStr(phoneStr)){
+	                    ar.setSuccess(false);
+	                    ar.setMessage("手机号格式有误！"); 
+	                    return ar;
+	                }
+	                
+	                if(StringUtils.isEmpty(pd.get("id").toString())){
+	                    pd.put("smsStatus", "2");//发送中
+	                    pd.put("flowId", FlowNoGenerater.generateOrderNo());
+	                }
+	                pd.put("operatorAccno", user.getUSERNAME());
+	                pd.put("operatorName", user.getNAME());
+	                boolean  smsResult = smsService.sendBatchSms(phoneStr,pd);
+	                if(smsResult){
+	                    ar.setSuccess(true);
+	                    ar.setMessage("发送成功"); 
+	                    return ar;
+	                }else{
+	                    ar.setSuccess(false);
+	                    ar.setMessage("发送失败"); 
+	                    return ar;
+	                }
+	            }else{
+	                if(StringUtils.isEmpty(phoneStr)){
+	                    ar.setSuccess(false);
+	                    ar.setMessage("手机号不能为空！");
+	                    return ar;
+	                }else if(StringUtils.isEmpty(pd.getString("content"))){
+	                    ar.setSuccess(false);
+	                    ar.setMessage("短信内容不能为空！");
+	                    return ar;
+	                }
+	            }
 			}
+			
 		} catch (Exception e) {
 			ar.setSuccess(false);
 			ar.setMessage("系统异常");
@@ -163,6 +197,13 @@ public class SmsController extends BaseController {
         try {
             PageData pd = new PageData();
             pd = this.getPageData();
+            if("1".equals(pd.getString("send_range"))){//全部用户
+                pd.put("freeze_flag", "");
+            }else if("2".equals(pd.getString("send_range"))){//普通用户
+                pd.put("freeze_flag", "1");
+            }else if("3".equals(pd.getString("send_range"))){//投资机构
+                pd.put("freeze_flag", "0");
+            }
             page.setPd(pd);
             List<PageData> varList = smsService.listPageVip(page);
             mv.setViewName("business/sms/single_send");
@@ -196,8 +237,10 @@ public class SmsController extends BaseController {
 	        pd.put("phone", sms.getString("phone"));
 	        pd.put("sms_type", sms.getString("sms_type"));
 	        pd.put("sms_status", sms.getString("sms_status"));
+	        pd.put("send_type", sms.getString("send_type"));
+	        pd.put("send_range", sms.getString("send_range"));
 	        mv.setViewName("business/sms/single_send");
-	        if(sms.getString("sms_status").equals("0")){//发送失败的，需要显示列表
+	        if(sms.getString("sms_status").equals("0")&&"2".equals(sms.getString("send_type"))){//发送失败且单个发送时显示会员列表
 	            List<PageData> varList = smsService.listPageVip(page);
 	            mv.addObject("varList", varList);
 	        }
@@ -223,14 +266,41 @@ public class SmsController extends BaseController {
         try {
             PageData pd = new PageData();
             pd = this.getPageData();
+            //shiro管理的session
+            Subject currentUser = SecurityUtils.getSubject();  
+            Session session = currentUser.getSession();
+            User user = (User)session.getAttribute(Const.SESSION_USER);
+            
             PageData sms = smsService.getOneSms(pd);
-            boolean result = smsService.sendBatchSms(sms.getString("phone"),sms);
-            if(result){
-                ar.setSuccess(true);
-                ar.setMessage("发送成功！");
-            }else{
-                ar.setSuccess(false);
-                ar.setMessage("发送失败！");
+            if("1".equals(sms.getString("send_type"))){//全部发送时，根据条件从库里查询手机号
+                if("1".equals(sms.getString("send_range"))){//全部用户
+                    sms.put("freeze_flag", "");
+                }else if("2".equals(sms.getString("send_range"))){//普通会员
+                    sms.put("freeze_flag", "1");
+                }else if("3".equals(sms.getString("send_range"))){//投资机构
+                    sms.put("freeze_flag", "0");
+                }
+                sms.put("operatorAccno", user.getUSERNAME());
+                sms.put("operatorName", user.getNAME());
+                boolean smsResult = smsService.sendAllSms(sms);
+                if(smsResult){
+                    ar.setSuccess(true);
+                    ar.setMessage("发送成功"); 
+                    return ar;
+                }else{
+                    ar.setSuccess(false);
+                    ar.setMessage("发送失败"); 
+                    return ar;
+                }
+            }else{//单个发送
+                boolean result = smsService.sendBatchSms(sms.getString("phone"),sms);
+                if(result){
+                    ar.setSuccess(true);
+                    ar.setMessage("发送成功！");
+                }else{
+                    ar.setSuccess(false);
+                    ar.setMessage("发送失败！");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

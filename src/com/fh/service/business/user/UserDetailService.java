@@ -118,5 +118,16 @@ public class UserDetailService {
     public PageData findUserInfoByPhone(String phone)throws Exception{
         return (PageData)dao.findForObject("UserDetailMapper.findUserInfoByPhone", phone);
     }
+    /**
+     * @describe:根据条件查询所有手机号
+     * @author: zhangchunming
+     * @date: 2016年10月20日下午4:52:08
+     * @param pd
+     * @throws Exception
+     * @return: List<PageData>
+     */
+    public List<PageData> findAllPhoneByCondition(PageData pd)throws Exception{
+        return (List<PageData>)dao.findForList("UserDetailMapper.findAllPhoneByCondition", pd);
+    }
 }
 
