@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.service.business.user.UserDetailService;
-import com.fh.util.FlowNoGenerater;
 import com.fh.util.PageData;
 import com.fh.util.SmsSend;
 import com.fh.util.Validator;
@@ -25,8 +24,13 @@ public class SmsService {
 	
 	@Resource(name="userDetailService")
     private UserDetailService userDetailService;
+	private String suffix = "回T退订【三界宝】";
 	
 	public boolean addSms(PageData pd) throws Exception{
+	    if("2".equals(pd.getString("interface_type"))){//营销短信
+	        pd.put("content", pd.getString("content")+suffix);
+	    }
+	    
 	    return (Integer)dao.save("SmsMapper.insertSelective", pd)>0;
 	}
 	/**
@@ -72,6 +76,9 @@ public class SmsService {
 	 * @return: void
 	 */
 	public void updateStatusById(PageData pd)throws Exception{
+	    if("2".equals(pd.getString("interface_type"))){//营销短信
+            pd.put("content", pd.getString("content")+suffix);
+        }
 	    dao.update("SmsMapper.updateStatusById", pd);
 	}
 	/**
@@ -91,42 +98,49 @@ public class SmsService {
 	    if(StringUtils.isEmpty(pd.get("id").toString())){//id为空则为新发短信，否则为再次发送
 	        smsService.addSms(pd);
         }
-	    
-        for(String phone:phoneArr){
-            phone = phone.trim();
-            if(Validator.isMobile(phone)){
-                int num = smsService.findsmsPhone(phone);
-                if(num==0){//判断是否在黑名单
-                    //批量发送短信
-                    String content = pd.getString("content");
-                    content = content.substring(0, content.indexOf("【")+1)+phone+content.substring(content.indexOf("】"));
-                    boolean result = SmsSend.sendSms(phone, content);//需添加发送日志
-//                        boolean result = true;
-                    if(result){
-                        sendBool = true;
+	    String content = pd.getString("content");
+	    if("1".equals(pd.getString("interface_type"))){//验证、通知类短信
+            for(String phone:phoneArr){
+                phone = phone.trim();
+                if(Validator.isMobile(phone)){
+                    int num = smsService.findsmsPhone(phone);
+                    if(num==0){//判断是否在黑名单
+                        //批量发送短信
+                        content = content.substring(0, content.indexOf("【")+1)+phone+content.substring(content.indexOf("】"));
+                        boolean result = SmsSend.sendSms(phone, content);//需添加发送日志
+//                            boolean result = true;
+                        if(result){
+                            sendBool = true;
+                        }
                     }
                 }
+            }
+	    }else if("2".equals(pd.getString("interface_type"))&&!"".equals(phoneStr.toString())){//营销短信
+            boolean result = SmsSend.sendMarketingSms(phoneStr, content);//调用营销短信接口
+//            boolean result = true;
+            if(result){
+                sendBool = true;
             }
         }
         if(sendBool){//只要有一条发送成功，及成功
             if(StringUtils.isEmpty(pd.get("id").toString())){
                 PageData smsData = new PageData();
-                smsData.put("smsStatus", "1");//发送成功
-                smsData.put("flowId", pd.get("flowId"));
+                smsData.put("sms_status", "1");//发送成功
+                smsData.put("flow_id", pd.get("flow_id"));
                 updateStatusByFlowId(smsData);
             }else{
-                pd.put("smsStatus", "1");//发送成功
+                pd.put("sms_status", "1");//发送成功
                 updateStatusById(pd);//根据流水号修改状态
             }
             
         }else{
             if(StringUtils.isEmpty(pd.get("id").toString())){
                 PageData smsData = new PageData();
-                smsData.put("smsStatus", "0");//发送失败
-                smsData.put("flowId", pd.get("flowId"));
+                smsData.put("sms_status", "0");//发送失败
+                smsData.put("flow_id", pd.get("flow_id"));
                 updateStatusByFlowId(smsData);
             }else{
-                pd.put("smsStatus", "0");//发送失败
+                pd.put("sms_status", "0");//发送失败
                 updateStatusById(pd);//根据id修改状态
             }
         }
@@ -185,7 +199,7 @@ public class SmsService {
         }
         if(sendBool){//只要有一条发送成功，及成功
             PageData smsData = new PageData();
-            smsData.put("smsStatus", "1");//发送成功
+            smsData.put("sms_status", "1");//发送成功
             smsData.put("content", pd.getString("content"));
             smsData.put("phone", pd.getString("phone"));
             smsData.put("operator_accno", pd.getString("operator_accno"));
@@ -212,38 +226,52 @@ public class SmsService {
             smsService.addSms(pd);
         }
         List<PageData> phoneList = userDetailService.findAllPhoneByCondition(pd);
+        String content = pd.getString("content");
+        StringBuffer phoneStr = new StringBuffer("");
         for(PageData phoneData:phoneList){
             String phone = phoneData.getString("phone");
             int num = smsService.findsmsPhone(phone);
             if(num==0){//判断是否在黑名单
-                //批量发送短信
-                String content = pd.getString("content");
-                content = content.substring(0, content.indexOf("【")+1)+phone+content.substring(content.indexOf("】"));
-                boolean result = SmsSend.sendSms(phone, content);//需添加发送日志
-                if(result){
-                    sendBool = true;
+                if("1".equals(pd.getString("interface_type"))){//验证码、通知类短信
+                  //批量发送短信
+                    content = content.substring(0, content.indexOf("【")+1)+phone+content.substring(content.indexOf("】"));
+                    boolean result = SmsSend.sendSms(phone, content);//需添加发送日志
+//                    boolean result = true;
+                    if(result){
+                        sendBool = true;
+                    }
+                }else if("2".equals(pd.getString("interface_type"))){//营销类短信接口
+                    phoneStr.append(phone+",");
                 }
+            }
+        }
+        if("2".equals(pd.getString("interface_type"))&&!"".equals(phoneStr.toString())){
+            phoneStr = new StringBuffer(phoneStr.substring(0, phoneStr.length()-1));//去掉末尾逗号
+            boolean result = SmsSend.sendMarketingSms(phoneStr.toString(), content);//调用营销短信接口
+//            boolean result = true;
+            if(result){
+                sendBool = true;
             }
         }
         if(sendBool){//只要有一条发送成功，及成功
             if(StringUtils.isEmpty(pd.get("id").toString())){
                 PageData smsData = new PageData();
-                smsData.put("smsStatus", "1");//发送成功
-                smsData.put("flowId", pd.get("flowId"));
+                smsData.put("sms_status", "1");//发送成功
+                smsData.put("flow_id", pd.get("flow_id"));
                 updateStatusByFlowId(smsData);
             }else{
-                pd.put("smsStatus", "1");//发送成功
+                pd.put("sms_status", "1");//发送成功
                 updateStatusById(pd);//根据流水号修改状态
             }
             
         }else{
             if(StringUtils.isEmpty(pd.get("id").toString())){
                 PageData smsData = new PageData();
-                smsData.put("smsStatus", "0");//发送失败
-                smsData.put("flowId", pd.get("flowId"));
+                smsData.put("sms_status", "0");//发送失败
+                smsData.put("flow_id", pd.get("flow_id"));
                 updateStatusByFlowId(smsData);
             }else{
-                pd.put("smsStatus", "0");//发送失败
+                pd.put("sms_status", "0");//发送失败
                 updateStatusById(pd);//根据id修改状态
             }
         }

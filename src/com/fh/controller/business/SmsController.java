@@ -1,12 +1,8 @@
 package com.fh.controller.business;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
@@ -24,10 +19,8 @@ import com.fh.service.business.sms.SmsService;
 import com.fh.service.business.user.UserDetailService;
 import com.fh.util.AjaxResponse;
 import com.fh.util.Const;
-import com.fh.util.DateUtil;
 import com.fh.util.FlowNoGenerater;
 import com.fh.util.PageData;
-import com.fh.util.SmsSend;
 import com.fh.util.Validator;
 
 
@@ -54,25 +47,25 @@ public class SmsController extends BaseController {
             
 			PageData pd = new PageData();
 			pd=this.getPageData();
-			if("1".equals(pd.getString("sendType"))){//全部发送时，根据条件从库里查询手机号
+			if("1".equals(pd.getString("send_type"))){//全部发送时，根据条件从库里查询手机号
 			    if(StringUtils.isEmpty(pd.getString("content"))){
 			        ar.setSuccess(false);
                     ar.setMessage("请输入短信内容！"); 
                     return ar;
 			    }
-			    if("1".equals(pd.getString("sendRange"))){//全部用户
+			    if("1".equals(pd.getString("send_range"))){//全部用户
 			        pd.put("freeze_flag", "");
-			    }else if("2".equals(pd.getString("sendRange"))){//普通会员
+			    }else if("2".equals(pd.getString("send_range"))){//普通会员
 			        pd.put("freeze_flag", "1");
-			    }else if("3".equals(pd.getString("sendRange"))){//投资机构
+			    }else if("3".equals(pd.getString("send_range"))){//投资机构
                     pd.put("freeze_flag", "0");
                 }
 			    if(StringUtils.isEmpty(pd.get("id").toString())){
-                    pd.put("smsStatus", "2");//发送中
-                    pd.put("flowId", FlowNoGenerater.generateOrderNo());
+                    pd.put("sms_status", "2");//发送中
+                    pd.put("flow_id", FlowNoGenerater.generateOrderNo());
                 }
-                pd.put("operatorAccno", user.getUSERNAME());
-                pd.put("operatorName", user.getNAME());
+                pd.put("operator_accno", user.getUSERNAME());
+                pd.put("operator_name", user.getNAME());
 			    boolean smsResult = smsService.sendAllSms(pd);
 			    if(smsResult){
                     ar.setSuccess(true);
@@ -93,11 +86,11 @@ public class SmsController extends BaseController {
 	                }
 	                
 	                if(StringUtils.isEmpty(pd.get("id").toString())){
-	                    pd.put("smsStatus", "2");//发送中
-	                    pd.put("flowId", FlowNoGenerater.generateOrderNo());
+	                    pd.put("sms_status", "2");//发送中
+	                    pd.put("flow_id", FlowNoGenerater.generateOrderNo());
 	                }
-	                pd.put("operatorAccno", user.getUSERNAME());
-	                pd.put("operatorName", user.getNAME());
+	                pd.put("operator_accno", user.getUSERNAME());
+	                pd.put("operator_name", user.getNAME());
 	                boolean  smsResult = smsService.sendBatchSms(phoneStr,pd);
 	                if(smsResult){
 	                    ar.setSuccess(true);
@@ -204,6 +197,9 @@ public class SmsController extends BaseController {
             }else if("3".equals(pd.getString("send_range"))){//投资机构
                 pd.put("freeze_flag", "0");
             }
+            /*pd.put("send_type", "1");
+            pd.put("send_range", "1");
+            pd.put("interface_type", "1");*/
             page.setPd(pd);
             List<PageData> varList = smsService.listPageVip(page);
             mv.setViewName("business/sms/single_send");
@@ -239,6 +235,7 @@ public class SmsController extends BaseController {
 	        pd.put("sms_status", sms.getString("sms_status"));
 	        pd.put("send_type", sms.getString("send_type"));
 	        pd.put("send_range", sms.getString("send_range"));
+	        pd.put("interface_type", sms.getString("interface_type"));
 	        mv.setViewName("business/sms/single_send");
 	        if(sms.getString("sms_status").equals("0")&&"2".equals(sms.getString("send_type"))){//发送失败且单个发送时显示会员列表
 	            List<PageData> varList = smsService.listPageVip(page);
@@ -280,8 +277,8 @@ public class SmsController extends BaseController {
                 }else if("3".equals(sms.getString("send_range"))){//投资机构
                     sms.put("freeze_flag", "0");
                 }
-                sms.put("operatorAccno", user.getUSERNAME());
-                sms.put("operatorName", user.getNAME());
+                sms.put("operator_accno", user.getUSERNAME());
+                sms.put("operator_name", user.getNAME());
                 boolean smsResult = smsService.sendAllSms(sms);
                 if(smsResult){
                     ar.setSuccess(true);

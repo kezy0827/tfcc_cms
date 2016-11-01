@@ -65,8 +65,19 @@
     <input type="hidden" id="id" name="id" value="${pd.id }"/>
     <input type="hidden" id="send_type" name="send_type" value="${pd.send_type }"/>
     <input type="hidden" id="send_range" name="send_range" value="${pd.send_range }"/>
+    <input type="hidden" id="interface_type" name="interface_type" value="${pd.interface_type }"/>
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
+            <tr>
+                <td ><label class="right">短信接口:</label></td>
+                <td>
+                    <ul class="radio">
+                        <li><label><input type="radio" name="interface_type_radio"  value="1" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${pd.interface_type == '1' or empty pd.interface_type}">checked="checked"</c:if>  /><span class="lbl">&nbsp;接口一（验证、通知）</span></label></li>
+                        <li><label><input type="radio" name="interface_type_radio" value="2" <c:if test="${not empty pd.id }">disabled="disabled"</c:if> <c:if test="${pd.interface_type=='2' }">checked="checked"</c:if>/><span class="lbl">&nbsp;接口二（营销）</span></label></li>
+                        
+                    </ul>
+                </td>
+            </tr>
             <tr>
                 <td ><label class="right">发送方式:</label></td>
                 <td>
@@ -315,10 +326,11 @@
                 var content = $.trim($("#content").val());
                 var phone = $.trim($("#phone").val());
                 var id=$("#id").val();
-                var sendType=$("#send_type").val();
-                var sendRange=$("#send_range").val();
+                var send_type=$("#send_type").val();
+                var send_range=$("#send_range").val();
+                var interface_type=$("#interface_type").val();
                 var url = "sms/sendSms.do";
-                var data = {smsType:sms_type,title:title,content:content,phone:phone,id:id,sendType:sendType,sendRange:sendRange};
+                var data = {sms_type:sms_type,title:title,content:content,phone:phone,id:id,send_type:send_type,send_range:send_range,interface_type:interface_type};
                 $("#zhongxin").hide();
                 $("#zhongxin2").show();
                 $.post(url,data,function(data){
@@ -366,13 +378,13 @@
             });
             $("input[name='ids']").each(function(){
             	$(this).on("click",function(){
-            		var phone = $("#phone").text();
+            		var phone = $("#phone").val();
             		if($(this).attr("checked")){
             			phone += $.trim($(this).val())+",";
-            			$("#phone").text(phone);
+            			$("#phone").val(phone);
             		}else{
             			phone = phone.replace($(this).val()+",","");  
-            			$("#phone").text(phone);
+            			$("#phone").val(phone);
             		}
             	});
             	
@@ -393,15 +405,26 @@
                     }
             	});
             });
+            $("input[name='interface_type_radio']").each(function(){
+            	$(this).on("click",function(){
+            		if($(this).attr("checked")){
+                        if($(this).val()=='1'){//验证、通知接口
+                            $("#interface_type").val("1");
+                        }else if($(this).val()=='2'){//营销接口
+                            $("#interface_type").val("2");
+                        }
+                    }
+            	});
+            });
                 $("#zcheckbox").on("click",function(){
                 	var phone = "";
                     if($(this).attr("checked")){
                     	$("input[name='ids']").each(function(){
                               phone += $.trim($(this).val())+",";
-                              $("#phone").text(phone);
+                              $("#phone").val(phone);
                         });
                     }else{
-                        $("#phone").text('');
+                        $("#phone").val('');
                     }
                 });
                 

@@ -75,7 +75,8 @@
 						<th>标题</th>
 						<th>发送状态</th>
                         <th>操作员账号</th>
-                        <th>姓名</th>
+                        <th>操作员姓名</th>
+                        <th>短信接口</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -101,6 +102,10 @@
                                 </td>
 								<td>${var.operator_accno}</td>
 								<td>${var.operator_name}</td>
+								<td>
+                                    <c:if test="${var.interface_type == 1}">接口一（验证、通知）</c:if>
+                                    <c:if test="${var.interface_type == 2}">接口二（营销）</c:if>
+                                </td>
 							</tr>
 						</c:forEach>
 						</c:if>

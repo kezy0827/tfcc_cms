@@ -5,23 +5,23 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="send_type" property="sendType" jdbcType="VARCHAR" />
-    <result column="sms_type" property="smsType" jdbcType="VARCHAR" />
-    <result column="sms_status" property="smsStatus" jdbcType="VARCHAR" />
-    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
-    <result column="operator_accno" property="operatorAccno" jdbcType="VARCHAR" />
-    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="send_type" property="send_type" jdbcType="VARCHAR" />
+    <result column="sms_type" property="sms_type" jdbcType="VARCHAR" />
+    <result column="sms_status" property="sms_status" jdbcType="VARCHAR" />
+    <result column="send_time" property="send_time" jdbcType="TIMESTAMP" />
+    <result column="operator_accno" property="operator_accno" jdbcType="VARCHAR" />
+    <result column="operator_name" property="operator_name" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="update_time" jdbcType="TIMESTAMP" />
     <result column="syscode" property="syscode" jdbcType="VARCHAR" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modify_time" jdbcType="TIMESTAMP" />
   </resultType> -->
  <!--  <resultType id="resultTypeWithBLOBs" type="project.model.Sms" extends="BaseresultType" >
     <result column="phone" property="phone" jdbcType="LONGVARCHAR" />
   </resultType> -->
   <sql id="Base_Column_List" >
     id, title, content, send_type, sms_type, sms_status, send_time, operator_accno, operator_name, 
-    create_time, update_time, syscode, modify_time,flow_id,send_range
+    create_time, update_time, syscode, modify_time,flow_id,send_range,interface_type
   </sql>
   <sql id="Blob_Column_List" >
     phone
@@ -42,13 +42,13 @@
     insert into tb_sms (title, content, 
       send_type, sms_type, sms_status, 
       send_time, operator_accno, operator_name, 
-      create_time, update_time, syscode, 
-      modify_time, phone,flow_id,send_range)
+      create_time, syscode, modify_time, phone,
+      flow_id,send_range,interface_type)
     values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{sendType,jdbcType=VARCHAR}, #{smsType,jdbcType=VARCHAR}, #{smsStatus,jdbcType=VARCHAR}, 
-      #{sendTime,jdbcType=TIMESTAMP}, #{operatorAccno,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{syscode,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{phone,jdbcType=LONGVARCHAR},#{flowId,jdbcType=LONGVARCHAR},#{send_range,jdbcType=VARCHAR})
+      #{send_type,jdbcType=VARCHAR}, #{sms_type,jdbcType=VARCHAR}, #{sms_status,jdbcType=VARCHAR}, 
+      #{send_time,jdbcType=TIMESTAMP}, #{operator_accno,jdbcType=VARCHAR}, #{operator_name,jdbcType=VARCHAR}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{syscode,jdbcType=VARCHAR}, #{modify_time,jdbcType=TIMESTAMP},
+      #{phone,jdbcType=LONGVARCHAR},#{flow_id,jdbcType=LONGVARCHAR},#{send_range,jdbcType=VARCHAR},#{interface_type,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="pd" >
     insert into tb_sms
@@ -59,20 +59,20 @@
       <if test="content != null" >
         content,
       </if>
-      <if test="sendType != null" >
+      <if test="send_type != null" >
         send_type,
       </if>
-      <if test="smsType != null" >
+      <if test="sms_type != null" >
         sms_type,
       </if>
-      <if test="smsStatus != null" >
+      <if test="sms_status != null" >
         sms_status,
       </if>
         send_time,
-      <if test="operatorAccno != null" >
+      <if test="operator_accno != null" >
         operator_accno,
       </if>
-      <if test="operatorName != null" >
+      <if test="operator_name != null" >
         operator_name,
       </if>
         create_time,
@@ -83,10 +83,13 @@
       <if test="phone != null" >
         phone,
       </if>
-      <if test="flowId != null" >
+      <if test="flow_id != null" >
         flow_id,
       </if>
-      <if test="sendRange != null" >
+      <if test="interface_type != null" >
+        interface_type,
+      </if>
+      <if test="send_range != null" >
         send_range,
       </if>
     </trim>
@@ -97,21 +100,21 @@
       <if test="content != null" >
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="sendType != null" >
-        #{sendType,jdbcType=VARCHAR},
+      <if test="send_type != null" >
+        #{send_type,jdbcType=VARCHAR},
       </if>
-      <if test="smsType != null" >
-        #{smsType,jdbcType=VARCHAR},
+      <if test="sms_type != null" >
+        #{sms_type,jdbcType=VARCHAR},
       </if>
-      <if test="smsStatus != null" >
-        #{smsStatus,jdbcType=VARCHAR},
+      <if test="sms_status != null" >
+        #{sms_status,jdbcType=VARCHAR},
       </if>
       now(),
-      <if test="operatorAccno != null" >
-        #{operatorAccno,jdbcType=VARCHAR},
+      <if test="operator_accno != null" >
+        #{operator_accno,jdbcType=VARCHAR},
       </if>
-      <if test="operatorName != null" >
-        #{operatorName,jdbcType=VARCHAR},
+      <if test="operator_name != null" >
+        #{operator_name,jdbcType=VARCHAR},
       </if>
        now(),
       <if test="syscode != null" >
@@ -121,11 +124,14 @@
       <if test="phone != null" >
         #{phone,jdbcType=LONGVARCHAR},
       </if>
-      <if test="flowId != null" >
-        #{flowId,jdbcType=LONGVARCHAR},
+      <if test="flow_id != null" >
+        #{flow_id,jdbcType=VARCHAR},
       </if>
-      <if test="sendRange != null" >
-        #{sendRange,jdbcType=LONGVARCHAR},
+      <if test="interface_type != null" >
+        #{interface_type},
+      </if>
+      <if test="send_range != null" >
+        #{send_range,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -138,44 +144,44 @@
       <if test="content != null" >
         content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="sendType != null" >
-        send_type = #{sendType,jdbcType=VARCHAR},
+      <if test="send_type != null" >
+        send_type = #{send_type,jdbcType=VARCHAR},
       </if>
-      <if test="smsType != null" >
-        sms_type = #{smsType,jdbcType=VARCHAR},
+      <if test="sms_type != null" >
+        sms_type = #{sms_type,jdbcType=VARCHAR},
       </if>
-      <if test="smsStatus != null" >
-        sms_status = #{smsStatus,jdbcType=VARCHAR},
+      <if test="sms_status != null" >
+        sms_status = #{sms_status,jdbcType=VARCHAR},
       </if>
-      <if test="sendTime != null" >
-        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      <if test="send_time != null" >
+        send_time = #{send_time,jdbcType=TIMESTAMP},
       </if>
-      <if test="operatorAccno != null" >
-        operator_accno = #{operatorAccno,jdbcType=VARCHAR},
+      <if test="operator_accno != null" >
+        operator_accno = #{operator_accno,jdbcType=VARCHAR},
       </if>
-      <if test="operatorName != null" >
-        operator_name = #{operatorName,jdbcType=VARCHAR},
+      <if test="operator_name != null" >
+        operator_name = #{operator_name,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="create_time != null" >
+        create_time = #{create_time,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="update_time != null" >
+        update_time = #{update_time,jdbcType=TIMESTAMP},
       </if>
       <if test="syscode != null" >
         syscode = #{syscode,jdbcType=VARCHAR},
       </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="modify_time != null" >
+        modify_time = #{modify_time,jdbcType=TIMESTAMP},
       </if>
       <if test="phone != null" >
         phone = #{phone,jdbcType=LONGVARCHAR},
       </if>
-      <if test="flowId != null" >
-        flow_id = #{flowId,jdbcType=LONGVARCHAR},
+      <if test="flow_id != null" >
+        flow_id = #{flow_id,jdbcType=LONGVARCHAR},
       </if>
-      <if test="sendRange != null" >
-        send_range = #{sendRange,jdbcType=LONGVARCHAR},
+      <if test="send_range != null" >
+        send_range = #{send_range,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -184,40 +190,40 @@
     update tb_sms
     set title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
-      send_type = #{sendType,jdbcType=VARCHAR},
-      sms_type = #{smsType,jdbcType=VARCHAR},
-      sms_status = #{smsStatus,jdbcType=VARCHAR},
-      send_time = #{sendTime,jdbcType=TIMESTAMP},
-      operator_accno = #{operatorAccno,jdbcType=VARCHAR},
-      operator_name = #{operatorName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      send_type = #{send_type,jdbcType=VARCHAR},
+      sms_type = #{sms_type,jdbcType=VARCHAR},
+      sms_status = #{sms_status,jdbcType=VARCHAR},
+      send_time = #{send_time,jdbcType=TIMESTAMP},
+      operator_accno = #{operator_accno,jdbcType=VARCHAR},
+      operator_name = #{operator_name,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
       syscode = #{syscode,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_time = #{modify_time,jdbcType=TIMESTAMP},
       phone = #{phone,jdbcType=LONGVARCHAR},
-      flow_id = #{flowId,jdbcType=LONGVARCHAR}
-      send_range = #{sendRange,jdbcType=VARCHAR}
+      flow_id = #{flow_id,jdbcType=LONGVARCHAR}
+      send_range = #{send_range,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateStatusByFlowId" parameterType="pd" >
     update tb_sms
-    set sms_status = #{smsStatus,jdbcType=VARCHAR}
-    where flow_id = #{flowId,jdbcType=BIGINT}
+    set sms_status = #{sms_status,jdbcType=VARCHAR}
+    where flow_id = #{flow_id,jdbcType=BIGINT}
   </update>
   <!-- <update id="updateById" parameterType="pd" >
     update tb_sms
     set title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
-      send_type = #{sendType,jdbcType=VARCHAR},
-      sms_type = #{smsType,jdbcType=VARCHAR},
-      sms_status = #{smsStatus,jdbcType=VARCHAR},
-      send_time = #{sendTime,jdbcType=TIMESTAMP},
-      operator_accno = #{operatorAccno,jdbcType=VARCHAR},
-      operator_name = #{operatorName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      send_type = #{send_type,jdbcType=VARCHAR},
+      sms_type = #{sms_type,jdbcType=VARCHAR},
+      sms_status = #{sms_status,jdbcType=VARCHAR},
+      send_time = #{send_time,jdbcType=TIMESTAMP},
+      operator_accno = #{operator_accno,jdbcType=VARCHAR},
+      operator_name = #{operator_name,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
       syscode = #{syscode,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      modify_time = #{modify_time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update> -->
   <select id="listPageSms" resultType="pd" parameterType="page">
@@ -248,6 +254,9 @@
     <if test="pd.endTime != null and pd.endTime !=''" >
         and substring(create_time,1,10) &lt;= #{pd.endTime}
     </if>
+    <if test="pd.interface_type != null and pd.interface_type !=''" >
+        and interface_type = #{pd.interface_type}
+    </if>
     order by create_time desc
   </select>
 	<!-- 查询用户手机号是否进入黑名单 -->
@@ -270,12 +279,12 @@
     </select>
     <update id="updateStatusById" parameterType="pd">
         update tb_sms
-	    set sms_status = #{smsStatus,jdbcType=VARCHAR},
-	    <if test="sendType != null and sendType !=''" >
-         send_type = #{sendType},
+	    set sms_status = #{sms_status,jdbcType=VARCHAR},
+	    <if test="send_type != null and send_type !=''" >
+         send_type = #{send_type},
         </if>
-	    <if test="sendRange != null and sendRange !=''" >
-         send_range = #{sendRange},
+	    <if test="send_range != null and send_range !=''" >
+         send_range = #{send_range},
         </if>
 	    <if test="content != null and content !=''" >
          content = #{content},
