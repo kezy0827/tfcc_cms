@@ -177,7 +177,7 @@ public class SmsService {
 	 * @throws Exception
 	 * @return: boolean
 	 */
-	public boolean updateBatchSms(String phoneStr,PageData pd) throws Exception{
+	/*public boolean updateBatchSms(String phoneStr,PageData pd) throws Exception{
         boolean sendBool = false;
         String[] phoneArr = null;
         phoneArr = phoneStr.trim().split(",");
@@ -208,7 +208,7 @@ public class SmsService {
             updateStatusById(smsData);
         }
         return sendBool;
-    }
+    }*/
 	
 	/**
 	 * @describe:全部发送
