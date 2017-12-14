@@ -1,5 +1,6 @@
 package com.fh.controller.system.login;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -367,4 +368,27 @@ public class LoginController extends BaseController {
 		return mv;
 	}
 	
+	public static void main(String[] args) {
+	  //初始  
+		String passwd = new SimpleHash("SHA-1", "admin", "admin123").toString();	//密码加密
+		boolean rs =RightsHelper.testRights("32758","18");
+		/*	System.out.println(rs); 
+		System.out.println("passwd is "+passwd);*/
+        BigInteger num = new BigInteger("0");   
+        num = num.setBit(2);  
+        System.out.println(num);  
+        num = num.setBit(1);  
+        System.out.println(num);  
+        num = num.setBit(3);  
+        System.out.println(num); 
+        System.out.println(num.testBit(2));  
+        System.out.println(num.testBit(1));  
+        System.out.println(num.testBit(3)); 
+        
+        BigInteger num1 = new BigInteger("32758");  
+        System.out.println(num1);
+        num1= num1.setBit(15);
+        System.out.println(num1); 
+		
+    }
 }

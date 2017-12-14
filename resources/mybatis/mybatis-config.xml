@@ -46,7 +46,7 @@
 		
 		<!-- 业务模块  开始-->
 			<!-- 系统工具管理 -->
-			<mapper resource="mybatis/system/SystemMapper.xml"/>
+<!-- 			<mapper resource="mybatis/system/SystemMapper.xml"/> -->
 			<!-- 短信管理 -->
 			<mapper resource="mybatis/system/DictionarySmsMapper.xml"/>
 			<!-- 日志管理  -->
